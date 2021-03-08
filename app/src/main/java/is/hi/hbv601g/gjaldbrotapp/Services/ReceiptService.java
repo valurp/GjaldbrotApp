@@ -1,5 +1,6 @@
 package is.hi.hbv601g.gjaldbrotapp.Services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
@@ -53,6 +54,26 @@ public class ReceiptService {
         throw new UnsupportedOperationException("This function has not been implemented");
     }
 
+    /**
+     * Testing method to create fake Receipts
+     * DELETE AFTER FINISHED
+     */
+    public List<ReceiptItem> mockReceipts(int num){
+        String[] types = {"Matur", "Leiga", "Áfengi", "Fatnaður"};
+        int[] amounts = {500, 2000, 3000, 5000, 10000, 1000};
+        int id = 1;
+        int n = types.length;
+        int m = amounts.length;
+        List<ReceiptItem> mock = new ArrayList<ReceiptItem>();
+        for(int i = 0; i < num; i++){
+            String t = types[(int)(Math.random()*n)];
+            int a = amounts[(int)(Math.random()*m)];
+            ReceiptItem r = new ReceiptItem(id, a,t);
+            mock.add(r);
+            id++;
+        }
+        return mock;
+    }
 
 
 }

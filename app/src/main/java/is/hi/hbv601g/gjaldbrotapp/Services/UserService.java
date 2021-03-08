@@ -44,4 +44,13 @@ public class UserService {
     public User getUser(){
         return user;
     }
+
+    /**
+     * Testing method
+     * DELETE WHEN FINISHED
+     * @return
+     */
+    public User mockUser(){
+        return new User("Foo", "Bar");
+    }
 }
