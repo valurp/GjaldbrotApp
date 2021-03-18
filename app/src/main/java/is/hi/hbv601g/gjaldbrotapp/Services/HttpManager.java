@@ -3,6 +3,7 @@ package is.hi.hbv601g.gjaldbrotapp.Services;
 import android.net.Uri;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -86,7 +87,7 @@ public class HttpManager {
                     .build().toString();
             String jsonString = getUrlString(url);
             JSONObject jsonBody = new JSONObject(jsonString);
-            receipts = parseReceipts(jsonBody);
+            parseReceipts(receipts, jsonBody);
         } catch (IOException ioe) {
             Log.e("GjaldbrotApp", "Failed to fetch user", ioe);
         } catch (JSONException je) {
@@ -96,8 +97,25 @@ public class HttpManager {
 
     }
 
-    private List<ReceiptItem> parseReceipts(JSONObject jsonBody) throws IOException, JSONException{
-        JSONObject receiptsJSONObject = jsonBody.getJSONObject("Receipts");
-        
+    /**
+     * Fills List with receipts for a given user
+     * @param receipts the (empty) list to fill
+     * @param jsonBody the JSON body in which the data can be found
+     * @throws IOException
+     * @throws JSONException
+     */
+    private void parseReceipts(List<ReceiptItem> receipts, JSONObject jsonBody) throws IOException, JSONException{
+        JSONObject receiptsJSONObject = jsonBody.getJSONObject("receipts");
+        JSONArray receiptJSONArray = receiptsJSONObject.getJSONArray("receipt");
+        for (int i = 0; i < receiptJSONArray.length(); i++) {
+            ReceiptItem receipt = new ReceiptItem();
+
+            JSONObject receiptJSON = receiptJSONArray.getJSONObject(i);
+
+            receipt.setAmount(receiptJSON.getInt("amount"));
+            receipt.setId(receiptJSON.getInt("id"));
+            receipt.setType(receiptJSON.getString("type"));
+            receipts.add(receipt);
+        }
     }
 }

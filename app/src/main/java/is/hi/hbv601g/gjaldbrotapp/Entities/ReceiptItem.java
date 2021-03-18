@@ -13,6 +13,10 @@ public class ReceiptItem {
         this.type = type;
     }
 
+    public ReceiptItem() {
+
+    }
+
     public void setId(int id) {
         this.id = id;
     }
