@@ -5,6 +5,10 @@ public class User {
     private String name;
     private String token;
 
+    public User(){
+        
+    }
+
     public User(String name, String token) {
         this.name = name;
         this.token = token;
