@@ -7,9 +7,9 @@ import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.Entities.User;
 
 public class ReceiptService {
-    private User loggedUser; //Hold reference to who's logged in to keep authorization
-    private UserService uService; //Use uService to fetch logged user
-    //private HttpManager httpManager;
+    private User loggedUser = new User(); //Hold reference to who's logged in to keep authorization
+    private UserService uService = new UserService(); //Use uService to fetch logged user
+    private HttpManager httpManager = new HttpManager();
 
     /**
      * Parses String from HTTPManager into list of
@@ -26,7 +26,11 @@ public class ReceiptService {
      * @return list of their receipts
      */
     public List<ReceiptItem> fetchReceipts(){
-        throw new UnsupportedOperationException("This function has not been implemented");
+        if(loggedUser == null) loggedUser = uService.getUser();
+        httpManager.setToken(loggedUser.getToken());
+        List<ReceiptItem> receipts = new ArrayList<>();
+        receipts = httpManager.fetchReceipts();
+        return  receipts;
     }
 
     /**
@@ -64,7 +68,7 @@ public class ReceiptService {
         int id = 1;
         int n = types.length;
         int m = amounts.length;
-        List<ReceiptItem> mock = new ArrayList<ReceiptItem>();
+        List<ReceiptItem> mock = new ArrayList<>();
         for(int i = 0; i < num; i++){
             String t = types[(int)(Math.random()*n)];
             int a = amounts[(int)(Math.random()*m)];

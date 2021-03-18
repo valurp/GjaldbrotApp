@@ -1,9 +1,16 @@
 package is.hi.hbv601g.gjaldbrotapp.Services;
 
+import android.util.Log;
+
 import is.hi.hbv601g.gjaldbrotapp.Entities.User;
 
 public class UserService {
     private User user;
+    HttpManager manager = new HttpManager();
+
+    public UserService(){
+
+    }
 
     /**
      * Method tries to log in user with
@@ -14,7 +21,14 @@ public class UserService {
      * @throws Exception if no such User exists
      */
     public User fetchUser(String u, String p){
-        throw new UnsupportedOperationException("This function has not been implemented");
+        User login = null;
+        try {
+            login = manager.fetchUser(u, p);
+        } catch (Exception e) {
+            Log.e("","Error fetching user");
+        }
+        this.user = login;
+        return login;
     }
 
     /**
@@ -28,14 +42,6 @@ public class UserService {
         throw new UnsupportedOperationException("This function has not been implemented");
     }
 
-    /**
-     * Parses String from HTTPManager into User
-     * @param s result from HTTPManager
-     * @return User object parsed from string
-     */
-    private User parseItem(String s){
-        throw new UnsupportedOperationException("This function has not been implemented");
-    }
 
     /**
      * Method returns logged in user
@@ -43,6 +49,10 @@ public class UserService {
      */
     public User getUser(){
         return user;
+    }
+
+    public void setUser(User u){
+        user = u;
     }
 
     /**

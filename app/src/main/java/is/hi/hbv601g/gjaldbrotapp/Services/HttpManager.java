@@ -21,6 +21,7 @@ import is.hi.hbv601g.gjaldbrotapp.Entities.User;
 
 public class HttpManager {
     private String token;
+    private static final String URL = "PLACEHOLDER FOR THE ACTUAL URL";
 
     public byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
@@ -45,7 +46,14 @@ public class HttpManager {
     public String getUrlString(String urlSpec) throws IOException {
         return new String(getUrlBytes(urlSpec));
     }
-    public User fetchUser() {
+
+    /** TODO Specify how
+     * Function returns a User object if the user name and password given matches an existing user
+     * @param u the username
+     * @param p the password
+     * @return a valid User object
+     */
+    public User fetchUser(String u, String p) {
         User user = new User();
         try {
             String url = Uri.parse("http://[APP SITE NAME HERE]/")
@@ -70,6 +78,7 @@ public class HttpManager {
         JSONObject userJsonObject = jsonBody.getJSONObject("user");
         String name = userJsonObject.getString("name");
         String token = userJsonObject.getString("token");
+        this.token = token;
         return new User(name, token);
     }
 
@@ -117,5 +126,13 @@ public class HttpManager {
             receipt.setType(receiptJSON.getString("type"));
             receipts.add(receipt);
         }
+    }
+
+    public HttpManager(){
+
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
