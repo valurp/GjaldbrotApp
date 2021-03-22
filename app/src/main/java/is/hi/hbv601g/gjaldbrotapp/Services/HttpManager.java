@@ -7,9 +7,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -86,7 +89,7 @@ public class HttpManager {
         if(token == null){
             return null;
         }
-        List<ReceiptItem> receipts = new ArrayList<ReceiptItem>();
+        List<ReceiptItem> receipts = new ArrayList<>();
         try {
             String url = Uri.parse("http://[APP SITE NAME HERE]/")
                     .buildUpon()
@@ -127,7 +130,66 @@ public class HttpManager {
             receipts.add(receipt);
         }
     }
+    public void createUser(String name, String password) throws Exception{
+        String url = Uri.parse(URL)
+                .buildUpon()
+                .appendPath("/signup")
+                .build()
+                .toString();
+        URL postUrl = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) postUrl.openConnection();
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json; utf-8");
+        con.setRequestProperty("Accept", "application/json");
+        con.setDoOutput(true);
+        String jsonUser = "{ name:" + name + ",\n password: " + password + "}";
+        try(OutputStream os = con.getOutputStream()) {
+            byte[] input = jsonUser.getBytes("utf-8");
+            os.write(input, 0, input.length);
+            System.out.println(con.getResponseCode());
+        }
+        try(BufferedReader br = new BufferedReader(
+                new InputStreamReader(con.getInputStream(), "utf-8")
+        )){
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            System.out.println(response.toString());
+        }
+    }
 
+    public void createReceipt(int amount, String type) throws Exception{
+        String url = Uri.parse(URL)
+                .buildUpon()
+                .appendPath("/receipt")
+                .build()
+                .toString();
+        URL postUrl = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) postUrl.openConnection();
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Authorization", "Bearer " + token);
+        con.setRequestProperty("Content-Type", "application/json; utf-8");
+        con.setRequestProperty("Accept", "application/json");
+        con.setDoOutput(true);
+        String jsonReceipt = "{ amount: " + amount + ",\n type: " + type + "}";
+        try(OutputStream os = con.getOutputStream()) {
+            byte[] input = jsonReceipt.getBytes("utf-8");
+            os.write(input, 0, input.length);
+            System.out.println(con.getResponseCode());
+        }
+        try(BufferedReader br = new BufferedReader(
+                new InputStreamReader(con.getInputStream(), "utf-8")
+        )){
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            System.out.println(response.toString());
+        }
+    }
     public HttpManager(){
 
     }
