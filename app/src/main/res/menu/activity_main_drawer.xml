@@ -9,13 +9,17 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_month_overview"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_month_overview" />
+            android:id="@+id/nav_add_receipt"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_add_receipt" />
         <item
             android:id="@+id/nav_all_receipts"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_all_receipts" />
+        <item
+            android:id="@+id/nav_month_overview"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/menu_month_overview" />
         <item
             android:id="@+id/nav_month_comparison"
             android:icon="@drawable/ic_menu_slideshow"

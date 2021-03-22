@@ -12,4 +12,5 @@
     <string name="menu_month_comparison">Show monthly comparison</string>
     <string name="menu_month_overview">Show monthly overview</string>
     <string name="menu_all_receipts">All receipts</string>
+    <string name="menu_add_receipt">Add receipt</string>
 </resources>
