@@ -40,9 +40,11 @@ public class ReceiptService {
      * @param r the receipt
      */
     public void addReceipt(ReceiptItem r){
+        if(loggedUser == null) uService.getUser();
         try {
             int amount = r.getAmount();
             String type = r.getType();
+            httpManager.setToken(loggedUser.getToken());
             httpManager.createReceipt(amount, type);
         } catch (Exception e) {
             Log.e("HTTPManager", "Error creating receipt");
