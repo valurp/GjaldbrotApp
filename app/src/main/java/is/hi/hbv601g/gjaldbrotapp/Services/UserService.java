@@ -39,7 +39,12 @@ public class UserService {
      * @throws Exception if username is already taken
      */
     public void createUser(String u, String p){
-        throw new UnsupportedOperationException("This function has not been implemented");
+        try {
+            manager.createUser(u, p);
+        } catch (Exception e) {
+            Log.e("HTTPManager", "Error creating user");
+        }
+        Log.i("HTTPManager", "User created successfully");
     }
 
 

@@ -1,5 +1,7 @@
 package is.hi.hbv601g.gjaldbrotapp.Services;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +40,14 @@ public class ReceiptService {
      * @param r the receipt
      */
     public void addReceipt(ReceiptItem r){
-        throw new UnsupportedOperationException("This function has not been implemented");
+        try {
+            int amount = r.getAmount();
+            String type = r.getType();
+            httpManager.createReceipt(amount, type);
+        } catch (Exception e) {
+            Log.e("HTTPManager", "Error creating receipt");
+        }
+        Log.i("HTTPManager", "Receipt created");
     }
 
     /**
