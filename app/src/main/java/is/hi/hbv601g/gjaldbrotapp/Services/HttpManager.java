@@ -24,11 +24,19 @@ import is.hi.hbv601g.gjaldbrotapp.Entities.User;
 
 public class HttpManager {
     private String token;
-    private static final String URL = "PLACEHOLDER FOR THE ACTUAL URL";
+    private static final String URL = "https://gjaldbrot-rest-service.herokuapp.com/api";
 
+    /**
+     * Method for receiving response from server.
+     * @param urlSpec URL to query
+     * @return
+     * @throws IOException
+     */
     public byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        if(token != null) conn.addRequestProperty("Authorization", "Bearer " + token);
+        conn.setRequestMethod("GET");
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             InputStream in = conn.getInputStream();
@@ -46,8 +54,33 @@ public class HttpManager {
             conn.disconnect();
         }
     }
+
+    /**
+     * Method for getting response from server
+     * @param urlSpec URL to query
+     * @return String containing JSON response.
+     * @throws IOException
+     */
     public String getUrlString(String urlSpec) throws IOException {
         return new String(getUrlBytes(urlSpec));
+    }
+
+    public void writeTo(HttpURLConnection con, String json) throws Exception{
+        try(OutputStream os = con.getOutputStream()) {
+            byte[] input = json.getBytes("utf-8");
+            os.write(input, 0, input.length);
+            System.out.println(con.getResponseCode());
+        }
+        try(BufferedReader br = new BufferedReader(
+                new InputStreamReader(con.getInputStream(), "utf-8")
+        )){
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            System.out.println(response.toString());
+        }
     }
 
     /** TODO Specify how
@@ -59,10 +92,11 @@ public class HttpManager {
     public User fetchUser(String u, String p) {
         User user = new User();
         try {
-            String url = Uri.parse("http://[APP SITE NAME HERE]/")
+            String url = Uri.parse(URL)
                     .buildUpon()
-                    .appendQueryParameter("method", "get")
-                    .appendQueryParameter("format", "json")
+                    .appendPath("login")
+                    .appendQueryParameter("username", u)
+                    .appendQueryParameter("password", p)
                     .appendQueryParameter("nojsoncallback", "1")
                     .build().toString();
             String jsonString = getUrlString(url);
@@ -77,6 +111,13 @@ public class HttpManager {
 
     }
 
+    /**
+     * Creates User object from JSON response
+     * @param jsonBody JSON response from back-end
+     * @return user and assigns a token
+     * @throws IOException
+     * @throws JSONException
+     */
     private User parseUser(JSONObject jsonBody) throws IOException, JSONException {
         JSONObject userJsonObject = jsonBody.getJSONObject("user");
         String name = userJsonObject.getString("name");
@@ -85,6 +126,10 @@ public class HttpManager {
         return new User(name, token);
     }
 
+    /**
+     * Method fetches user's receipt with their token
+     * @return
+     */
     public List<ReceiptItem> fetchReceipts() {
         if(token == null){
             return null;
@@ -130,6 +175,14 @@ public class HttpManager {
             receipts.add(receipt);
         }
     }
+
+    /**
+     * Method creates POST request to back-end, creating user
+     * with username and password
+     * @param name username
+     * @param password password
+     * @throws Exception if URL is invalid, or if connection fails.
+     */
     public void createUser(String name, String password) throws Exception{
         String url = Uri.parse(URL)
                 .buildUpon()
@@ -143,27 +196,21 @@ public class HttpManager {
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
         String jsonUser = "{ name:" + name + ",\n password: " + password + "}";
-        try(OutputStream os = con.getOutputStream()) {
-            byte[] input = jsonUser.getBytes("utf-8");
-            os.write(input, 0, input.length);
-            System.out.println(con.getResponseCode());
-        }
-        try(BufferedReader br = new BufferedReader(
-                new InputStreamReader(con.getInputStream(), "utf-8")
-        )){
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-            System.out.println(response.toString());
-        }
+        writeTo(con, jsonUser);
     }
 
-    public void createReceipt(int amount, String type) throws Exception{
+    /**
+     * Method POSTs receipt using amount and type, backend requires token
+     * and takes care of ID for us.
+     * @param amount amount of receipt
+     * @param type type of receipt
+     * @throws Exception if URL is invalid, or if connection fails.
+     */
+    public void createReceipt(int amount, String type) throws Exception {
         String url = Uri.parse(URL)
                 .buildUpon()
-                .appendPath("/receipt")
+                .appendPath("user")
+                .appendPath("receipt")
                 .build()
                 .toString();
         URL postUrl = new URL(url);
@@ -174,22 +221,46 @@ public class HttpManager {
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
         String jsonReceipt = "{ amount: " + amount + ",\n type: " + type + "}";
-        try(OutputStream os = con.getOutputStream()) {
-            byte[] input = jsonReceipt.getBytes("utf-8");
-            os.write(input, 0, input.length);
-            System.out.println(con.getResponseCode());
-        }
-        try(BufferedReader br = new BufferedReader(
-                new InputStreamReader(con.getInputStream(), "utf-8")
-        )){
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-            System.out.println(response.toString());
-        }
+        writeTo(con, jsonReceipt);
     }
+
+    public void updateReceipt(int amount, String type, int id) throws Exception {
+        String url = Uri.parse(URL)
+                .buildUpon()
+                .appendPath("users")
+                .appendPath("receipt")
+                .appendPath(""+ id)
+                .build()
+                .toString();
+        URL patchUrl = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) patchUrl.openConnection();
+        con.setRequestMethod("PATCH");
+        con.setRequestProperty("Authorization", "Bearer " + token);
+        con.setRequestProperty("Content-Type", "application/json; utf-8");
+        con.setRequestProperty("Accept", "application/json");
+        con.setDoOutput(true);
+        String jsonReceipt = "{ amount: " + amount + ",\n type: " + type + "}";
+        writeTo(con, jsonReceipt);
+    }
+
+    public void createType(String type) throws Exception{
+        String url = Uri.parse(URL)
+                .buildUpon()
+                .appendPath("user")
+                .appendPath("types")
+                .build()
+                .toString();
+        URL postUrl = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) postUrl.openConnection();
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Authorization", "Bearer " + token);
+        con.setRequestProperty("Content-Type", "application/json; utf-8");
+        con.setRequestProperty("Accept", "application/json");
+        con.setDoOutput(true);
+        String jsonType = "{ type: " + type + "}";
+        writeTo(con, jsonType);
+    }
+
     public HttpManager(){
 
     }
@@ -197,4 +268,5 @@ public class HttpManager {
     public void setToken(String token) {
         this.token = token;
     }
+
 }
