@@ -57,7 +57,14 @@ public class ReceiptService {
      * @param type the name of the Type
      */
     public void addType(String type){
-        throw new UnsupportedOperationException("This function has not been implemented");
+        if(loggedUser == null) uService.getUser();
+        try {
+            httpManager.setToken(loggedUser.getToken());
+            httpManager.createType(type);
+        } catch (Exception e){
+            Log.e("HTTPManager", "Error creating type");
+        }
+        Log.i("HTTPManager", "Type created");
     }
 
     /**
@@ -66,7 +73,14 @@ public class ReceiptService {
      * @param params the attributes to modify
      */
     public void changeReceipt(ReceiptItem r, String params){
-        throw new UnsupportedOperationException("This function has not been implemented");
+        if(loggedUser == null) uService.getUser();
+        try {
+            httpManager.setToken(loggedUser.getToken());
+            httpManager.updateReceipt(r.getAmount(),r.getType(), r.getId());
+        } catch (Exception e) {
+            Log.e("HTTPManager", "Error updatingreceipt");
+        }
+        Log.i("HTTPManager", "Receipt updated");
     }
 
     /**
