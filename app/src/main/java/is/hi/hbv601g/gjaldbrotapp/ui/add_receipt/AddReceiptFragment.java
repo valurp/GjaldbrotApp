@@ -21,11 +21,6 @@ public class AddReceiptFragment extends Fragment {
         mAddReceiptViewModel =
                 new ViewModelProvider(this).get(AddReceiptViewModel.class);
         View root = inflater.inflate(R.layout.fragment_add_receipt, container, false);
-        final TextView textView = root.findViewById(R.id.text_add_receipt);
-        mAddReceiptViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) { textView.setText(s); }
-        });
         return root;
     }
 }
