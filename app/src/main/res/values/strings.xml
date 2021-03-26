@@ -14,4 +14,6 @@
     <string name="menu_all_receipts">All receipts</string>
     <string name="menu_add_receipt">Add receipt</string>
     <string name="take_a_photo">Take a photo</string>
+    <string name="photo">Photo</string>
+    <string name="manually">Manually</string>
 </resources>
