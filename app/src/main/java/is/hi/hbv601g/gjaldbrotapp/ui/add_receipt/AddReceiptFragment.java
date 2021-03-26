@@ -1,5 +1,6 @@
 package is.hi.hbv601g.gjaldbrotapp.ui.add_receipt;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,10 +32,14 @@ public class AddReceiptFragment extends Fragment {
         photo = root.findViewById(R.id.add_receipt_photo);
 
         photo.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
-                AddPhotoFragment addPhotoFragment = new AddPhotoFragment();
-                System.out.println("Button Clicked");
+                AddPhotoFragment addPhoto = new AddPhotoFragment();
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.nav_host_fragment, addPhoto);
+                ft.commit();
             }
          });
 
@@ -42,7 +48,11 @@ public class AddReceiptFragment extends Fragment {
         man.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Button Clicked");
+                AddManuallyFragment addManually = new AddManuallyFragment();
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.nav_host_fragment, addManually);
+                ft.commit();
             }
         });
 
