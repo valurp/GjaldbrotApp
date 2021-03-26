@@ -16,4 +16,8 @@
     <string name="take_a_photo">Take a photo</string>
     <string name="photo">Photo</string>
     <string name="manually">Manually</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="amount">Amount</string>
+    <string name="add">Add</string>
 </resources>
