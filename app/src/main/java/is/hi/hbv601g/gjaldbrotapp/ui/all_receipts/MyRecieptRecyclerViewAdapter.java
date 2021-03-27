@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.R;
 
 import is.hi.hbv601g.gjaldbrotapp.ui.all_receipts.dummy.DummyContent.DummyItem;
@@ -18,9 +20,9 @@ import java.util.List;
  */
 public class MyRecieptRecyclerViewAdapter extends RecyclerView.Adapter<MyRecieptRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private List<ReceiptItem> mValues;
 
-    public MyRecieptRecyclerViewAdapter(List<DummyItem> items) {
+    public MyRecieptRecyclerViewAdapter(List<ReceiptItem> items) {
         mValues = items;
     }
 
@@ -34,8 +36,8 @@ public class MyRecieptRecyclerViewAdapter extends RecyclerView.Adapter<MyReciept
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(""+mValues.get(position).getId());
+        holder.mContentView.setText(""+mValues.get(position).getAmount());
     }
 
     @Override
@@ -47,7 +49,7 @@ public class MyRecieptRecyclerViewAdapter extends RecyclerView.Adapter<MyReciept
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public ReceiptItem mItem;
 
         public ViewHolder(View view) {
             super(view);
@@ -60,5 +62,10 @@ public class MyRecieptRecyclerViewAdapter extends RecyclerView.Adapter<MyReciept
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";
         }
+    }
+
+    public void setItems(List<ReceiptItem> receiptItems) {
+        mValues = receiptItems;
+        notifyDataSetChanged();
     }
 }

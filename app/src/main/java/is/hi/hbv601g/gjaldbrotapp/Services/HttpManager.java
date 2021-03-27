@@ -131,19 +131,20 @@ public class HttpManager {
      * @return
      */
     public List<ReceiptItem> fetchReceipts() {
+        Log.i("Receipt http", "starting fetch receipt call");
+        token = "d1423fdf-5895-4b2c-8822-0c3fe87b394b"; // TODO gera eitthvað þannig að token er pottþétt sett
         if(token == null){
             return null;
         }
-        List<ReceiptItem> receipts = new ArrayList<>();
+        List<ReceiptItem> receipts = new ArrayList<ReceiptItem>();
         try {
-            String url = Uri.parse("http://[APP SITE NAME HERE]/")
+            String url = Uri.parse(URL+"/user/receipt")
                     .buildUpon()
                     .appendQueryParameter("method", "get")
                     .appendQueryParameter("format", "json")
-                    .appendQueryParameter("nojsoncallback", "1")
                     .build().toString();
             String jsonString = getUrlString(url);
-            JSONObject jsonBody = new JSONObject(jsonString);
+            JSONArray jsonBody = new JSONArray(jsonString);
             parseReceipts(receipts, jsonBody);
         } catch (IOException ioe) {
             Log.e("GjaldbrotApp", "Failed to fetch user", ioe);
@@ -157,13 +158,13 @@ public class HttpManager {
     /**
      * Fills List with receipts for a given user
      * @param receipts the (empty) list to fill
-     * @param jsonBody the JSON body in which the data can be found
+     * @param receiptJSONArray the JSON body in which the data can be found
      * @throws IOException
      * @throws JSONException
      */
-    private void parseReceipts(List<ReceiptItem> receipts, JSONObject jsonBody) throws IOException, JSONException{
-        JSONObject receiptsJSONObject = jsonBody.getJSONObject("receipts");
-        JSONArray receiptJSONArray = receiptsJSONObject.getJSONArray("receipt");
+    private void parseReceipts(List<ReceiptItem> receipts, JSONArray receiptJSONArray) throws IOException, JSONException{
+        //JSONObject receiptsJSONObject = jsonBody.getJSONObject("receipts");
+        //JSONArray receiptJSONArray = receiptsJSONObject.getJSONArray("receipt");
         for (int i = 0; i < receiptJSONArray.length(); i++) {
             ReceiptItem receipt = new ReceiptItem();
 
@@ -268,5 +269,4 @@ public class HttpManager {
     public void setToken(String token) {
         this.token = token;
     }
-
 }

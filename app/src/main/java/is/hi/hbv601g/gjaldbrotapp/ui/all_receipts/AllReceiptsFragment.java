@@ -1,6 +1,8 @@
 package is.hi.hbv601g.gjaldbrotapp.ui.all_receipts;
 
+import android.content.AsyncQueryHandler;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,65 +10,76 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.R;
+import is.hi.hbv601g.gjaldbrotapp.Services.HttpManager;
 import is.hi.hbv601g.gjaldbrotapp.ui.all_receipts.dummy.DummyContent;
 
-/**
- * A fragment representing a list of Items.
- */
 public class AllReceiptsFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 3;
+    private List<ReceiptItem> mReceiptItems;
+    private MyRecieptRecyclerViewAdapter mAdapter;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public AllReceiptsFragment() {
-    }
-
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static AllReceiptsFragment newInstance(int columnCount) {
-        AllReceiptsFragment fragment = new AllReceiptsFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
+        mReceiptItems = new ArrayList<ReceiptItem>();
+        mAdapter = new MyRecieptRecyclerViewAdapter(mReceiptItems);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
+        setRetainInstance(true);
+        Log.i("Web call", "creating async task");
+        new FetchReceiptsTask().execute(null, null, null);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         View view = inflater.inflate(R.layout.fragment_all_receipts_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MyRecieptRecyclerViewAdapter(DummyContent.ITEMS));
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+            recyclerView.setAdapter(mAdapter);
         }
         return view;
+    }
+
+    private class FetchReceiptsTask extends AsyncTask<Void, Void, List<ReceiptItem>> {
+        @Override
+        protected List<ReceiptItem> doInBackground(Void... params) {
+            Log.i("Web call","Starting web call");
+            return new HttpManager().fetchReceipts();
+        }
+
+        @Override
+        protected void onPostExecute(List<ReceiptItem> items) {
+            Log.i("Web call","Finished web call");
+            System.out.println(items.toString());
+            mReceiptItems.addAll(items); // TODO gera eitthvað í null response frá httpManager
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void setUpAdapter() {
+        if (mAdapter == null) {
+            mAdapter = new MyRecieptRecyclerViewAdapter(mReceiptItems);
+        } else {
+            mAdapter.setItems(mReceiptItems);
+        }
     }
 }
