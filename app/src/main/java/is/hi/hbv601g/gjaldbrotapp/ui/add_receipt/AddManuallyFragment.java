@@ -1,5 +1,6 @@
 package is.hi.hbv601g.gjaldbrotapp.ui.add_receipt;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -61,6 +62,10 @@ public class AddManuallyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_manually, container, false);
+        View root = inflater.inflate(R.layout.fragment_add_manually, container, false);
+
+        root.setBackgroundColor(Color.WHITE);
+
+        return root;
     }
 }

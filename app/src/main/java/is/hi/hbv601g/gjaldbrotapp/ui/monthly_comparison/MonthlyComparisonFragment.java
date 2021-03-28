@@ -1,5 +1,6 @@
 package is.hi.hbv601g.gjaldbrotapp.ui.monthly_comparison;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,9 @@ public class MonthlyComparisonFragment extends Fragment {
         mMonthlyComparisonViewModel =
                 new ViewModelProvider(this).get(MonthlyComparisonViewModel.class);
         View root = inflater.inflate(R.layout.fragment_month_comparison, container, false);
+
+        root.setBackgroundColor(Color.WHITE);
+
         final TextView textView = root.findViewById(R.id.text_slideshow);
         mMonthlyComparisonViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override

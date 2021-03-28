@@ -132,7 +132,7 @@ public class HttpManager {
      */
     public List<ReceiptItem> fetchReceipts() {
         Log.i("Receipt http", "starting fetch receipt call");
-        token = "d1423fdf-5895-4b2c-8822-0c3fe87b394b"; // TODO gera eitthvað þannig að token er pottþétt sett
+        token = "7038394a-f2fd-45b4-b185-26533f337039"; // TODO gera eitthvað þannig að token er pottþétt sett
         if(token == null){
             return null;
         }
