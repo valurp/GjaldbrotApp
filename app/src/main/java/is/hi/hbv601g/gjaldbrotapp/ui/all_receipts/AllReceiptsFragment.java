@@ -37,7 +37,6 @@ public class AllReceiptsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        Log.i("Web call", "creating async task");
         new FetchReceiptsTask().execute(null, null, null);
     }
 
@@ -62,14 +61,11 @@ public class AllReceiptsFragment extends Fragment {
     private class FetchReceiptsTask extends AsyncTask<Void, Void, List<ReceiptItem>> {
         @Override
         protected List<ReceiptItem> doInBackground(Void... params) {
-            Log.i("Web call","Starting web call");
             return new HttpManager().fetchReceipts();
         }
 
         @Override
         protected void onPostExecute(List<ReceiptItem> items) {
-            Log.i("Web call","Finished web call");
-            System.out.println(items.toString());
             mReceiptItems.addAll(items); // TODO gera eitthvað í null response frá httpManager
             mAdapter.notifyDataSetChanged();
         }
