@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import is.hi.hbv601g.gjaldbrotapp.R;
 
@@ -61,6 +63,8 @@ public class AddManuallyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_manually, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_manually, container, false);
+        Button addReceiptButton = (Button) view.findViewById(R.id.add_receipt_button);
+        return view;
     }
 }

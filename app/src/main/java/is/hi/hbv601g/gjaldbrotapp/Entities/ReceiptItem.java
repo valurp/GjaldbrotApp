@@ -40,6 +40,8 @@ public class ReceiptItem {
         return type;
     }
 
+    public String getDate() { return "2020-01-01"; };
+
 
 
 

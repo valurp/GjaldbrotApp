@@ -36,8 +36,9 @@ public class MyRecieptRecyclerViewAdapter extends RecyclerView.Adapter<MyReciept
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(""+mValues.get(position).getId());
-        holder.mContentView.setText(""+mValues.get(position).getAmount());
+        holder.mDateView.setText(""+mValues.get(position).getDate());
+        holder.mTypeView.setText(""+mValues.get(position).getType());
+        holder.mAmountView.setText(""+mValues.get(position).getAmount());
     }
 
     @Override
@@ -47,20 +48,22 @@ public class MyRecieptRecyclerViewAdapter extends RecyclerView.Adapter<MyReciept
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
+        public final TextView mTypeView;
+        public final TextView mAmountView;
+        public final TextView mDateView;
         public ReceiptItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mTypeView = (TextView) view.findViewById(R.id.receipt_list_type);
+            mAmountView = (TextView) view.findViewById(R.id.receipt_list_amount);
+            mDateView = (TextView) view.findViewById(R.id.receipt_list_date);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mAmountView.getText() + "'";
         }
     }
 

@@ -32,11 +32,11 @@ public class HttpManager {
      * @return
      * @throws IOException
      */
-    public byte[] getUrlBytes(String urlSpec) throws IOException {
+    public byte[] getUrlBytes(String urlSpec, String method) throws IOException {
         URL url = new URL(urlSpec);
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         if(token != null) conn.addRequestProperty("Authorization", "Bearer " + token);
-        conn.setRequestMethod("GET");
+        conn.setRequestMethod(method);
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             InputStream in = conn.getInputStream();
@@ -61,8 +61,8 @@ public class HttpManager {
      * @return String containing JSON response.
      * @throws IOException
      */
-    public String getUrlString(String urlSpec) throws IOException {
-        return new String(getUrlBytes(urlSpec));
+    public String getUrlString(String urlSpec, String method) throws IOException {
+        return new String(getUrlBytes(urlSpec, method));
     }
 
     public void writeTo(HttpURLConnection con, String json) throws Exception{
@@ -97,9 +97,8 @@ public class HttpManager {
                     .appendPath("login")
                     .appendQueryParameter("username", u)
                     .appendQueryParameter("password", p)
-                    .appendQueryParameter("nojsoncallback", "1")
                     .build().toString();
-            String jsonString = getUrlString(url);
+            String jsonString = getUrlString(url, "POST");
             JSONObject jsonBody = new JSONObject(jsonString);
             user = parseUser(jsonBody);
         } catch (IOException ioe) {
@@ -119,11 +118,10 @@ public class HttpManager {
      * @throws JSONException
      */
     private User parseUser(JSONObject jsonBody) throws IOException, JSONException {
-        JSONObject userJsonObject = jsonBody.getJSONObject("user");
-        String name = userJsonObject.getString("name");
-        String token = userJsonObject.getString("token");
-        this.token = token;
-        return new User(name, token);
+        //String name = jsonBody.getString("username");
+        String token = jsonBody.getString("access_token");
+        this.token = token; // TODO vista token i store sem er sott thegar app er keyrt upp
+        return new User("joi", token);
     }
 
     /**
@@ -132,7 +130,7 @@ public class HttpManager {
      */
     public List<ReceiptItem> fetchReceipts() {
         Log.i("Receipt http", "starting fetch receipt call");
-        token = "d1423fdf-5895-4b2c-8822-0c3fe87b394b"; // TODO gera eitthvað þannig að token er pottþétt sett
+        token = "1c380122-85bc-4f09-8ba6-7b87f1f9b13e"; // TODO gera eitthvað þannig að token er pottþétt sett
         if(token == null){
             return null;
         }
@@ -143,7 +141,7 @@ public class HttpManager {
                     .appendQueryParameter("method", "get")
                     .appendQueryParameter("format", "json")
                     .build().toString();
-            String jsonString = getUrlString(url);
+            String jsonString = getUrlString(url, "GET");
             JSONArray jsonBody = new JSONArray(jsonString);
             parseReceipts(receipts, jsonBody);
         } catch (IOException ioe) {
@@ -169,7 +167,7 @@ public class HttpManager {
             ReceiptItem receipt = new ReceiptItem();
 
             JSONObject receiptJSON = receiptJSONArray.getJSONObject(i);
-
+            // TODO parse-a líka date
             receipt.setAmount(receiptJSON.getInt("amount"));
             receipt.setId(receiptJSON.getInt("id"));
             receipt.setType(receiptJSON.getString("type"));
