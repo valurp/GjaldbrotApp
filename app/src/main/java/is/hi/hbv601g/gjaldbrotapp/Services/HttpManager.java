@@ -181,8 +181,9 @@ public class HttpManager {
      * @param name username
      * @param password password
      * @throws Exception if URL is invalid, or if connection fails.
+     * @return int (0 if user was created) (1 if error occured)
      */
-    public void createUser(String name, String password) throws Exception{
+    public int createUser(String name, String password) throws Exception{  //TODO gera eitthvað til að láta virka
         String url = Uri.parse(URL)
                 .buildUpon()
                 .appendPath("/signup")
@@ -195,7 +196,14 @@ public class HttpManager {
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
         String jsonUser = "{ name:" + name + ",\n password: " + password + "}";
-        writeTo(con, jsonUser);
+        try {
+            writeTo(con, jsonUser);
+
+        }
+        catch (Exception e) {
+            return 1;
+        }
+        return 0;
     }
 
     /**
