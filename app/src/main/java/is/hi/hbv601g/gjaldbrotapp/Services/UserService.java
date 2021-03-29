@@ -38,13 +38,13 @@ public class UserService {
      * @param p Password
      * @throws Exception if username is already taken
      */
-    public void createUser(String u, String p){
+    public boolean createUser(String u, String p){
         try {
             manager.createUser(u, p);
+            return true;
         } catch (Exception e) {
-            Log.e("HTTPManager", "Error creating user");
+            return false;
         }
-        Log.i("HTTPManager", "User created successfully");
     }
 
 

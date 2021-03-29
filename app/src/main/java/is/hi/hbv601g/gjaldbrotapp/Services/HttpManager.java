@@ -89,7 +89,7 @@ public class HttpManager {
      * @param p the password
      * @return a valid User object
      */
-    public User fetchUser(String u, String p) {
+    public User fetchUser(String u, String p) throws Exception{
         User user = new User();
         try {
             String url = Uri.parse(URL)
@@ -103,8 +103,10 @@ public class HttpManager {
             user = parseUser(jsonBody);
         } catch (IOException ioe) {
             Log.e("GjaldbrotApp", "Failed to fetch user", ioe);
+            throw ioe;
         } catch (JSONException je) {
             Log.e("GjaldbrotApp", "Failed to parse JSON", je);
+            throw je;
         }
         return user;
 
@@ -183,7 +185,7 @@ public class HttpManager {
      * @throws Exception if URL is invalid, or if connection fails.
      * @return int (0 if user was created) (1 if error occured)
      */
-    public int createUser(String name, String password) throws Exception{  //TODO gera eitthvað til að láta virka
+    public void createUser(String name, String password) throws Exception{  //TODO gera eitthvað til að láta virka
         String url = Uri.parse(URL)
                 .buildUpon()
                 .appendPath("/signup")
@@ -196,14 +198,7 @@ public class HttpManager {
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
         String jsonUser = "{ name:" + name + ",\n password: " + password + "}";
-        try {
-            writeTo(con, jsonUser);
-
-        }
-        catch (Exception e) {
-            return 1;
-        }
-        return 0;
+        writeTo(con, jsonUser);
     }
 
     /**

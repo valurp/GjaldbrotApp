@@ -1,5 +1,7 @@
 package is.hi.hbv601g.gjaldbrotapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -22,12 +24,29 @@ import is.hi.hbv601g.gjaldbrotapp.Services.HttpManager;
 
 public class LoginFragment extends Fragment {
 
+    LoginCallbacks mLoginCallback;
+
     EditText usernameField;
     EditText passwordField;
     View view;
 
     public LoginFragment() {
-        // Required empty public constructor
+    }
+
+    public interface LoginCallbacks {
+        public void onLogin();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mLoginCallback = (LoginCallbacks) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mLoginCallback = null;
     }
 
     @Override
@@ -65,12 +84,27 @@ public class LoginFragment extends Fragment {
     class LoginTask extends AsyncTask<String, Void, User> {
         @Override
         protected User doInBackground(String... params) {
-            return new HttpManager().fetchUser(params[0], params[1]);
+            try {
+                return new HttpManager().fetchUser(params[0], params[1]);
+            }
+            catch (Exception e) {
+                return null;
+            }
         }
 
         @Override
         protected void onPostExecute(User user) {
-            Toast.makeText(view.getContext(), user.getToken(), Toast.LENGTH_SHORT).show();
+            if (user != null) {
+                SharedPreferences sharedPreferences = view.getContext().getSharedPreferences(
+                        getString(R.string.shared_preferences), Context.MODE_PRIVATE);
+                sharedPreferences.edit()
+                        .putString(getString(R.string.token_file_key), user.getToken())
+                        .apply();
+                mLoginCallback.onLogin();
+            }
+            else {
+                Toast.makeText(view.getContext(), "Could not log in", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

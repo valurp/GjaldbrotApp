@@ -1,5 +1,6 @@
 package is.hi.hbv601g.gjaldbrotapp;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import is.hi.hbv601g.gjaldbrotapp.Services.HttpManager;
+import is.hi.hbv601g.gjaldbrotapp.Services.UserService;
 
 public class RegisterFragment extends Fragment {
 
@@ -22,10 +24,26 @@ public class RegisterFragment extends Fragment {
     EditText mReenterPasswordField;
     Button mRegisterButton;
 
-    public RegisterFragment() {
-        // Required empty public constructor
+    private RegisterCallbacks mCallbacks;
+
+    public interface RegisterCallbacks {
+        void onRegister();
     }
 
+    public RegisterFragment() {
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallbacks = (RegisterCallbacks) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +60,7 @@ public class RegisterFragment extends Fragment {
         mPasswordField = (EditText) view.findViewById(R.id.et_password);
         mReenterPasswordField = (EditText) view.findViewById(R.id.et_repassword);
 
-        mRegisterButton = (Button) view.findViewById(R.id.btn_login);
+        mRegisterButton = (Button) view.findViewById(R.id.btn_register);
         mRegisterButton.setOnClickListener(new RegisterListener());
 
         return view;
@@ -67,21 +85,21 @@ public class RegisterFragment extends Fragment {
         }
     }
 
-    class RegisterTask extends AsyncTask<String, Void, String> {
+    class RegisterTask extends AsyncTask<String, Void, Boolean> {
         @Override
-        public String doInBackground(String... params) {
-            try {
-                new HttpManager().createUser(params[0], params[1]);
-                return "";
-            }
-            catch (Exception e) {
-                return "";
-            }
+        public Boolean doInBackground(String... params) {
+            return new UserService().createUser(params[0], params[1]);
         }
 
         @Override
-        public void onPostExecute(String result) {
+        public void onPostExecute(Boolean result) {
             //TODO go to login page if successful
+            if (result.booleanValue()) {
+                mCallbacks.onRegister();
+            }
+            else {
+                Toast.makeText(view.getContext(), "Error creating user", Toast.LENGTH_SHORT);
+            }
         }
     }
 }

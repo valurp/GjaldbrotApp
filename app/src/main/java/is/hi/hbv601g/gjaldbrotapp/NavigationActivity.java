@@ -1,5 +1,7 @@
 package is.hi.hbv601g.gjaldbrotapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
@@ -17,6 +19,11 @@ import androidx.appcompat.widget.Toolbar;
 public class NavigationActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+
+    public static Intent newIntent(Context context) {
+        Intent i = new Intent(context, NavigationActivity.class);
+        return i;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
