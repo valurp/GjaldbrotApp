@@ -22,15 +22,17 @@ public class LoginActivity
         implements RegisterFragment.RegisterCallbacks,
         LoginFragment.LoginCallbacks {
 
+    ViewPager loginViewPager;
+
     @Override
     public void onRegister() {
-        // todo change fragment to be LoginFragment
+        loginViewPager.setCurrentItem(0);
     }
 
     @Override
     public void onLogin() {
         Intent intent = NavigationActivity.newIntent(this);
-        startActivity(intent);
+        startActivity(intent); // TODO láta navigationActivity vera neðst á stakknum
     }
 
     @Override
@@ -38,19 +40,20 @@ public class LoginActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        ViewPager loginViewPager = findViewById(R.id.loginViewPager);
+        loginViewPager = findViewById(R.id.loginViewPager);
         /*Við geymum token í sharedPreferences og ef að það er strengur vistaður þar nú þegar viljum
          við fara beint í NavigationActivity*/
 
         /** FOR DEV PURPOSES WE ALWAYS GO TO LOGIN SCREEN FIRST, MAYBE WE WANT A MORE COMPLEX CHECK
          * WITH LIKE A WEB CALL*/
-        SharedPreferences sharedPreferences =
+        /*SharedPreferences sharedPreferences =
                 loginViewPager.getContext().getSharedPreferences(getString(R.string.shared_preferences), Context.MODE_PRIVATE);
         String token = sharedPreferences.getString(getString(R.string.token_file_key), null);
         if (token != null) {
             Intent intent = NavigationActivity.newIntent(this);
             startActivity(intent); //TODO láta NavigationActivity vera neðst á activity stakknum
-        }
+        }*/
+
 
         AuthenticationPagerAdapter pagerAdapter = new AuthenticationPagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFragment(new LoginFragment());
