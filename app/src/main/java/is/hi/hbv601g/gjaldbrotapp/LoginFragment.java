@@ -21,6 +21,7 @@ import java.util.List;
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.Entities.User;
 import is.hi.hbv601g.gjaldbrotapp.Services.HttpManager;
+import is.hi.hbv601g.gjaldbrotapp.Services.UserService;
 
 public class LoginFragment extends Fragment {
 
@@ -30,8 +31,7 @@ public class LoginFragment extends Fragment {
     EditText passwordField;
     View view;
 
-    public LoginFragment() {
-    }
+    public LoginFragment() { }
 
     public interface LoginCallbacks {
         public void onLogin();
@@ -57,7 +57,6 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_login, container, false);
 
         usernameField = (EditText) view.findViewById(R.id.et_username);
@@ -84,17 +83,13 @@ public class LoginFragment extends Fragment {
     class LoginTask extends AsyncTask<String, Void, User> {
         @Override
         protected User doInBackground(String... params) {
-            try {
-                return new HttpManager().fetchUser(params[0], params[1]);
-            }
-            catch (Exception e) {
-                return null;
-            }
+            return UserService.getInstance().fetchUser(params[0], params[1]);
         }
 
         @Override
         protected void onPostExecute(User user) {
             if (user != null) {
+                UserService.getInstance().setToken(user.getToken());
                 SharedPreferences sharedPreferences = view.getContext().getSharedPreferences(
                         getString(R.string.shared_preferences), Context.MODE_PRIVATE);
                 sharedPreferences.edit()

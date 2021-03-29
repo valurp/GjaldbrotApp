@@ -5,11 +5,30 @@ import android.util.Log;
 import is.hi.hbv601g.gjaldbrotapp.Entities.User;
 
 public class UserService {
+    private static UserService self;
     private User user;
-    HttpManager manager = new HttpManager();
+    private HttpManager manager;
+
+    /**
+     * Singleton
+     */
+    public static UserService getInstance() {
+        if (self == null) {
+            self = new UserService();
+        }
+        return self;
+    }
 
     public UserService(){
+        manager = HttpManager.getInstance();
+    }
 
+    /**
+     * Sets the user token of the HttpManager for authorized calls
+     * @param token String
+     */
+    public void setToken(String token) {
+        manager.setToken(token);
     }
 
     /**
@@ -17,18 +36,14 @@ public class UserService {
      * username and password
      * @param u Username
      * @param p Password
-     * @return User if he exists
-     * @throws Exception if no such User exists
+     * @return User if he exists, null if no such user exists
      */
     public User fetchUser(String u, String p){
-        User login = null;
         try {
-            login = manager.fetchUser(u, p);
+            return manager.fetchUser(u, p);
         } catch (Exception e) {
-            Log.e("","Error fetching user");
+            return null;
         }
-        this.user = login;
-        return login;
     }
 
     /**

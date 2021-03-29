@@ -23,8 +23,19 @@ import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.Entities.User;
 
 public class HttpManager {
+    private static HttpManager self;
     private String token;
     private static final String URL = "https://gjaldbrot-rest-service.herokuapp.com/api";
+
+    /**
+     * Singleton
+     */
+    public static HttpManager getInstance() {
+        if (self == null) {
+            self = new HttpManager();
+        }
+        return self;
+    }
 
     /**
      * Method for receiving response from server.
@@ -261,7 +272,6 @@ public class HttpManager {
     }
 
     public HttpManager(){
-
     }
 
     public void setToken(String token) {

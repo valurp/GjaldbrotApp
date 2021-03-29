@@ -90,7 +90,7 @@ public class RegisterFragment extends Fragment {
         @Override
         public Boolean doInBackground(String... params) {
             Log.i("REGISTER CALL", params[0]+" "+params[1]);
-            return new UserService().createUser(params[0], params[1]);
+            return UserService.getInstance().createUser(params[0], params[1]);
         }
 
         @Override
