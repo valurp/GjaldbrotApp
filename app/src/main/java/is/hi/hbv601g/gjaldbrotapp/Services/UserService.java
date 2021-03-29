@@ -38,7 +38,7 @@ public class UserService {
      * @param p Password
      * @throws Exception if username is already taken
      */
-    public boolean createUser(String u, String p){
+    public Boolean createUser(String u, String p){
         try {
             manager.createUser(u, p);
             return true;

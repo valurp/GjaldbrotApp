@@ -69,7 +69,7 @@ public class HttpManager {
         try(OutputStream os = con.getOutputStream()) {
             byte[] input = json.getBytes("utf-8");
             os.write(input, 0, input.length);
-            System.out.println(con.getResponseCode());
+            Log.i("RESPONSE CODE", ""+con.getResponseCode());
         }
         try(BufferedReader br = new BufferedReader(
                 new InputStreamReader(con.getInputStream(), "utf-8")
@@ -188,17 +188,14 @@ public class HttpManager {
     public void createUser(String name, String password) throws Exception{  //TODO gera eitthvað til að láta virka
         String url = Uri.parse(URL)
                 .buildUpon()
-                .appendPath("/signup")
+                .appendPath("signup")
+                .appendQueryParameter("username", name)
+                .appendQueryParameter("password", password)
                 .build()
                 .toString();
-        URL postUrl = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) postUrl.openConnection();
-        con.setRequestMethod("POST");
-        con.setRequestProperty("Content-Type", "application/json; utf-8");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-        String jsonUser = "{ name:" + name + ",\n password: " + password + "}";
-        writeTo(con, jsonUser);
+        Log.i("REGISTER URL", url);
+        String response = getUrlString(url, "POST");
+        Log.i("REGISTER RESPONSE", response);
     }
 
     /**

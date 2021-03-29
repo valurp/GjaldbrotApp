@@ -22,8 +22,6 @@ public class LoginActivity
         implements RegisterFragment.RegisterCallbacks,
         LoginFragment.LoginCallbacks {
 
-    private TextView mTextView;
-
     @Override
     public void onRegister() {
         // todo change fragment to be LoginFragment
@@ -45,18 +43,18 @@ public class LoginActivity
          við fara beint í NavigationActivity*/
 
         /** FOR DEV PURPOSES WE ALWAYS GO TO LOGIN SCREEN FIRST, MAYBE WE WANT A MORE COMPLEX CHECK
-         * WITH LIKE A WEB CALL
+         * WITH LIKE A WEB CALL*/
         SharedPreferences sharedPreferences =
                 loginViewPager.getContext().getSharedPreferences(getString(R.string.shared_preferences), Context.MODE_PRIVATE);
         String token = sharedPreferences.getString(getString(R.string.token_file_key), null);
         if (token != null) {
             Intent intent = NavigationActivity.newIntent(this);
-            startActivity(intent);
-        }*/
+            startActivity(intent); //TODO láta NavigationActivity vera neðst á activity stakknum
+        }
 
         AuthenticationPagerAdapter pagerAdapter = new AuthenticationPagerAdapter(getSupportFragmentManager());
-        pagerAdapter.addFragmet(new LoginFragment());
-        pagerAdapter.addFragmet(new RegisterFragment());
+        pagerAdapter.addFragment(new LoginFragment());
+        pagerAdapter.addFragment(new RegisterFragment());
         loginViewPager.setAdapter(pagerAdapter);
     }
 
@@ -77,7 +75,7 @@ public class LoginActivity
             return fragmentList.size();
         }
 
-        void addFragmet(Fragment fragment) {
+        void addFragment(Fragment fragment) {
             fragmentList.add(fragment);
         }
     }

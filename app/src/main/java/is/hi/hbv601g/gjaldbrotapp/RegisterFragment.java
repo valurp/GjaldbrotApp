@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,12 +89,12 @@ public class RegisterFragment extends Fragment {
     class RegisterTask extends AsyncTask<String, Void, Boolean> {
         @Override
         public Boolean doInBackground(String... params) {
+            Log.i("REGISTER CALL", params[0]+" "+params[1]);
             return new UserService().createUser(params[0], params[1]);
         }
 
         @Override
         public void onPostExecute(Boolean result) {
-            //TODO go to login page if successful
             if (result.booleanValue()) {
                 mCallbacks.onRegister();
             }
