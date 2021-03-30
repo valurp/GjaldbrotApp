@@ -58,11 +58,11 @@ public class RegisterFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_register, container, false);
 
-        mUsernameField = (EditText) view.findViewById(R.id.et_name);
-        mPasswordField = (EditText) view.findViewById(R.id.et_password);
-        mReenterPasswordField = (EditText) view.findViewById(R.id.et_repassword);
+        mUsernameField = (EditText) view.findViewById(R.id.register_et_username);
+        mPasswordField = (EditText) view.findViewById(R.id.register_et_password);
+        mReenterPasswordField = (EditText) view.findViewById(R.id.register_et_passwordRepeat);
 
-        mRegisterButton = (Button) view.findViewById(R.id.btn_register);
+        mRegisterButton = (Button) view.findViewById(R.id.register_btn_submit);
         mRegisterButton.setOnClickListener(new RegisterListener());
 
         return view;

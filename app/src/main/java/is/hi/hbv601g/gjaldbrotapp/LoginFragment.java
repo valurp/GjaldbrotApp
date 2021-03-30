@@ -27,9 +27,9 @@ public class LoginFragment extends Fragment {
 
     LoginCallbacks mLoginCallback;
 
-    EditText usernameField;
-    EditText passwordField;
-    View view;
+    EditText mUsernameField;
+    EditText mPasswordField;
+    View mView;
 
     public LoginFragment() { }
 
@@ -59,14 +59,14 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_login, container, false);
+        mView = inflater.inflate(R.layout.fragment_login, container, false);
 
-        usernameField = (EditText) view.findViewById(R.id.et_username);
-        passwordField = (EditText) view.findViewById(R.id.et_password);
+        mUsernameField = (EditText) mView.findViewById(R.id.login_et_username);
+        mPasswordField = (EditText) mView.findViewById(R.id.login_et_password);
 
-        Button button = (Button) view.findViewById(R.id.btn_login);
+        Button button = (Button) mView.findViewById(R.id.login_btn_submit);
         button.setOnClickListener(new LoginListener());
-        return view;
+        return mView;
     }
 
     // OnClickListener til að staðfesta innskráningu
@@ -74,11 +74,11 @@ public class LoginFragment extends Fragment {
         @Override
         public void onClick(View v) {
             // Sækjum gögnin úr viðmótinu
-            String username = usernameField.getText().toString();
-            String password = passwordField.getText().toString();
+            String username = mUsernameField.getText().toString();
+            String password = mPasswordField.getText().toString();
 
             if (username.length() == 0 || password.length() == 0) {
-                Toast.makeText(view.getContext(), "Username or password is empty", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mView.getContext(), "Username or password is empty", Toast.LENGTH_SHORT).show();
                 return;
             }
             new LoginTask().execute(username, password);
@@ -97,7 +97,7 @@ public class LoginFragment extends Fragment {
         protected void onPostExecute(User user) {
             if (user != null) {
                 UserService.getInstance().setToken(user.getToken());
-                SharedPreferences sharedPreferences = view.getContext().getSharedPreferences(
+                SharedPreferences sharedPreferences = mView.getContext().getSharedPreferences(
                         getString(R.string.shared_preferences), Context.MODE_PRIVATE);
                 sharedPreferences.edit()
                         .putString(getString(R.string.token_file_key), user.getToken())
@@ -105,7 +105,7 @@ public class LoginFragment extends Fragment {
                 mLoginCallback.onLogin();
             }
             else {
-                Toast.makeText(view.getContext(), "Could not log in", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mView.getContext(), "Could not log in", Toast.LENGTH_SHORT).show();
             }
         }
     }

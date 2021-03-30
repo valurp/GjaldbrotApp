@@ -22,11 +22,11 @@ public class LoginActivity
         implements RegisterFragment.RegisterCallbacks,
         LoginFragment.LoginCallbacks {
 
-    ViewPager loginViewPager; // Container fyrir login og register fragment
+    ViewPager viewPager; // Container fyrir login og register fragment
 
     @Override
     public void onRegister() {
-        loginViewPager.setCurrentItem(0);
+        viewPager.setCurrentItem(0);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class LoginActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        loginViewPager = findViewById(R.id.loginViewPager);
+        viewPager = findViewById(R.id.login_viewPager);
 
         // Athuga eftir token í SharedPreferences, ef það er til gerum við ráð fyrir að
         // notandi sé skráður inn
@@ -65,7 +65,7 @@ public class LoginActivity
                 new AuthenticationPagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFragment(new LoginFragment());
         pagerAdapter.addFragment(new RegisterFragment());
-        loginViewPager.setAdapter(pagerAdapter);
+        viewPager.setAdapter(pagerAdapter);
     }
 
     // Innri klasi sem að heldur utan um hvaða fragment er í focus.

@@ -8,7 +8,7 @@
 
 
     <view
-        android:id="@+id/loginViewPager"
+        android:id="@+id/login_viewPager"
         class="androidx.viewpager.widget.ViewPager"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -8,7 +8,7 @@
     tools:context=".RegisterFragment">
 
     <TextView
-        android:id="@+id/tv_logo"
+        android:id="@+id/register_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Register"
@@ -19,7 +19,7 @@
         android:layout_marginTop="60dp"/>
 
     <TextView
-        android:id="@+id/tv_subtitle"
+        android:id="@+id/register_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="REGISTER"
@@ -28,7 +28,7 @@
         android:layout_marginBottom="50dp"/>
 
     <EditText
-        android:id="@+id/et_name"
+        android:id="@+id/register_et_username"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:hint="Username"
@@ -40,7 +40,7 @@
         android:textSize="15sp" />
 
     <EditText
-        android:id="@+id/et_password"
+        android:id="@+id/register_et_password"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:hint="Password"
@@ -52,7 +52,7 @@
         android:textSize="15sp" />
 
     <EditText
-        android:id="@+id/et_repassword"
+        android:id="@+id/register_et_passwordRepeat"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:hint="Re-enter password"
@@ -68,7 +68,7 @@
         android:layout_weight="1">
 
         <Button
-            android:id="@+id/btn_register"
+            android:id="@+id/register_btn_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
