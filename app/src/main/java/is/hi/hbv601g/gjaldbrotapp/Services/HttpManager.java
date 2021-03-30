@@ -143,8 +143,8 @@ public class HttpManager {
      */
     public List<ReceiptItem> fetchReceipts() {
         Log.i("Receipt http", "starting fetch receipt call");
-        token = "1c380122-85bc-4f09-8ba6-7b87f1f9b13e"; // TODO gera eitthvað þannig að token er pottþétt sett
         if(token == null){
+            Log.e("TOKEN", "Token is null");
             return null;
         }
         List<ReceiptItem> receipts = new ArrayList<ReceiptItem>();
@@ -216,7 +216,7 @@ public class HttpManager {
      * @param type type of receipt
      * @throws Exception if URL is invalid, or if connection fails.
      */
-    public void createReceipt(int amount, String type) throws Exception {
+    public void createReceipt(int amount, String type, String date, String time) throws Exception {
         String url = Uri.parse(URL)
                 .buildUpon()
                 .appendPath("user")
@@ -227,10 +227,15 @@ public class HttpManager {
         HttpURLConnection con = (HttpURLConnection) postUrl.openConnection();
         con.setRequestMethod("POST");
         con.setRequestProperty("Authorization", "Bearer " + token);
-        con.setRequestProperty("Content-Type", "application/json; utf-8");
+        con.setRequestProperty("Content-Type", "application/json");
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
-        String jsonReceipt = "{ amount: " + amount + ",\n type: " + type + "}";
+        String jsonReceipt =
+                "{ \"amount\":\"" + amount + "\", "
+                        + "\"type\":\"" + type + "\","
+                        + "\"date\":\"" + date + "\","
+                        + "\"time\":\"" + time + "\""
+                        + "}";
         writeTo(con, jsonReceipt);
     }
 
@@ -277,4 +282,5 @@ public class HttpManager {
     public void setToken(String token) {
         this.token = token;
     }
+    public boolean hasToken() { return token != null; }
 }

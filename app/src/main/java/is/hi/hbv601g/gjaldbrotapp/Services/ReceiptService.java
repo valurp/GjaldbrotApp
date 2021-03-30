@@ -2,16 +2,40 @@ package is.hi.hbv601g.gjaldbrotapp.Services;
 
 import android.util.Log;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.Entities.User;
 
 public class ReceiptService {
+    private static ReceiptService self;
+
     private User loggedUser = new User(); //Hold reference to who's logged in to keep authorization
-    private UserService uService = new UserService(); //Use uService to fetch logged user
-    private HttpManager httpManager = new HttpManager();
+    private UserService uService; //Use uService to fetch logged user
+    private HttpManager httpManager;
+
+
+    /**
+     * Singleton
+     */
+    public static ReceiptService getInstance() {
+        if (self == null) {
+            self = new ReceiptService();
+        }
+        return self;
+    }
+
+    /**
+     * Construcor
+     */
+    public ReceiptService() {
+        uService = UserService.getInstance();
+        httpManager = HttpManager.getInstance();
+    }
 
     /**
      * Parses String from HTTPManager into list of
@@ -28,28 +52,32 @@ public class ReceiptService {
      * @return list of their receipts
      */
     public List<ReceiptItem> fetchReceipts(){
-        if(loggedUser == null) loggedUser = uService.getUser();
-        httpManager.setToken(loggedUser.getToken());
-        List<ReceiptItem> receipts = new ArrayList<>();
-        receipts = httpManager.fetchReceipts();
-        return  receipts;
+        if (!httpManager.hasToken()) {
+            Log.e("MANAGER TOKEN", "HttpManager has no token");
+            return null;
+        }
+        return httpManager.fetchReceipts();
     }
 
     /**
      * Method adds receipt for user
      * @param r the receipt
      */
-    public void addReceipt(ReceiptItem r){
-        if(loggedUser == null) uService.getUser();
+    public Boolean addReceipt(ReceiptItem r){
         try {
-            int amount = r.getAmount();
-            String type = r.getType();
-            httpManager.setToken(loggedUser.getToken());
-            httpManager.createReceipt(amount, type);
+            /*int amount = r.getAmount();
+            String type = r.getType();*/
+            int amount = 4500; // TODO fá gögn frá ReceiptItem
+            String type = "3";
+            String date = "2020-01-01";
+            String time = "10:10:10";
+            httpManager.createReceipt(amount, type, date, time);
+            Log.i("RECEIPT_SERVICE", "Receipt created");
+            return true;
         } catch (Exception e) {
-            Log.e("HTTPManager", "Error creating receipt");
+            Log.e("RECEIPT_SEVICE", e.toString());
+            return false;
         }
-        Log.i("HTTPManager", "Receipt created");
     }
 
     /**

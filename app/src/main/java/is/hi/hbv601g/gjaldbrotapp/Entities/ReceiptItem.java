@@ -5,7 +5,7 @@ public class ReceiptItem {
     private int id;
     private int amount;
     private String type;
-    //Private ??? date
+    //Private ??? date TODO implement some date and time fields
 
     public ReceiptItem(int id, int amount, String type) {
         this.id = id;

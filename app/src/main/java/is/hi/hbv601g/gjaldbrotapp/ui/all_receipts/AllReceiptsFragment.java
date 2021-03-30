@@ -21,6 +21,7 @@ import java.util.List;
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.R;
 import is.hi.hbv601g.gjaldbrotapp.Services.HttpManager;
+import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
 import is.hi.hbv601g.gjaldbrotapp.ui.all_receipts.dummy.DummyContent;
 
 public class AllReceiptsFragment extends Fragment {
@@ -61,12 +62,16 @@ public class AllReceiptsFragment extends Fragment {
     private class FetchReceiptsTask extends AsyncTask<Void, Void, List<ReceiptItem>> {
         @Override
         protected List<ReceiptItem> doInBackground(Void... params) {
-            return new HttpManager().fetchReceipts();
+            return ReceiptService.getInstance().fetchReceipts();
         }
 
         @Override
         protected void onPostExecute(List<ReceiptItem> items) {
-            mReceiptItems.addAll(items); // TODO gera eitthvað í null response frá httpManager
+            if(items == null) {
+                Log.e("NULL ERROR", "items from receipt call are null");
+                return;
+            }
+            mReceiptItems.addAll(items); // TODO gera eitthvað í null response frá httpManager t.d. láta user logga sig aftur inn
             mAdapter.notifyDataSetChanged();
         }
     }

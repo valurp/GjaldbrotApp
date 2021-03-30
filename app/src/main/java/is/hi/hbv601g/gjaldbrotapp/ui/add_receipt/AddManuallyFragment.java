@@ -1,17 +1,21 @@
 package is.hi.hbv601g.gjaldbrotapp.ui.add_receipt;
 
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.R;
+import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,6 +72,32 @@ public class AddManuallyFragment extends Fragment {
 
         root.setBackgroundColor(Color.WHITE);
 
+        Button createReceiptBtn = root.findViewById(R.id.buttonAdd);
+        createReceiptBtn.setOnClickListener(new CreateReceiptListener());
         return root;
+    }
+
+    private class CreateReceiptListener implements View.OnClickListener{
+        @Override
+        public void onClick(View view) {
+            new CreateReceiptTask().execute(); // TODO lesa gögn úr EditText, sjá Login og RegisterFragment
+        }
+    }
+
+    private class CreateReceiptTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        public Boolean doInBackground(Void... params) {
+            return ReceiptService.getInstance().addReceipt(new ReceiptItem());
+        }
+        @Override
+        public void onPostExecute(Boolean result) {
+            if (result.booleanValue()) {
+                // TODO reroute to all_receipts, need callback to parent activity
+                return;
+            }
+            else {
+                Log.e("CREATE RECEIPT", "Error creating receipt");
+            }
+        }
     }
 }
