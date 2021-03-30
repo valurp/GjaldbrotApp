@@ -32,7 +32,8 @@ public class LoginActivity
     @Override
     public void onLogin() {
         Intent intent = NavigationActivity.newIntent(this);
-        startActivity(intent); // TODO láta navigationActivity vera neðst á stakknum
+        startActivity(intent);
+        this.finish();
     }
 
     @Override
@@ -46,7 +47,8 @@ public class LoginActivity
         // notandi sé skráður inn
         /** FOR DEV PURPOSES WE ALWAYS GO TO LOGIN SCREEN FIRST, MAYBE WE WANT A MORE COMPLEX CHECK
          * WITH LIKE A WEB CALL*/
-        SharedPreferences sharedPreferences = loginViewPager.getContext()
+
+        /*SharedPreferences sharedPreferences = loginViewPager.getContext()
                         .getSharedPreferences(
                                 getString(R.string.shared_preferences),
                                 Context.MODE_PRIVATE);
@@ -54,9 +56,9 @@ public class LoginActivity
                 getString(R.string.token_file_key),
                 null);
         if (token != null) {
-            Intent intent = NavigationActivity.newIntent(this);
-            startActivity(intent); //TODO láta NavigationActivity vera neðst á activity stakknum
-        }
+            onLogin();
+            return;
+        }*/
 
 
         AuthenticationPagerAdapter pagerAdapter =
