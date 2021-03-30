@@ -15,8 +15,7 @@ import is.hi.hbv601g.gjaldbrotapp.ui.all_receipts.dummy.DummyContent.DummyItem;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
- * TODO: Replace the implementation with code for your data type.
+ * {@link RecyclerView.Adapter} that can display a {@link ReceiptItem}.
  */
 public class MyRecieptRecyclerViewAdapter extends RecyclerView.Adapter<MyRecieptRecyclerViewAdapter.ViewHolder> {
 
@@ -33,6 +32,7 @@ public class MyRecieptRecyclerViewAdapter extends RecyclerView.Adapter<MyReciept
         return new ViewHolder(view);
     }
 
+    // Þessi aðferð populate-ar röð i með gögnum úr staki i úr listanum.
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
