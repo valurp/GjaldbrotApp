@@ -33,6 +33,8 @@ public class LoginFragment extends Fragment {
 
     public LoginFragment() { }
 
+    // Callbacks til að LoginActivity geti byrjað NavigationActivity þegar notandi
+    // loggar sig inn
     public interface LoginCallbacks {
         public void onLogin();
     }
@@ -67,11 +69,14 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
-    class LoginListener implements View.OnClickListener {
+    // OnClickListener til að staðfesta innskráningu
+    private class LoginListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            // Sækjum gögnin úr viðmótinu
             String username = usernameField.getText().toString();
             String password = passwordField.getText().toString();
+
             if (username.length() == 0 || password.length() == 0) {
                 Toast.makeText(view.getContext(), "Username or password is empty", Toast.LENGTH_SHORT).show();
                 return;
@@ -80,7 +85,9 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    class LoginTask extends AsyncTask<String, Void, User> {
+    // Innri klasi sem framkvæmir vefkall í öðrum þræði til að skrá notanda inn.
+    // Vistar token í SharedPreferences ef innskráning virkaði, sýnir notanda annars villu.
+    private class LoginTask extends AsyncTask<String, Void, User> {
         @Override
         protected User doInBackground(String... params) {
             return UserService.getInstance().fetchUser(params[0], params[1]);
