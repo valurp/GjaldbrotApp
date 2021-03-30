@@ -22,7 +22,7 @@ public class LoginActivity
         implements RegisterFragment.RegisterCallbacks,
         LoginFragment.LoginCallbacks {
 
-    ViewPager loginViewPager;
+    ViewPager loginViewPager; // Container fyrir login og register fragment
 
     @Override
     public void onRegister() {
@@ -41,27 +41,33 @@ public class LoginActivity
         setContentView(R.layout.activity_login);
 
         loginViewPager = findViewById(R.id.loginViewPager);
-        /*Við geymum token í sharedPreferences og ef að það er strengur vistaður þar nú þegar viljum
-         við fara beint í NavigationActivity*/
 
+        // Athuga eftir token í SharedPreferences, ef það er til gerum við ráð fyrir að
+        // notandi sé skráður inn
         /** FOR DEV PURPOSES WE ALWAYS GO TO LOGIN SCREEN FIRST, MAYBE WE WANT A MORE COMPLEX CHECK
          * WITH LIKE A WEB CALL*/
-        /*SharedPreferences sharedPreferences =
-                loginViewPager.getContext().getSharedPreferences(getString(R.string.shared_preferences), Context.MODE_PRIVATE);
-        String token = sharedPreferences.getString(getString(R.string.token_file_key), null);
+        SharedPreferences sharedPreferences = loginViewPager.getContext()
+                        .getSharedPreferences(
+                                getString(R.string.shared_preferences),
+                                Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString(
+                getString(R.string.token_file_key),
+                null);
         if (token != null) {
             Intent intent = NavigationActivity.newIntent(this);
             startActivity(intent); //TODO láta NavigationActivity vera neðst á activity stakknum
-        }*/
+        }
 
 
-        AuthenticationPagerAdapter pagerAdapter = new AuthenticationPagerAdapter(getSupportFragmentManager());
+        AuthenticationPagerAdapter pagerAdapter =
+                new AuthenticationPagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFragment(new LoginFragment());
         pagerAdapter.addFragment(new RegisterFragment());
         loginViewPager.setAdapter(pagerAdapter);
     }
 
-    class AuthenticationPagerAdapter extends FragmentPagerAdapter {
+    // Innri klasi sem að heldur utan um hvaða fragment er í focus.
+    private class AuthenticationPagerAdapter extends FragmentPagerAdapter {
         private ArrayList<Fragment> fragmentList = new ArrayList<>();
 
         public AuthenticationPagerAdapter(FragmentManager fm) {
