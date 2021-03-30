@@ -25,13 +25,14 @@ public class RegisterFragment extends Fragment {
     EditText mReenterPasswordField;
     Button mRegisterButton;
 
-    private RegisterCallbacks mCallbacks;
-
-    public interface RegisterCallbacks {
-        void onRegister();
+    public RegisterFragment() {
     }
 
-    public RegisterFragment() {
+    // Callback til að LoginActivity geti látið LoginFragment í focus
+    // eftir að notandi registerar
+    private RegisterCallbacks mCallbacks;
+    public interface RegisterCallbacks {
+        void onRegister();
     }
 
     @Override
@@ -67,9 +68,11 @@ public class RegisterFragment extends Fragment {
         return view;
     }
 
-    class RegisterListener implements View.OnClickListener {
+    // OnClickListener til að register-a notenda þegar hann ýtir á "Skrá sig" takkann
+    private class RegisterListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            // sækjum gögn úr texta svæðum
             String username = mUsernameField.getText().toString();
             String password = mPasswordField.getText().toString();
             String reenterPassword = mReenterPasswordField.getText().toString();
@@ -86,7 +89,9 @@ public class RegisterFragment extends Fragment {
         }
     }
 
-    class RegisterTask extends AsyncTask<String, Void, Boolean> {
+    // Innri klasi sem að framkvæmir vefkall í öðrum þræði og ákveður hvert á að fara eftir svar
+    // frá server.
+    private class RegisterTask extends AsyncTask<String, Void, Boolean> {
         @Override
         public Boolean doInBackground(String... params) {
             Log.i("REGISTER CALL", params[0]+" "+params[1]);
