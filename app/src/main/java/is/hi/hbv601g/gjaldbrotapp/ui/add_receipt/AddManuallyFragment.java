@@ -5,24 +5,34 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import is.hi.hbv601g.gjaldbrotapp.DatePickerFragment;
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.R;
 import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AddManuallyFragment#newInstance} factory method to
+ * Use the {@link AddManuallyFragment} factory method to
  * create an instance of this fragment.
  */
 public class AddManuallyFragment extends Fragment {
+
+    private EditText amountField;
+    private Spinner daySpinner;
+    private EditText timeField;
+    private Spinner typeField;
 
     public AddManuallyFragment() {
     }
@@ -35,13 +45,21 @@ public class AddManuallyFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_add_manually, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_manually, container, false);
+        view.setBackgroundColor(Color.WHITE);
 
-        root.setBackgroundColor(Color.WHITE);
+        FragmentManager fm = getChildFragmentManager();
+        DatePickerFragment dpf = new DatePickerFragment();
+        fm.beginTransaction().add(R.id.manually_dp_container, dpf).commit();
 
-        Button createReceiptBtn = root.findViewById(R.id.buttonAdd);
+        amountField = (EditText) view.findViewById(R.id.manually_et_amount);
+
+        timeField = (EditText) view.findViewById(R.id.manually_et_time);
+        typeField = (Spinner) view.findViewById(R.id.manually_sp_type);
+
+        Button createReceiptBtn = (Button) view.findViewById(R.id.manually_btn_add);
         createReceiptBtn.setOnClickListener(new CreateReceiptListener());
-        return root;
+        return view;
     }
 
     private class CreateReceiptListener implements View.OnClickListener{

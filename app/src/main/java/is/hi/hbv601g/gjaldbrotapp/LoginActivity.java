@@ -48,7 +48,7 @@ public class LoginActivity
         /** FOR DEV PURPOSES WE ALWAYS GO TO LOGIN SCREEN FIRST, MAYBE WE WANT A MORE COMPLEX CHECK
          * WITH LIKE A WEB CALL*/
 
-        /*SharedPreferences sharedPreferences = loginViewPager.getContext()
+        SharedPreferences sharedPreferences = viewPager.getContext()
                         .getSharedPreferences(
                                 getString(R.string.shared_preferences),
                                 Context.MODE_PRIVATE);
@@ -58,7 +58,7 @@ public class LoginActivity
         if (token != null) {
             onLogin();
             return;
-        }*/
+        }
 
 
         AuthenticationPagerAdapter pagerAdapter =

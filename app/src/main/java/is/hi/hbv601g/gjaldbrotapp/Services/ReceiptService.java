@@ -131,6 +131,4 @@ public class ReceiptService {
         }
         return mock;
     }
-
-
 }
