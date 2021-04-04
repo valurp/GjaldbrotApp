@@ -28,11 +28,13 @@ import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
  * create an instance of this fragment.
  */
 public class AddManuallyFragment extends Fragment {
+    private static String TAG = "ADD_MANUALLY_FRAGMENT";
 
     private EditText amountField;
     private Spinner daySpinner;
     private EditText timeField;
     private Spinner typeField;
+    private DatePickerFragment mDatePickerFragment;
 
     public AddManuallyFragment() {
     }
@@ -49,8 +51,8 @@ public class AddManuallyFragment extends Fragment {
         view.setBackgroundColor(Color.WHITE);
 
         FragmentManager fm = getChildFragmentManager();
-        DatePickerFragment dpf = new DatePickerFragment();
-        fm.beginTransaction().add(R.id.manually_dp_container, dpf).commit();
+        mDatePickerFragment = new DatePickerFragment();
+        fm.beginTransaction().add(R.id.manually_dp_container, mDatePickerFragment).commit();
 
         amountField = (EditText) view.findViewById(R.id.manually_et_amount);
 
@@ -65,6 +67,8 @@ public class AddManuallyFragment extends Fragment {
     private class CreateReceiptListener implements View.OnClickListener{
         @Override
         public void onClick(View view) {
+            String date = mDatePickerFragment.getDateSelected();
+            String amount = amountField.getText().toString();
             new CreateReceiptTask().execute(); // TODO lesa gögn úr EditText, sjá Login og RegisterFragment
         }
     }
@@ -72,7 +76,8 @@ public class AddManuallyFragment extends Fragment {
     private class CreateReceiptTask extends AsyncTask<Void, Void, Boolean> {
         @Override
         public Boolean doInBackground(Void... params) {
-            return ReceiptService.getInstance().addReceipt(new ReceiptItem());
+            return false;
+            //return ReceiptService.getInstance().addReceipt(new ReceiptItem());
         }
         @Override
         public void onPostExecute(Boolean result) {

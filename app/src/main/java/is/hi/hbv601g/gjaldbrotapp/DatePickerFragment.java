@@ -15,6 +15,8 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,13 +25,15 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class DatePickerFragment extends Fragment {
+    private static String TAG = "DATE_PICKER";
 
     private Spinner yearSpinner;
     private Spinner monthSpinner;
     private Spinner daySpinner;
 
+    private int day = 1; // þessi breyta er til að uppfæra daySpinner eftir að monthSpinner hefur verið valinn
+
     public DatePickerFragment() {
-        // Required empty public constructor
     }
 
     public static DatePickerFragment newInstance(Context parentContext) {
@@ -62,9 +66,30 @@ public class DatePickerFragment extends Fragment {
         monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         monthSpinner.setAdapter(monthAdapter);
         monthSpinner.setOnItemSelectedListener(new OnMonthSelected());
-        monthSpinner.setSelection(3); // TODO setja mánuð og ár default sem current mon/year
+        setDate(new Date());
 
         return view;
+    }
+
+    public String getDateSelected() {
+        String year = yearSpinner.getSelectedItem().toString();
+        String month = monthSpinner.getSelectedItemPosition()+1+"";
+        String day = daySpinner.getSelectedItem().toString();
+        Log.i(TAG, String.format("%s-%s-%s", year, month, day));
+        return String.format("%s-%s-%s", year, month, day);
+    }
+
+    public void setDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        Log.i(TAG+" month", month+"");
+        Log.i(TAG+" day", day-1+"");
+        // TODO upphafsstilla árið í yearSpinner
+        this.day = day;
+        monthSpinner.setSelection(month);
     }
 
     private class OnMonthSelected implements AdapterView.OnItemSelectedListener {
@@ -88,11 +113,11 @@ public class DatePickerFragment extends Fragment {
             ArrayAdapter<Integer> dayAdapter = new ArrayAdapter<Integer>(DatePickerFragment.this.getContext(), android.R.layout.simple_spinner_dropdown_item, days);
             dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             daySpinner.setAdapter(dayAdapter);
+            daySpinner.setSelection(day);
         }
 
         @Override
         public void onNothingSelected(AdapterView parent) {
-
         }
     }
 }
