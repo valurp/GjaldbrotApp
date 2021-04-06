@@ -11,14 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import is.hi.hbv601g.gjaldbrotapp.DatePickerFragment;
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
+import is.hi.hbv601g.gjaldbrotapp.ReceiptEditFragment;
 import is.hi.hbv601g.gjaldbrotapp.R;
 import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
 
@@ -30,11 +28,7 @@ import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
 public class AddManuallyFragment extends Fragment {
     private static String TAG = "ADD_MANUALLY_FRAGMENT";
 
-    private EditText amountField;
-    private Spinner daySpinner;
-    private EditText timeField;
-    private Spinner typeField;
-    private DatePickerFragment mDatePickerFragment;
+    private ReceiptEditFragment mReceiptEditFragment;
 
     public AddManuallyFragment() {
     }
@@ -51,13 +45,8 @@ public class AddManuallyFragment extends Fragment {
         view.setBackgroundColor(Color.WHITE);
 
         FragmentManager fm = getChildFragmentManager();
-        mDatePickerFragment = new DatePickerFragment();
-        fm.beginTransaction().add(R.id.manually_dp_container, mDatePickerFragment).commit();
-
-        amountField = (EditText) view.findViewById(R.id.manually_et_amount);
-
-        timeField = (EditText) view.findViewById(R.id.manually_et_time);
-        typeField = (Spinner) view.findViewById(R.id.manually_sp_type);
+        mReceiptEditFragment = new ReceiptEditFragment();
+        fm.beginTransaction().add(R.id.manually_dp_container, mReceiptEditFragment).commit();
 
         Button createReceiptBtn = (Button) view.findViewById(R.id.manually_btn_add);
         createReceiptBtn.setOnClickListener(new CreateReceiptListener());
@@ -67,17 +56,20 @@ public class AddManuallyFragment extends Fragment {
     private class CreateReceiptListener implements View.OnClickListener{
         @Override
         public void onClick(View view) {
-            String date = mDatePickerFragment.getDateSelected();
-            String amount = amountField.getText().toString();
-            new CreateReceiptTask().execute(); // TODO lesa gögn úr EditText, sjá Login og RegisterFragment
+            try {
+                ReceiptItem receiptItem = mReceiptEditFragment.getReceiptItem();
+                new CreateReceiptTask().execute(receiptItem); // TODO lesa gögn úr EditText, sjá Login og RegisterFragment
+            }
+            catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
         }
     }
 
-    private class CreateReceiptTask extends AsyncTask<Void, Void, Boolean> {
+    private class CreateReceiptTask extends AsyncTask<ReceiptItem, Void, Boolean> {
         @Override
-        public Boolean doInBackground(Void... params) {
-            return false;
-            //return ReceiptService.getInstance().addReceipt(new ReceiptItem());
+        public Boolean doInBackground(ReceiptItem... params) {
+            return ReceiptService.getInstance().addReceipt(params[0]);
         }
         @Override
         public void onPostExecute(Boolean result) {

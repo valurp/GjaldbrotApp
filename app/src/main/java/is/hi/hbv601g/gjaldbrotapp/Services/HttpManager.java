@@ -184,6 +184,12 @@ public class HttpManager {
             receipt.setAmount(receiptJSON.getInt("amount"));
             receipt.setId(receiptJSON.getInt("id"));
             receipt.setType(receiptJSON.getString("type"));
+            try {
+                receipt.setFormattedDate(receiptJSON.getString("date"));
+            }
+            catch (Exception e) {
+
+            }
             receipts.add(receipt);
         }
     }

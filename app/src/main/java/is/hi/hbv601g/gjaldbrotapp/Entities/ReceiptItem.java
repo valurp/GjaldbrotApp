@@ -1,16 +1,25 @@
 package is.hi.hbv601g.gjaldbrotapp.Entities;
 
+import android.nfc.FormatException;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class ReceiptItem {
 
-    private int id;
-    private int amount;
-    private String type;
+    private static DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+
+    private int mId;
+    private int mAmount;
+    private String mType;
+    private Date mDate;
     //Private ??? date TODO implement some date and time fields
 
     public ReceiptItem(int id, int amount, String type) {
-        this.id = id;
-        this.amount = amount;
-        this.type = type;
+        this.mId = id;
+        this.mAmount = amount;
+        this.mType = type;
     }
 
     public ReceiptItem() {
@@ -18,29 +27,38 @@ public class ReceiptItem {
     }
 
     public void setId(int id) {
-        this.id = id;
+        mId = id;
     }
 
     public void setAmount(int amount) {
-        this.amount = amount;
+        mAmount = amount;
     }
 
     public void setType(String type) {
-        this.type = type;
+        mType = type;
     }
+
     public int getId() {
-        return id;
+        return mId;
     }
 
     public int getAmount() {
-        return amount;
+        return mAmount;
     }
 
     public String getType() {
-        return type;
+        return mType;
     }
 
-    public String getDate() { return "2020-01-01"; };
+    public Date getDate() { return mDate; };
+
+    public void setFormattedDate(String formattedDate) throws Exception {
+        mDate = df.parse(formattedDate);
+    }
+
+    public String getFormattedDate() {
+        return df.format(mDate);
+    }
 
 
 

@@ -36,7 +36,7 @@ public class MyRecieptRecyclerViewAdapter extends RecyclerView.Adapter<MyReciept
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mDateView.setText(""+mValues.get(position).getDate());
+        holder.mDateView.setText(""+mValues.get(position).getFormattedDate());
         holder.mTypeView.setText(""+mValues.get(position).getType());
         holder.mAmountView.setText(""+mValues.get(position).getAmount());
     }

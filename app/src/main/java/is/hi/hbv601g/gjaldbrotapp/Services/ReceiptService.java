@@ -67,9 +67,9 @@ public class ReceiptService {
         try {
             /*int amount = r.getAmount();
             String type = r.getType();*/
-            int amount = 4500; // TODO fá gögn frá ReceiptItem
-            String type = "3";
-            String date = "2020-01-01";
+            int amount = r.getAmount();
+            String type = r.getType(); // TODO láta type tengjast meira ReceiptType
+            String date = "2020-10-10";// r.getFormattedDate();
             String time = "10:10:10";
             httpManager.createReceipt(amount, type, date, time);
             Log.i("RECEIPT_SERVICE", "Receipt created");

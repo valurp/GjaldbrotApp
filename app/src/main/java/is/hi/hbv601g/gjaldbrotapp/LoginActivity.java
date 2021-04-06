@@ -47,7 +47,7 @@ public class LoginActivity
         // notandi sé skráður inn
         /** FOR DEV PURPOSES WE ALWAYS GO TO LOGIN SCREEN FIRST, MAYBE WE WANT A MORE COMPLEX CHECK
          * WITH LIKE A WEB CALL*/
-
+        /*
         SharedPreferences sharedPreferences = viewPager.getContext()
                         .getSharedPreferences(
                                 getString(R.string.shared_preferences),
@@ -58,7 +58,7 @@ public class LoginActivity
         if (token != null) {
             onLogin();
             return;
-        }
+        }*/
 
 
         AuthenticationPagerAdapter pagerAdapter =
