@@ -88,7 +88,7 @@ public class DatePickerFragment extends Fragment {
         Log.i(TAG+" month", month+"");
         Log.i(TAG+" day", day-1+"");
         // TODO upphafsstilla árið í yearSpinner
-        this.day = day;
+        this.day = day-1;
         monthSpinner.setSelection(month);
     }
 
