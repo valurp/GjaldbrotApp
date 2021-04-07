@@ -50,9 +50,9 @@ public class DatePickerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_date_picker, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_manually, container, false);
 
-        yearSpinner = (Spinner) view.findViewById(R.id.datepicker_sp_year);
+        /*yearSpinner = (Spinner) view.findViewById(R.id.datepicker_sp_year);
         monthSpinner = (Spinner) view.findViewById(R.id.datepicker_sp_month);
         daySpinner = (Spinner) view.findViewById(R.id.datepicker_sp_day);
 
@@ -67,7 +67,7 @@ public class DatePickerFragment extends Fragment {
         monthSpinner.setAdapter(monthAdapter);
         monthSpinner.setOnItemSelectedListener(new OnMonthSelected());
         setDate(new Date());
-
+*/
         return view;
     }
 

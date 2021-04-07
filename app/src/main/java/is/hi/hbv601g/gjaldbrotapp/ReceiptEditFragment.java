@@ -77,7 +77,7 @@ public class ReceiptEditFragment extends Fragment {
         monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mMonthSpinner.setAdapter(monthAdapter);
         mMonthSpinner.setOnItemSelectedListener(new OnMonthSelected());
-        setDate(new Date());
+        setDate(new Date()); // todo rétt timezone
 
         /**
          * Tengja rest af inputum
@@ -103,7 +103,7 @@ public class ReceiptEditFragment extends Fragment {
     }
 
     private void setDate(Date date) {
-        Calendar calendar = Calendar.getInstance();// todo rétt timezone
+        Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
