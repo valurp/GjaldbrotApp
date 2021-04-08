@@ -15,7 +15,7 @@ public class ReceiptItem implements Serializable {
     private int mAmount;
     private String mType;
     private Date mDate;
-    //Private ??? date TODO implement some date and time fields
+    //Private ??? date TODO implement time field
 
     public ReceiptItem(int id, int amount, String type) {
         this.mId = id;
