@@ -164,7 +164,6 @@ public class AllReceiptsFragment extends Fragment {
                         (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
                 NavController navController = navHostFragment.getNavController();
                 Bundle bundle = ChangeReceiptFragment.createBundleFromReceipt(mReceiptItem);
-                bundle.putString("amount", "2000");
                 navController.navigate(R.id.action_nav_all_receipts_to_changeReceiptFragment, bundle);
             }
         }

@@ -20,10 +20,15 @@ import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
 import is.hi.hbv601g.gjaldbrotapp.ui.add_receipt.AddManuallyFragment;
 
 public class ChangeReceiptFragment extends Fragment {
-    private static String TAG = "CHANGE_RECEIPT_FRAGMENT";
+    private final static String TAG = "CHANGE_RECEIPT_FRAGMENT";
+    private final static String bundleAmount = "amount";
+    private final static String bundleDate = "date";
+    private final static String bundleType = "type";
 
     public static Bundle createBundleFromReceipt(ReceiptItem receiptItem) {
-        return new Bundle(); // add attributes from the receiptItem
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("receipt", receiptItem);
+        return bundle; // add attributes from the receiptItem
     }
 
     private ReceiptEditFragment mReceiptEditFragment;
@@ -42,10 +47,10 @@ public class ChangeReceiptFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_change_receipt, container, false);
         view.setBackgroundColor(Color.WHITE);
 
-        Log.i(TAG, getArguments().getString("amount"));
+        ReceiptItem receiptItem = (ReceiptItem) getArguments().getSerializable("receipt");
 
         FragmentManager fm = getChildFragmentManager();
-        mReceiptEditFragment = new ReceiptEditFragment();// pass in receipt item from the bundle
+        mReceiptEditFragment = new ReceiptEditFragment(receiptItem);// pass in receipt item from the bundle
         fm.beginTransaction().add(R.id.edit_receipt_container, mReceiptEditFragment).commit();
 
         Button createReceiptBtn = (Button) view.findViewById(R.id.edit_receipt_btn);

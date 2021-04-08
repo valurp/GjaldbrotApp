@@ -2,13 +2,14 @@ package is.hi.hbv601g.gjaldbrotapp.Entities;
 
 import android.nfc.FormatException;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ReceiptItem {
+public class ReceiptItem implements Serializable {
 
-    private static DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+    private static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     private int mId;
     private int mAmount;

@@ -24,7 +24,6 @@ import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ReceiptEditFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class ReceiptEditFragment extends Fragment {
@@ -39,16 +38,13 @@ public class ReceiptEditFragment extends Fragment {
     private EditText mTimeField;
     private Spinner mTypeSpinner;
 
-    private EditText amount;
+    private ReceiptItem mReceiptItem;
 
     public ReceiptEditFragment() {
     }
+
     public ReceiptEditFragment(ReceiptItem receiptItem) {
-        // some initialization
-    }
-    public static ReceiptEditFragment newInstance(Context parentContext, Bundle bundle) {
-        ReceiptEditFragment fragment = new ReceiptEditFragment();
-        return fragment;
+        mReceiptItem = receiptItem;
     }
 
     @Override
@@ -78,7 +74,6 @@ public class ReceiptEditFragment extends Fragment {
         monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mMonthSpinner.setAdapter(monthAdapter);
         mMonthSpinner.setOnItemSelectedListener(new OnMonthSelected());
-        setDate(new Date()); // todo rétt timezone
 
         /**
          * Tengja rest af inputum
@@ -92,7 +87,20 @@ public class ReceiptEditFragment extends Fragment {
                         new ArrayList(Arrays.asList(1,2,3))); // todo láta lesa frá notenda upplýsingum
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mTypeSpinner.setAdapter(typeAdapter);
+
+        initializeForm();
+
         return view;
+    }
+
+    private void initializeForm() {
+        if (mReceiptItem == null) {
+            setDate(new Date());
+            return;
+        }
+        Log.i(TAG, mReceiptItem.getDate().toString());
+        setDate(mReceiptItem.getDate());
+        mAmountField.setText(mReceiptItem.getAmount()+"");
     }
 
     private String getDateSelected() {
