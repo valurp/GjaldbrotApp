@@ -1,4 +1,4 @@
-package is.hi.hbv601g.gjaldbrotapp.ui.add_receipt;
+package is.hi.hbv601g.gjaldbrotapp.ui.all_receipts;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -12,25 +12,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
 
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
-import is.hi.hbv601g.gjaldbrotapp.ReceiptEditFragment;
 import is.hi.hbv601g.gjaldbrotapp.R;
+import is.hi.hbv601g.gjaldbrotapp.ReceiptEditFragment;
 import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
+import is.hi.hbv601g.gjaldbrotapp.ui.add_receipt.AddManuallyFragment;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddManuallyFragment} factory method to
- * create an instance of this fragment.
- */
-public class AddManuallyFragment extends Fragment {
-    private static String TAG = "ADD_MANUALLY_FRAGMENT";
+public class ChangeReceiptFragment extends Fragment {
+    private static String TAG = "CHANGE_RECEIPT_FRAGMENT";
+
+    public static Bundle createBundleFromReceipt(ReceiptItem receiptItem) {
+        return new Bundle(); // add attributes from the receiptItem
+    }
 
     private ReceiptEditFragment mReceiptEditFragment;
 
-    public AddManuallyFragment() {
+    public ChangeReceiptFragment() {
     }
 
     @Override
@@ -41,14 +39,16 @@ public class AddManuallyFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_manually, container, false);
+        View view = inflater.inflate(R.layout.fragment_change_receipt, container, false);
         view.setBackgroundColor(Color.WHITE);
 
-        FragmentManager fm = getChildFragmentManager();
-        mReceiptEditFragment = new ReceiptEditFragment();
-        fm.beginTransaction().add(R.id.manually_dp_container, mReceiptEditFragment).commit();
+        Log.i(TAG, getArguments().getString("amount"));
 
-        Button createReceiptBtn = (Button) view.findViewById(R.id.manually_btn_add);
+        FragmentManager fm = getChildFragmentManager();
+        mReceiptEditFragment = new ReceiptEditFragment();// pass in receipt item from the bundle
+        fm.beginTransaction().add(R.id.edit_receipt_container, mReceiptEditFragment).commit();
+
+        Button createReceiptBtn = (Button) view.findViewById(R.id.edit_receipt_btn);
         createReceiptBtn.setOnClickListener(new CreateReceiptListener());
         return view;
     }
@@ -69,7 +69,8 @@ public class AddManuallyFragment extends Fragment {
     private class CreateReceiptTask extends AsyncTask<ReceiptItem, Void, Boolean> {
         @Override
         public Boolean doInBackground(ReceiptItem... params) {
-            return ReceiptService.getInstance().addReceipt(params[0]);
+            return false;
+            //return ReceiptService.getInstance().addReceipt(params[0]);
         }
         @Override
         public void onPostExecute(Boolean result) {

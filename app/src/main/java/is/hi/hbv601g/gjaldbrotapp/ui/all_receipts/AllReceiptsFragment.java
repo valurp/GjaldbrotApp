@@ -9,6 +9,9 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -110,7 +113,7 @@ public class AllReceiptsFragment extends Fragment {
             holder.mDateView.setText(""+holder.mItem.getFormattedDate());
             holder.mTypeView.setText(""+holder.mItem.getType());
             holder.mAmountView.setText(""+holder.mItem.getAmount());
-            holder.mEditButton.setOnClickListener(new ReceiptRecyclerViewAdapter.EditButtonOnClickListener(holder.mItem.getId()));
+            holder.mEditButton.setOnClickListener(new ReceiptRecyclerViewAdapter.EditButtonOnClickListener(holder.mItem));
             holder.mEditButton.setText("Edit receipt");
         }
 
@@ -148,20 +151,21 @@ public class AllReceiptsFragment extends Fragment {
         }
 
         private class EditButtonOnClickListener implements View.OnClickListener {
-            private int mId;
+            private ReceiptItem mReceiptItem;
 
-            public EditButtonOnClickListener(int id) {
+            public EditButtonOnClickListener(ReceiptItem receiptItem) {
                 //super();
-                mId = id;
+                mReceiptItem = receiptItem;
             }
 
             @Override
             public void onClick(View v) {
-                AddManuallyFragment addManually = new AddManuallyFragment();
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                fm.beginTransaction()
-                        .replace(R.id.nav_host_fragment, addManually)
-                        .commit();
+                NavHostFragment navHostFragment =
+                        (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                NavController navController = navHostFragment.getNavController();
+                Bundle bundle = ChangeReceiptFragment.createBundleFromReceipt(mReceiptItem);
+                bundle.putString("amount", "2000");
+                navController.navigate(R.id.action_nav_all_receipts_to_changeReceiptFragment, bundle);
             }
         }
     }

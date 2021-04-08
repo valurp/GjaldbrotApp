@@ -41,11 +41,12 @@ public class ReceiptEditFragment extends Fragment {
 
     private EditText amount;
 
-
     public ReceiptEditFragment() {
     }
-
-    public static ReceiptEditFragment newInstance(Context parentContext) {
+    public ReceiptEditFragment(ReceiptItem receiptItem) {
+        // some initialization
+    }
+    public static ReceiptEditFragment newInstance(Context parentContext, Bundle bundle) {
         ReceiptEditFragment fragment = new ReceiptEditFragment();
         return fragment;
     }

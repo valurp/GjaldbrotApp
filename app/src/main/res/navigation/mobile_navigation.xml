@@ -21,7 +21,12 @@
         android:id="@+id/nav_all_receipts"
         android:name="is.hi.hbv601g.gjaldbrotapp.ui.all_receipts.AllReceiptsFragment"
         android:label="@string/menu_all_receipts"
-        tools:layout="@layout/fragment_all_receipts" />
+        tools:layout="@layout/fragment_all_receipts" >
+        <action
+            android:id="@+id/action_nav_all_receipts_to_changeReceiptFragment"
+            app:destination="@id/changeReceiptFragment"
+            app:popUpTo="@id/nav_all_receipts" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_month_comparison"
@@ -44,4 +49,9 @@
         android:id="@+id/addManuallyFragment"
         android:name="is.hi.hbv601g.gjaldbrotapp.ui.add_receipt.AddManuallyFragment"
         android:label="AddManuallyFragment" />
+    <fragment
+        android:id="@+id/changeReceiptFragment"
+        android:name="is.hi.hbv601g.gjaldbrotapp.ui.all_receipts.ChangeReceiptFragment"
+        android:label="fragment_change_receipt"
+        tools:layout="@layout/fragment_change_receipt" />
 </navigation>
