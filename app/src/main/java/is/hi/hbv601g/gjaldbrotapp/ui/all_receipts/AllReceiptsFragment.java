@@ -161,7 +161,6 @@ public class AllReceiptsFragment extends Fragment {
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 fm.beginTransaction()
                         .replace(R.id.nav_host_fragment, addManually)
-                        .addToBackStack("")
                         .commit();
             }
         }

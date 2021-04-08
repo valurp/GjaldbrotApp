@@ -33,5 +33,15 @@
         android:id="@+id/nav_add_receipt"
         android:name="is.hi.hbv601g.gjaldbrotapp.ui.add_receipt.AddReceiptFragment"
         android:label="@string/menu_add_receipt"
-        tools:layout="@layout/fragment_add_receipt" />
+        tools:layout="@layout/fragment_add_receipt" >
+        <action
+            android:id="@+id/action_nav_add_receipt_to_addManuallyFragment"
+            app:destination="@id/addManuallyFragment"
+            app:popUpTo="@id/nav_add_receipt"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/addManuallyFragment"
+        android:name="is.hi.hbv601g.gjaldbrotapp.ui.add_receipt.AddManuallyFragment"
+        android:label="AddManuallyFragment" />
 </navigation>

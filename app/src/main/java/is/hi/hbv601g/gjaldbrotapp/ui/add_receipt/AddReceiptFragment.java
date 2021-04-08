@@ -11,6 +11,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+
 import is.hi.hbv601g.gjaldbrotapp.R;
 
 public class AddReceiptFragment extends Fragment {
@@ -33,13 +36,10 @@ public class AddReceiptFragment extends Fragment {
         man.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddManuallyFragment addManually = new AddManuallyFragment();
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                fm.popBackStack();
-                fm.beginTransaction()
-                        .replace(R.id.nav_host_fragment, addManually)
-                        .addToBackStack("")
-                        .commit();
+                NavHostFragment navHostFragment =
+                        (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                NavController navController = navHostFragment.getNavController();
+                navController.navigate(R.id.action_nav_add_receipt_to_addManuallyFragment);
             }
         });
 
@@ -48,12 +48,10 @@ public class AddReceiptFragment extends Fragment {
         photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddPhotoFragment addPhoto = new AddPhotoFragment();
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                fm.popBackStack();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.nav_host_fragment, addPhoto);
-                ft.commit();
+                NavHostFragment navHostFragment =
+                        (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                NavController navController = navHostFragment.getNavController();
+                navController.navigate(R.id.action_nav_add_receipt_to_addManuallyFragment);
             }
         });
 
