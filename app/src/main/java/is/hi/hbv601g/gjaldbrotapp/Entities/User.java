@@ -2,32 +2,31 @@ package is.hi.hbv601g.gjaldbrotapp.Entities;
 
 public class User {
 
-    private String name;
-    private String token;
+    private String mName;
+    private String mToken;
 
     public User(){
         
     }
 
     public User(String name, String token) {
-        this.name = name;
-        this.token = token;
+        mName = name;
+        mToken = token;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        mName = name;
     }
 
     public String getToken() {
-        return token;
+        return mToken;
     }
 
     public void setToken(String token) {
-        this.token = token;
+        mToken = token;
     }
-
 }
