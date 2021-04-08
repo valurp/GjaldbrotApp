@@ -22,6 +22,12 @@ import java.util.List;
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.Entities.User;
 
+/**
+ * Service klasi sem ad tengist vid netþjóninn um URL-ið og er með létt abstraction á
+ * POST og GET aðferðir sem að við þurfum.
+ * Klasinn fylgir singleton hönnunar mynstrinu til að auðvelda meðferð á token sem er nauðsynleg
+ * fyrir authentication í bakendanum.
+ */
 public class HttpManager {
     private static HttpManager self;
     private String token;
