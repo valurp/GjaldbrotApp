@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +17,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +27,7 @@ import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.R;
 import is.hi.hbv601g.gjaldbrotapp.Services.HttpManager;
 import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
+import is.hi.hbv601g.gjaldbrotapp.ui.add_receipt.AddManuallyFragment;
 import is.hi.hbv601g.gjaldbrotapp.ui.all_receipts.dummy.DummyContent;
 
 /**
@@ -31,11 +36,11 @@ import is.hi.hbv601g.gjaldbrotapp.ui.all_receipts.dummy.DummyContent;
 public class AllReceiptsFragment extends Fragment {
 
     private List<ReceiptItem> mReceiptItems;
-    private MyRecieptRecyclerViewAdapter mAdapter;
+    private ReceiptRecyclerViewAdapter mAdapter;
 
     public AllReceiptsFragment() {
         mReceiptItems = new ArrayList<ReceiptItem>();
-        mAdapter = new MyRecieptRecyclerViewAdapter(mReceiptItems);
+        mAdapter = new ReceiptRecyclerViewAdapter(mReceiptItems);
     }
 
     @Override
@@ -80,6 +85,85 @@ public class AllReceiptsFragment extends Fragment {
             }
             mReceiptItems.addAll(items); // TODO gera eitthvað í null response frá httpManager t.d. láta user logga sig aftur inn
             mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private class ReceiptRecyclerViewAdapter extends RecyclerView.Adapter<ReceiptRecyclerViewAdapter.ViewHolder>{
+        private static final String TAG = "ReceiptRecyclerAdapter";
+        private List<ReceiptItem> mValues;
+
+        public ReceiptRecyclerViewAdapter(List<ReceiptItem> items) {
+            mValues = items;
+        }
+
+        @Override
+        public ReceiptRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.fragment_all_receipts, parent, false);
+            return new ReceiptRecyclerViewAdapter.ViewHolder(view);
+        }
+
+        // Þessi aðferð populate-ar röð i með gögnum úr staki i úr listanum.
+        @Override
+        public void onBindViewHolder(final ReceiptRecyclerViewAdapter.ViewHolder holder, int position) {
+            holder.mItem = mValues.get(position);
+            holder.mDateView.setText(""+holder.mItem.getFormattedDate());
+            holder.mTypeView.setText(""+holder.mItem.getType());
+            holder.mAmountView.setText(""+holder.mItem.getAmount());
+            holder.mEditButton.setOnClickListener(new ReceiptRecyclerViewAdapter.EditButtonOnClickListener(holder.mItem.getId()));
+            holder.mEditButton.setText("Edit receipt");
+        }
+
+        @Override
+        public int getItemCount() {
+            return mValues.size();
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            public final View mView;
+            public final TextView mTypeView;
+            public final TextView mAmountView;
+            public final TextView mDateView;
+            public final Button mEditButton;
+            public ReceiptItem mItem;
+
+            public ViewHolder(View view) {
+                super(view);
+                mView = view;
+                mTypeView = (TextView) view.findViewById(R.id.receipt_list_type);
+                mAmountView = (TextView) view.findViewById(R.id.receipt_list_amount);
+                mDateView = (TextView) view.findViewById(R.id.receipt_list_date);
+                mEditButton = (Button) view.findViewById(R.id.receipt_list_button);
+            }
+
+            @Override
+            public String toString() {
+                return super.toString() + " '" + mAmountView.getText() + "'";
+            }
+        }
+
+        public void setItems(List<ReceiptItem> receiptItems) {
+            mValues = receiptItems;
+            notifyDataSetChanged();
+        }
+
+        private class EditButtonOnClickListener implements View.OnClickListener {
+            private int mId;
+
+            public EditButtonOnClickListener(int id) {
+                //super();
+                mId = id;
+            }
+
+            @Override
+            public void onClick(View v) {
+                AddManuallyFragment addManually = new AddManuallyFragment();
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                fm.beginTransaction()
+                        .replace(R.id.nav_host_fragment, addManually)
+                        .addToBackStack("")
+                        .commit();
+            }
         }
     }
 }

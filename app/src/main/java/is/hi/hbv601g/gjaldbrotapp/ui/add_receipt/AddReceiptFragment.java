@@ -36,9 +36,10 @@ public class AddReceiptFragment extends Fragment {
                 AddManuallyFragment addManually = new AddManuallyFragment();
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 fm.popBackStack();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.nav_host_fragment, addManually);
-                ft.commit();
+                fm.beginTransaction()
+                        .replace(R.id.nav_host_fragment, addManually)
+                        .addToBackStack("")
+                        .commit();
             }
         });
 
