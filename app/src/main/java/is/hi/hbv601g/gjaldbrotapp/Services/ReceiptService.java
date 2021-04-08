@@ -11,13 +11,16 @@ import java.util.List;
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.Entities.User;
 
+/**
+ * Enn hærra abstraction á vefköllum, notar Entity klasa til að auðvelda meðhöndlun.
+ * Notar líka singleton hönnunarmynstrið því okkur finnst það passa við network service klasa.
+ */
 public class ReceiptService {
-    private static ReceiptService self;
+    private static ReceiptService self; // vísun í sjálfan sig fyrir singleton
 
     private User loggedUser = new User(); //Hold reference to who's logged in to keep authorization
     private UserService uService; //Use uService to fetch logged user
-    private HttpManager httpManager;
-
+    private HttpManager httpManager; // eiginlegt bakbein fyrir vefköll
 
     /**
      * Singleton

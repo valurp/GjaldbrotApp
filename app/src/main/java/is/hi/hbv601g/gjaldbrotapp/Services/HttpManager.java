@@ -34,7 +34,7 @@ public class HttpManager {
     private static final String URL = "https://gjaldbrot-rest-service.herokuapp.com/api";
 
     /**
-     * Singleton
+     * Singleton hönnunar mynstrið
      */
     public static HttpManager getInstance() {
         if (self == null) {
