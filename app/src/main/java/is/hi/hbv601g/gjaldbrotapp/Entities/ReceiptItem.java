@@ -7,6 +7,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Entity klasi sem geymir upplýsingar um kvittanir.
+ */
 public class ReceiptItem implements Serializable {
 
     private static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -17,14 +20,14 @@ public class ReceiptItem implements Serializable {
     private Date mDate;
     //Private ??? date TODO implement time field
 
-    public ReceiptItem(int id, int amount, String type) {
-        this.mId = id;
-        this.mAmount = amount;
-        this.mType = type;
-    }
-
     public ReceiptItem() {
 
+    }
+
+    public ReceiptItem(int id, int amount, String type) {
+        mId = id;
+        mAmount = amount;
+        mType = type;
     }
 
     public void setId(int id) {
@@ -60,9 +63,4 @@ public class ReceiptItem implements Serializable {
     public String getFormattedDate() {
         return df.format(mDate);
     }
-
-
-
-
-
 }

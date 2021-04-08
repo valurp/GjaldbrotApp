@@ -1,5 +1,8 @@
 package is.hi.hbv601g.gjaldbrotapp.Entities;
 
+/**
+ * Entity klasi sem að geymir gögn um notenda
+ */
 public class User {
 
     private String mName;
