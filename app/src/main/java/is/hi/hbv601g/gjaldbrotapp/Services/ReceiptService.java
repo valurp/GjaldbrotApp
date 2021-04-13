@@ -123,6 +123,17 @@ public class ReceiptService {
         return httpManager.fetchTypes();
     }
 
+    public Boolean changeType(Type t){
+        try {
+            httpManager.updateType(t.getId(), t.getName());
+        } catch (Exception e) {
+            Log.e("HTTPManager", e.toString());
+            return false;
+        }
+        Log.i("HTTPManager", "Type updated");
+        return true;
+    }
+
     /**
      * Testing method to create fake Receipts
      * DELETE AFTER FINISHED
