@@ -1,6 +1,7 @@
 package is.hi.hbv601g.gjaldbrotapp;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -21,6 +22,8 @@ import java.util.Date;
 import java.util.List;
 
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
+import is.hi.hbv601g.gjaldbrotapp.Entities.Type;
+import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -85,10 +88,13 @@ public class ReceiptEditFragment extends Fragment {
         ArrayAdapter<CharSequence> typeAdapter =
                 new ArrayAdapter(this.getContext(),
                         android.R.layout.simple_spinner_item,
-                        new ArrayList(Arrays.asList(1,2,3))); // todo láta lesa frá notenda upplýsingum
+                        new ArrayList(Arrays.asList("Loading ..."))); // todo láta lesa frá notenda upplýsingum
+
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mTypeSpinner.setAdapter(typeAdapter);
 
+        new FetchTypesTask(typeAdapter).execute();
+        
         initializeForm();
 
         return view;
@@ -149,6 +155,27 @@ public class ReceiptEditFragment extends Fragment {
         mReceiptItem.setAmount(Integer.parseInt(amount));
         mReceiptItem.setType(type);
         return mReceiptItem;
+    }
+
+    private class FetchTypesTask extends AsyncTask<ReceiptItem, Void, List<Type>> {
+        private ArrayAdapter mTypeAdapter;
+        public FetchTypesTask(ArrayAdapter typeAdapter) {
+            mTypeAdapter = typeAdapter;
+        }
+
+        @Override
+        public List<Type> doInBackground(ReceiptItem... params) {
+            return ReceiptService.getInstance().fetchReceiptType();
+        }
+
+        @Override
+        public void onPostExecute(List<Type> result) {
+            mTypeAdapter.clear();
+            for (Type t : result) {
+                mTypeAdapter.add(t.getName());
+            }
+            mTypeAdapter.notifyDataSetChanged();
+        }
     }
 
     private class OnMonthSelected implements AdapterView.OnItemSelectedListener {
