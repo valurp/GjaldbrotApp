@@ -87,6 +87,7 @@ public class HttpManager {
             byte[] input = json.getBytes("utf-8");
             os.write(input, 0, input.length);
             Log.i("RESPONSE CODE", ""+con.getResponseCode());
+            Log.i("RESPONSE MSG", ""+con.getResponseMessage());
         }
         try(BufferedReader br = new BufferedReader(
                 new InputStreamReader(con.getInputStream(), "utf-8")
@@ -254,7 +255,7 @@ public class HttpManager {
     public void updateReceipt(int amount, String type, int id) throws Exception {
         String url = Uri.parse(URL)
                 .buildUpon()
-                .appendPath("users")
+                .appendPath("user")
                 .appendPath("receipt")
                 .appendPath(""+ id)
                 .build()
@@ -266,7 +267,11 @@ public class HttpManager {
         con.setRequestProperty("Content-Type", "application/json; utf-8");
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
-        String jsonReceipt = "{ amount: " + amount + ",\n type: " + type + "}";
+        String jsonReceipt = "{ \"amount\":\"" + amount + "\", "
+                + "\"type\":\"" + type + "\","
+                // + "\"date\":\"" + date + "\","
+                // + "\"time\":\"" + time + "\""
+                + "}";;
         writeTo(con, jsonReceipt);
     }
 

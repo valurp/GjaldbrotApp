@@ -101,17 +101,17 @@ public class ReceiptService {
     /**
      * Method modifies old receipt from User
      * @param r the Receipt to be modified
-     * @param params the attributes to modify
      */
-    public void changeReceipt(ReceiptItem r, String params){
-        if(loggedUser == null) uService.getUser();
+    public Boolean changeReceipt(ReceiptItem r){
+        // if(loggedUser == null) uService.getUser();
         try {
-            httpManager.setToken(loggedUser.getToken());
             httpManager.updateReceipt(r.getAmount(),r.getType(), r.getId());
         } catch (Exception e) {
-            Log.e("HTTPManager", "Error updatingreceipt");
+            Log.e("HTTPManager", e.toString());
+            return false;
         }
         Log.i("HTTPManager", "Receipt updated");
+        return true;
     }
 
     /**

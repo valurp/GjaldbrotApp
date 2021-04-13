@@ -41,6 +41,7 @@ public class ReceiptEditFragment extends Fragment {
     private ReceiptItem mReceiptItem;
 
     public ReceiptEditFragment() {
+        mReceiptItem = new ReceiptItem();
     }
 
     public ReceiptEditFragment(ReceiptItem receiptItem) {
@@ -138,17 +139,16 @@ public class ReceiptEditFragment extends Fragment {
         if (date.equals("") || amount.equals("") || time.equals("") || type.equals("")) {
             throw new Exception("Input error, not all fields are filled in");
         }
-        ReceiptItem receiptItem = new ReceiptItem();
 
         try {
-            receiptItem.setFormattedDate(date);
+            mReceiptItem.setFormattedDate(date);
         }
         catch (Exception e) {
             throw new Exception("Could not parse date, format yyyy-MM-dd");
         }
-        receiptItem.setAmount(Integer.parseInt(amount));
-        receiptItem.setType(type);
-        return receiptItem;
+        mReceiptItem.setAmount(Integer.parseInt(amount));
+        mReceiptItem.setType(type);
+        return mReceiptItem;
     }
 
     private class OnMonthSelected implements AdapterView.OnItemSelectedListener {

@@ -28,7 +28,7 @@ public class ChangeReceiptFragment extends Fragment {
     public static Bundle createBundleFromReceipt(ReceiptItem receiptItem) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("receipt", receiptItem);
-        return bundle; // add attributes from the receiptItem
+        return bundle;
     }
 
     private ReceiptEditFragment mReceiptEditFragment;
@@ -74,8 +74,7 @@ public class ChangeReceiptFragment extends Fragment {
     private class CreateReceiptTask extends AsyncTask<ReceiptItem, Void, Boolean> {
         @Override
         public Boolean doInBackground(ReceiptItem... params) {
-            return false;
-            //return ReceiptService.getInstance().addReceipt(params[0]);
+            return ReceiptService.getInstance().changeReceipt(params[0]);
         }
         @Override
         public void onPostExecute(Boolean result) {
