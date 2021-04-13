@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
+import is.hi.hbv601g.gjaldbrotapp.Entities.Type;
 import is.hi.hbv601g.gjaldbrotapp.Entities.User;
 
 /**
@@ -165,7 +166,7 @@ public class HttpManager {
             JSONArray jsonBody = new JSONArray(jsonString);
             parseReceipts(receipts, jsonBody);
         } catch (IOException ioe) {
-            Log.e("GjaldbrotApp", "Failed to fetch user", ioe);
+            Log.e("GjaldbrotApp", "Failed to fetch receipts", ioe);
         } catch (JSONException je) {
             Log.e("GjaldbrotApp", "Failed to parse JSON", je);
         }
@@ -300,4 +301,40 @@ public class HttpManager {
         this.token = token;
     }
     public boolean hasToken() { return token != null; }
+
+    public List<Type> fetchTypes() {
+        Log.i("Type http", "starting fetch receipt call");
+        if(token == null){
+            Log.e("TOKEN", "Token is null");
+            return null;
+        }
+        List<Type> types = new ArrayList<>();
+        try {
+            String url = Uri.parse(URL+"/user/types")
+                    .buildUpon()
+                    .appendQueryParameter("method", "get")
+                    .appendQueryParameter("format", "json")
+                    .build().toString();
+            String jsonString = getUrlString(url, "GET");
+            JSONArray jsonBody = new JSONArray(jsonString);
+            parseTypes(types, jsonBody);
+        } catch (IOException ioe) {
+            Log.e("GjaldbrotApp", "Failed to fetch receipts", ioe);
+        } catch (JSONException je) {
+            Log.e("GjaldbrotApp", "Failed to parse JSON", je);
+        }
+        return types;
+    }
+
+    private void parseTypes(List<Type> types, JSONArray jsonBody) throws JSONException {
+        for (int i = 0; i < jsonBody.length(); i++) {
+            Type type = new Type();
+
+            JSONObject typeJSON = jsonBody.getJSONObject(i);
+
+            type.setId(typeJSON.getInt("id"));
+            type.setName((typeJSON.getString("name")));
+            types.add(type);
+        }
+    }
 }

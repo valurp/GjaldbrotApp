@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
+import is.hi.hbv601g.gjaldbrotapp.Entities.Type;
 import is.hi.hbv601g.gjaldbrotapp.Entities.User;
 
 /**
@@ -112,6 +113,14 @@ public class ReceiptService {
         }
         Log.i("HTTPManager", "Receipt updated");
         return true;
+    }
+
+    public List<Type> fetchReceiptType(){
+        if (!httpManager.hasToken()) {
+            Log.e("MANAGER TOKEN", "HttpManager has no token");
+            return null;
+        }
+        return httpManager.fetchTypes();
     }
 
     /**

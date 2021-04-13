@@ -18,10 +18,10 @@ public class ReceiptItem implements Serializable {
     private int mAmount;
     private String mType;
     private Date mDate;
-    //Private ??? date TODO implement time field
+
 
     public ReceiptItem() {
-
+        mDate = new Date();
     }
 
     public ReceiptItem(int id, int amount, String type) {
