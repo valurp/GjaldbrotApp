@@ -294,6 +294,27 @@ public class HttpManager {
         writeTo(con, jsonType);
     }
 
+    public void updateType(int id, String name) throws Exception{
+        String url = Uri.parse(URL)
+                .buildUpon()
+                .appendPath("user")
+                .appendPath("types")
+                .appendPath(""+ id)
+                .build()
+                .toString();
+        URL patchUrl = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) patchUrl.openConnection();
+        con.setRequestMethod("PATCH");
+        con.setRequestProperty("Authorization", "Bearer " + token);
+        con.setRequestProperty("Content-Type", "application/json; utf-8");
+        con.setRequestProperty("Accept", "application/json");
+        con.setDoOutput(true);
+        String jsonType = "{ \"id\": \"" + id + "\","
+                + "\"name\": " + name
+                + "}";
+        writeTo(con,jsonType);
+    }
+
     public HttpManager(){
     }
 

@@ -34,7 +34,7 @@ public class ReceiptService {
     }
 
     /**
-     * Construcor
+     * Constructor
      */
     public ReceiptService() {
         uService = UserService.getInstance();
@@ -115,6 +115,10 @@ public class ReceiptService {
         return true;
     }
 
+    /**
+     * Method fetches users receipt types
+     * @return all types for logged user
+     */
     public List<Type> fetchReceiptType(){
         if (!httpManager.hasToken()) {
             Log.e("MANAGER TOKEN", "HttpManager has no token");
@@ -124,23 +128,18 @@ public class ReceiptService {
     }
 
     /**
-     * Testing method to create fake Receipts
-     * DELETE AFTER FINISHED
+     * Method updates name for given receipt
+     * @param t type to modify
+     * @return true if successful, otherwise false
      */
-    public List<ReceiptItem> mockReceipts(int num){
-        String[] types = {"Matur", "Leiga", "Áfengi", "Fatnaður"};
-        int[] amounts = {500, 2000, 3000, 5000, 10000, 1000};
-        int id = 1;
-        int n = types.length;
-        int m = amounts.length;
-        List<ReceiptItem> mock = new ArrayList<>();
-        for(int i = 0; i < num; i++){
-            String t = types[(int)(Math.random()*n)];
-            int a = amounts[(int)(Math.random()*m)];
-            ReceiptItem r = new ReceiptItem(id, a,t);
-            mock.add(r);
-            id++;
+    public Boolean changeType(Type t){
+        try {
+            httpManager.updateType(t.getId(), t.getName());
+        } catch (Exception e) {
+            Log.e("HTTPManager", e.toString());
+            return false;
         }
-        return mock;
+        Log.i("HTTPManager", "Type updated");
+        return true;
     }
 }
