@@ -96,7 +96,7 @@ public class ReceiptEditFragment extends Fragment {
 
     private String getDateSelected() {
         String year = String.valueOf(mDatePicker.getYear());
-        String month = String.valueOf(mDatePicker.getMonth());
+        String month = String.valueOf(mDatePicker.getMonth()+1);
         String day = String.valueOf(mDatePicker.getDayOfMonth());
         Log.i(TAG, String.format("%s-%s-%s", year, month, day));
         return String.format("%s-%s-%s", year, month, day);
