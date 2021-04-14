@@ -1,71 +1,80 @@
 package is.hi.hbv601g.gjaldbrotapp.ui.add_receipt;
 
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
+import is.hi.hbv601g.gjaldbrotapp.ReceiptEditFragment;
 import is.hi.hbv601g.gjaldbrotapp.R;
+import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AddPhotoFragment#newInstance} factory method to
+ * Use the {@link AddManuallyFragment} factory method to
  * create an instance of this fragment.
  */
 public class AddPhotoFragment extends Fragment {
+    private static String TAG = "ADD_PHOTO_FRAGMENT";
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private ReceiptEditFragment mReceiptEditFragment;
 
     public AddPhotoFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddPhotoFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AddPhotoFragment newInstance(String param1, String param2) {
-        AddPhotoFragment fragment = new AddPhotoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_add_photo, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_photo, container, false);
+        view.setBackgroundColor(Color.WHITE);
 
-        root.setBackgroundColor(Color.WHITE);
+        FragmentManager fm = getChildFragmentManager();
+        mReceiptEditFragment = new ReceiptEditFragment();
+        fm.beginTransaction().add(R.id.photo_dp_container, mReceiptEditFragment).commit();
 
-        return root;
+        return view;
+    }
+
+    private class CreateReceiptListener implements View.OnClickListener{
+        @Override
+        public void onClick(View view) {
+            try {
+                ReceiptItem receiptItem = mReceiptEditFragment.getReceiptItem();
+                new CreateReceiptTask().execute(receiptItem);
+            }
+            catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+        }
+    }
+
+    private class CreateReceiptTask extends AsyncTask<ReceiptItem, Void, Boolean> {
+        @Override
+        public Boolean doInBackground(ReceiptItem... params) {
+            return ReceiptService.getInstance().addReceipt(params[0]);
+        }
+        @Override
+        public void onPostExecute(Boolean result) {
+            if (result.booleanValue()) {
+                // TODO reroute to all_receipts, need callback to parent activity
+                return;
+            }
+            else {
+                Log.e("CREATE RECEIPT", "Error creating receipt");
+            }
+        }
     }
 }
