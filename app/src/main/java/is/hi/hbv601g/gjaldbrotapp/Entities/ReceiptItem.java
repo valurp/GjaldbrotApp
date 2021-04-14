@@ -17,6 +17,7 @@ public class ReceiptItem implements Serializable {
     private int mId;
     private int mAmount;
     private String mType;
+    private long mTypeId;
     private Date mDate;
 
 
@@ -42,6 +43,8 @@ public class ReceiptItem implements Serializable {
         mType = type;
     }
 
+    public void setTypeId(long typeId) { mTypeId = typeId; }
+
     public int getId() {
         return mId;
     }
@@ -53,6 +56,8 @@ public class ReceiptItem implements Serializable {
     public String getType() {
         return mType;
     }
+
+    public long getTypeId() { return mTypeId; }
 
     public Date getDate() { return mDate; };
 

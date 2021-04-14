@@ -192,6 +192,7 @@ public class HttpManager {
             receipt.setAmount(receiptJSON.getInt("amount"));
             receipt.setId(receiptJSON.getInt("id"));
             receipt.setType(receiptJSON.getString("type"));
+            receipt.setTypeId(receiptJSON.getLong("type_id"));
             try {
                 receipt.setFormattedDate(receiptJSON.getString("date"));
             }
@@ -230,7 +231,7 @@ public class HttpManager {
      * @param type type of receipt
      * @throws Exception if URL is invalid, or if connection fails.
      */
-    public void createReceipt(int amount, String type, String date, String time) throws Exception {
+    public void createReceipt(int amount, String type, long typeId, String date, String time) throws Exception {
         String url = Uri.parse(URL)
                 .buildUpon()
                 .appendPath("user")
@@ -247,6 +248,7 @@ public class HttpManager {
         String jsonReceipt =
                 "{ \"amount\":\"" + amount + "\", "
                         + "\"type\":\"" + type + "\","
+                        + "\"type_id\":"+typeId + ","
                         + "\"date\":\"" + date + "\","
                         + "\"time\":\"" + time + "\""
                         + "}";

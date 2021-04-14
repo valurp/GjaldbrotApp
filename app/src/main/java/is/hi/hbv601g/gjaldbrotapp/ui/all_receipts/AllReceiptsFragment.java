@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
+import is.hi.hbv601g.gjaldbrotapp.Entities.Type;
 import is.hi.hbv601g.gjaldbrotapp.R;
 import is.hi.hbv601g.gjaldbrotapp.Services.HttpManager;
 import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
@@ -56,7 +57,6 @@ public class AllReceiptsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
 
         View view = inflater.inflate(R.layout.fragment_all_receipts_list, container, false);
         view.setBackgroundColor(Color.WHITE);
@@ -94,6 +94,7 @@ public class AllReceiptsFragment extends Fragment {
     private class ReceiptRecyclerViewAdapter extends RecyclerView.Adapter<ReceiptRecyclerViewAdapter.ViewHolder>{
         private static final String TAG = "ReceiptRecyclerAdapter";
         private List<ReceiptItem> mValues;
+        private List<Type> mTypes;
 
         public ReceiptRecyclerViewAdapter(List<ReceiptItem> items) {
             mValues = items;

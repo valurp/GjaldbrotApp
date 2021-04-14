@@ -67,7 +67,6 @@ public class ReceiptEditFragment extends Fragment {
          */
         mDatePicker = (DatePicker) view.findViewById(R.id.edit_receipt_datepicker);
 
-
         /**
          * Tengja rest af inputum
          */
@@ -77,7 +76,7 @@ public class ReceiptEditFragment extends Fragment {
         ArrayAdapter<CharSequence> typeAdapter =
                 new ArrayAdapter(this.getContext(),
                         android.R.layout.simple_spinner_item,
-                        new ArrayList(Arrays.asList("Loading ..."))); // todo láta lesa frá notenda upplýsingum
+                        new ArrayList(Arrays.asList("Loading ...")));
 
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mTypeSpinner.setAdapter(typeAdapter);
@@ -120,9 +119,9 @@ public class ReceiptEditFragment extends Fragment {
         String date = getDateSelected();
         String amount = mAmountField.getText().toString();
         String time = mTimeField.getText().toString();
-        String type = getIdOfTypeSelected();
+        long type = getIdOfTypeSelected();
 
-        if (date.equals("") || amount.equals("") || time.equals("") || type.equals("")) {
+        if (date.equals("") || amount.equals("") || time.equals("") || type == -1) {
             throw new Exception("Input error, not all fields are filled in");
         }
 
@@ -133,22 +132,23 @@ public class ReceiptEditFragment extends Fragment {
             throw new Exception("Could not parse date, format yyyy-MM-dd");
         }
         mReceiptItem.setAmount(Integer.parseInt(amount));
-        mReceiptItem.setType(type);
+        mReceiptItem.setType(mTypeSpinner.getSelectedItem().toString());
+        mReceiptItem.setTypeId(type);
         return mReceiptItem;
     }
 
-    private String getIdOfTypeSelected() {
+    private long getIdOfTypeSelected() {
         String typeSelected = mTypeSpinner.getSelectedItem().toString();
         for (Type t : mTypeList) {
             if (t.getName().equals(typeSelected)) {
-                return String.format("%d", t.getId());
+                return t.getId();
             }
         }
-        return "";
+        return -1;
     }
 
     private class FetchTypesTask extends AsyncTask<ReceiptItem, Void, List<Type>> {
-        private ArrayAdapter mTypeAdapter;
+        private final ArrayAdapter mTypeAdapter;
         public FetchTypesTask(ArrayAdapter typeAdapter) {
             mTypeAdapter = typeAdapter;
         }
