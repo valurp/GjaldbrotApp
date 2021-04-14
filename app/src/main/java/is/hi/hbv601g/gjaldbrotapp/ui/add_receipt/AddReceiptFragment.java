@@ -51,7 +51,7 @@ public class AddReceiptFragment extends Fragment {
                 NavHostFragment navHostFragment =
                         (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
                 NavController navController = navHostFragment.getNavController();
-                navController.navigate(R.id.action_nav_add_receipt_to_addManuallyFragment);
+                navController.navigate(R.id.action_nav_add_receipt_to_addPhotoFragment);
             }
         });
 

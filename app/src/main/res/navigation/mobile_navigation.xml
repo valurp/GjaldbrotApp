@@ -44,11 +44,23 @@
             app:destination="@id/addManuallyFragment"
             app:popUpTo="@id/nav_add_receipt"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_nav_add_receipt_to_addPhotoFragment"
+            app:destination="@id/addPhotoFragment"
+            app:popUpTo="@id/nav_add_receipt"
+            app:popUpToInclusive="false" />
     </fragment>
+
     <fragment
         android:id="@+id/addManuallyFragment"
         android:name="is.hi.hbv601g.gjaldbrotapp.ui.add_receipt.AddManuallyFragment"
         android:label="AddManuallyFragment" />
+
+    <fragment
+        android:id="@+id/addPhotoFragment"
+        android:name="is.hi.hbv601g.gjaldbrotapp.ui.add_receipt.AddPhotoFragment"
+        android:label="AddPhotoFragment" />
+
     <fragment
         android:id="@+id/changeReceiptFragment"
         android:name="is.hi.hbv601g.gjaldbrotapp.ui.all_receipts.ChangeReceiptFragment"
