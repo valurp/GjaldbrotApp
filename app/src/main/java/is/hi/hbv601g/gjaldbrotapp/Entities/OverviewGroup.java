@@ -27,4 +27,9 @@ public class OverviewGroup {
 
     public OverviewGroup() {
     }
+
+    @Override
+    public String toString() {
+        return category+":"+amount;
+    }
 }

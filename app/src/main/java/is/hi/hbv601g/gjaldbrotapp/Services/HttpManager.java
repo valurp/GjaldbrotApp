@@ -379,7 +379,7 @@ public class HttpManager {
                     .appendQueryParameter("format", "json")
                     .build().toString();
             String jsonString = getUrlString(url, "GET");
-            JSONArray jsonBody = new JSONArray(jsonString);
+            JSONObject jsonBody = new JSONObject(jsonString);
             parseOverview(overview, jsonBody);
         } catch (IOException ioe) {
             Log.e("GjaldbrotApp", "Failed to fetch receipts", ioe);
@@ -390,12 +390,13 @@ public class HttpManager {
 
     }
 
-    private void parseOverview(List<OverviewGroup> overview, JSONArray jsonBody) throws JSONException{
+    private void parseOverview(List<OverviewGroup> overview, JSONObject jsonBody) throws JSONException{
+        JSONArray groupsJSON = jsonBody.getJSONArray("group");
         for (int i = 0; i < jsonBody.length(); i++) {
             OverviewGroup group = new OverviewGroup();
-            JSONObject groupsJSON = jsonBody.getJSONObject(i);
-            group.setAmount(groupsJSON.getInt("amount"));
-            group.setCategory(groupsJSON.getString("name"));
+            JSONObject groupJSON = groupsJSON.getJSONObject(i);
+            group.setAmount(groupJSON.getInt("amount"));
+            group.setCategory(groupJSON.getString("name"));
             overview.add(group);
         }
     }
