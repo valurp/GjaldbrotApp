@@ -68,16 +68,11 @@ public class ReceiptEditFragment extends Fragment implements TimePickerDialog.On
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_receipt_edit, container, false);
-        /**
-         * Setja upp dagsetningar spinner-a
-         */
+        // Dagsetningar veljarinn.
         mDatePicker = (DatePicker) view.findViewById(R.id.edit_receipt_datepicker);
-
-        /**
-         * Tengja rest af inputum
-         */
+        // Svæði fyrir upphæðina.
         mAmountField = (EditText) view.findViewById(R.id.receipt_edit_et_amount);
-
+        // Hnappur til að velja tímann.
         mTimeField = (Button) view.findViewById(R.id.receipt_edit_et_time);
         mTimeField.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +81,7 @@ public class ReceiptEditFragment extends Fragment implements TimePickerDialog.On
             }
         });
 
+        // Spinner með
         mTypeSpinner = (Spinner) view.findViewById(R.id.receipt_edit_sp_type);
         ArrayAdapter<CharSequence> typeAdapter =
                 new ArrayAdapter(this.getContext(),
@@ -102,38 +98,9 @@ public class ReceiptEditFragment extends Fragment implements TimePickerDialog.On
         return view;
     }
 
-    public void showTimePicker() {
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this.getContext(), this, mHour, mMinute, true);
-        timePickerDialog.show();
-    }
-
-    private void initializeForm() {
-        setDate(mReceiptItem.getDate());
-        mAmountField.setText(String.format("%d", mReceiptItem.getAmount()));
-    }
-
-    private String getDateSelected() {
-        String year = String.valueOf(mDatePicker.getYear());
-        String month = String.valueOf(mDatePicker.getMonth()+1);
-        String day = String.valueOf(mDatePicker.getDayOfMonth());
-        Log.i(TAG, String.format("%s-%s-%sT%d:%d", year, month, day, mHour, mMinute));
-        return String.format("%s-%s-%sT%d:%d:00", year, month, day, mHour, mMinute);
-    }
-
-    private void setDate(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        mHour = calendar.get(Calendar.HOUR_OF_DAY);
-        mMinute = calendar.get(Calendar.MINUTE);
-        mDatePicker.updateDate(year, month, day);
-        mTimeField.setText(mHour+":"+mMinute);
-    }
-
     /**
-     * Main function of this fragment, returns the receipt that the user has entered into the fields
+     * Aðalfall klasans. Les úr þeim upplýsingum sem að notandinn hefur slegið inn og skilar
+     * ReceiptItem út frá þeim.
      * @return
      * @throws Exception
      */
@@ -151,14 +118,61 @@ public class ReceiptEditFragment extends Fragment implements TimePickerDialog.On
             mReceiptItem.setFormattedDateWithTime(date);
         }
         catch (Exception e) {
-            throw new Exception("Could not parse date, format yyyy-MM-dd");
+            throw new Exception("Could not parse date, format yyyy-MM-dd'T'hh:mm:ss");
         }
+
         mReceiptItem.setAmount(Integer.parseInt(amount));
         mReceiptItem.setType(mTypeSpinner.getSelectedItem().toString());
         mReceiptItem.setTypeId(type);
         return mReceiptItem;
     }
 
+
+
+    /**
+     * Upphafstillir upplýsingarnar í forminu eftir kvittuninni
+     */
+    private void initializeForm() {
+        setDate(mReceiptItem.getDate());
+        if(mReceiptItem.getAmount() != 0) {
+            mAmountField.setText(String.format("%d", mReceiptItem.getAmount()));
+        }
+    }
+
+    /**
+     * Skilar dagsetningu á forminu yyyy-MM-dd'T'hh:mm:ss eftir því hvað er valið í mDatePicker og
+     * mTimeField
+     * @return
+     */
+    private String getDateSelected() {
+        String year = String.valueOf(mDatePicker.getYear());
+        String month = String.valueOf(mDatePicker.getMonth()+1);
+        String day = String.valueOf(mDatePicker.getDayOfMonth());
+        Log.i(TAG, String.format("%s-%s-%sT%d:%d", year, month, day, mHour, mMinute));
+        return String.format("%s-%s-%sT%d:%d:00", year, month, day, mHour, mMinute);
+    }
+
+    /**
+     * Upphafsstillir mDatePicker og mTimeField eftir dagssetningu.
+     * @param date
+     */
+    private void setDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        mHour = calendar.get(Calendar.HOUR_OF_DAY);
+        mMinute = calendar.get(Calendar.MINUTE);
+        mDatePicker.updateDate(year, month, day);
+        mTimeField.setText(mHour+":"+mMinute);
+    }
+
+    /**
+     * Fer í gegnum listann af kvittunar-tegundum sem notandinn er með skilgreindar og skilar
+     * id þeirrar sem er valin í mTypeSpinner.
+     * @return
+     */
     private long getIdOfTypeSelected() {
         String typeSelected = mTypeSpinner.getSelectedItem().toString();
         for (Type t : mTypeList) {
@@ -169,6 +183,26 @@ public class ReceiptEditFragment extends Fragment implements TimePickerDialog.On
         return -1;
     }
 
+    /**
+     * Fall sem að birtir TimePickerDialog. Þarf að vera hér til að hafa aðgang að this.getContext()
+     */
+    private void showTimePicker() {
+        TimePickerDialog timePickerDialog =
+                new TimePickerDialog(this.getContext(),
+                        this,
+                        mHour,
+                        mMinute,
+                        true);
+        timePickerDialog.show();
+    }
+
+    /**
+     * Útfærir onTimeSet fyrir TimePickerDialog.OnTimeSetListener
+     * Uppfærir textan á tíma hnappinum sem tímann sem var valinn.
+     * @param view
+     * @param hourOfDay
+     * @param minute
+     */
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         mMinute = minute;
@@ -176,6 +210,9 @@ public class ReceiptEditFragment extends Fragment implements TimePickerDialog.On
         mTimeField.setText(hourOfDay + ":" + minute);
     }
 
+    /**
+     * Innri klasi sem að sækir kvittunar-tegundir á vefþjónustu og uppfærir stökin mTypeSpinner
+     */
     private class FetchTypesTask extends AsyncTask<ReceiptItem, Void, List<Type>> {
         private final ArrayAdapter mTypeAdapter;
         public FetchTypesTask(ArrayAdapter typeAdapter) {
