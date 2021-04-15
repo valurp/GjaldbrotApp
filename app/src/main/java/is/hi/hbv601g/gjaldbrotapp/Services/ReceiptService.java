@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import is.hi.hbv601g.gjaldbrotapp.Entities.OverviewGroup;
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.Entities.Type;
 import is.hi.hbv601g.gjaldbrotapp.Entities.User;
@@ -142,5 +143,13 @@ public class ReceiptService {
         }
         Log.i("HTTPManager", "Type updated");
         return true;
+    }
+
+    public List<OverviewGroup> fetchOverview(){
+        if (!httpManager.hasToken()) {
+            Log.e("MANAGER TOKEN", "HttpManager has no token");
+            return null;
+        }
+        return httpManager.fetchOverview();
     }
 }

@@ -17,8 +17,10 @@ import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import is.hi.hbv601g.gjaldbrotapp.Entities.OverviewGroup;
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.Entities.Type;
 import is.hi.hbv601g.gjaldbrotapp.Entities.User;
@@ -363,4 +365,39 @@ public class HttpManager {
             types.add(type);
         }
     }
+    public List<OverviewGroup> fetchOverview() {
+        Log.i("Overview http", "starting fetch overview call");
+        if(token == null){
+            Log.e("TOKEN", "Token is null");
+            return null;
+        }
+        List<OverviewGroup> overview = new ArrayList<>();
+        try {
+            String url = Uri.parse(URL+"/user/receipt")
+                    .buildUpon()
+                    .appendQueryParameter("method", "get")
+                    .appendQueryParameter("format", "json")
+                    .build().toString();
+            String jsonString = getUrlString(url, "GET");
+            JSONArray jsonBody = new JSONArray(jsonString);
+            parseOverview(overview, jsonBody);
+        } catch (IOException ioe) {
+            Log.e("GjaldbrotApp", "Failed to fetch receipts", ioe);
+        } catch (JSONException je) {
+            Log.e("GjaldbrotApp", "Failed to parse JSON", je);
+        }
+        return overview;
+
+    }
+
+    private void parseOverview(List<OverviewGroup> overview, JSONArray jsonBody) throws JSONException{
+        for (int i = 0; i < jsonBody.length(); i++) {
+            OverviewGroup group = new OverviewGroup();
+            JSONObject groupsJSON = jsonBody.getJSONObject(i);
+            group.setAmount(groupsJSON.getInt("amount"));
+            group.setCategory(groupsJSON.getString("name"));
+            overview.add(group);
+        }
+    }
+
 }
