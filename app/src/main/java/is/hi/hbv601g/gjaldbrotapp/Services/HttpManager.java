@@ -373,7 +373,7 @@ public class HttpManager {
         }
         List<OverviewGroup> overview = new ArrayList<>();
         try {
-            String url = Uri.parse(URL+"/user/receipt")
+            String url = Uri.parse(URL+"/user/overview")
                     .buildUpon()
                     .appendQueryParameter("method", "get")
                     .appendQueryParameter("format", "json")
