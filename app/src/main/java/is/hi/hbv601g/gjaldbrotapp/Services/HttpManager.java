@@ -258,7 +258,7 @@ public class HttpManager {
         writeTo(con, jsonReceipt);
     }
 
-    public void updateReceipt(int amount, String type, int id) throws Exception {
+    public void updateReceipt(int amount, String type, int id, String time, String date) throws Exception {
         String url = Uri.parse(URL)
                 .buildUpon()
                 .appendPath("user")
@@ -275,8 +275,8 @@ public class HttpManager {
         con.setDoOutput(true);
         String jsonReceipt = "{ \"amount\":\"" + amount + "\", "
                 + "\"type\":\"" + type + "\","
-                // + "\"date\":\"" + date + "\","
-                // + "\"time\":\"" + time + "\""
+                + "\"date\":\"" + date + "\","
+                + "\"time\":\"" + time + "\""
                 + "}";;
         writeTo(con, jsonReceipt);
     }

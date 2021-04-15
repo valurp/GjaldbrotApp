@@ -107,7 +107,7 @@ public class ReceiptService {
     public Boolean changeReceipt(ReceiptItem r){
         // if(loggedUser == null) uService.getUser();
         try {
-            httpManager.updateReceipt(r.getAmount(),r.getType(), r.getId());
+            httpManager.updateReceipt(r.getAmount(), r.getType(), r.getId(), r.getTime(), r.getFormattedDate());
         } catch (Exception e) {
             Log.e("HTTPManager", e.toString());
             return false;
