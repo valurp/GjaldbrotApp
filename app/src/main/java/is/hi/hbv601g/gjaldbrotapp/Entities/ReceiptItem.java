@@ -12,7 +12,9 @@ import java.util.Date;
  */
 public class ReceiptItem implements Serializable {
 
-    private static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    private static DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private static DateFormat mDateFormatWithTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    private static DateFormat mTimeFormat = new SimpleDateFormat("HH:mm:ss");
 
     private int mId;
     private int mAmount;
@@ -62,10 +64,18 @@ public class ReceiptItem implements Serializable {
     public Date getDate() { return mDate; };
 
     public void setFormattedDate(String formattedDate) throws Exception {
-        mDate = df.parse(formattedDate);
+        mDate = mDateFormat.parse(formattedDate);
     }
 
     public String getFormattedDate() {
-        return df.format(mDate);
+        return mDateFormat.format(mDate);
+    }
+
+    public String getTime() {
+        return mTimeFormat.format(mDate);
+    }
+
+    public void setFormattedDateWithTime(String formattedDateWithTime) throws Exception {
+        mDate = mDateFormatWithTime.parse(formattedDateWithTime);
     }
 }

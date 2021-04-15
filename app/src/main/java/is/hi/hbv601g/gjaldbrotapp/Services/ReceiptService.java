@@ -74,7 +74,8 @@ public class ReceiptService {
             int amount = r.getAmount();
             String type = r.getType(); // TODO láta type tengjast meira ReceiptType
             String date = r.getFormattedDate();
-            String time = "10:10:10";
+            String time = r.getTime();
+            Log.i("RECEIPT SERVICE", time);
             httpManager.createReceipt(amount, type, r.getTypeId(), date, time);
             Log.i("RECEIPT_SERVICE", "Receipt created");
             return true;

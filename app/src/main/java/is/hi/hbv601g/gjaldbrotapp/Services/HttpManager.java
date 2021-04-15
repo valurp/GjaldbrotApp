@@ -194,10 +194,13 @@ public class HttpManager {
             receipt.setType(receiptJSON.getString("type"));
             receipt.setTypeId(receiptJSON.getLong("type_id"));
             try {
-                receipt.setFormattedDate(receiptJSON.getString("date"));
+                String date = receiptJSON.getString("date").split(" ")[0];
+                String time = receiptJSON.getString("parsedTime");
+                Log.i("DATE", date+"T"+time);
+                receipt.setFormattedDateWithTime(date+"T"+time);
             }
             catch (Exception e) {
-
+                Log.e("ERROR", "error parsing date");
             }
             receipts.add(receipt);
         }

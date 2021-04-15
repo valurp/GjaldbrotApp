@@ -1,5 +1,6 @@
 package is.hi.hbv601g.gjaldbrotapp;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,10 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -30,13 +34,15 @@ import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class ReceiptEditFragment extends Fragment {
+public class ReceiptEditFragment extends Fragment implements TimePickerDialog.OnTimeSetListener {
     private static String TAG = "DATE_PICKER";
 
     private DatePicker mDatePicker;
 
     private EditText mAmountField;
-    private EditText mTimeField;
+    private Button mTimeField;
+    private int mHour, mMinute;
+
     private Spinner mTypeSpinner;
     private List<Type> mTypeList;
 
@@ -71,7 +77,15 @@ public class ReceiptEditFragment extends Fragment {
          * Tengja rest af inputum
          */
         mAmountField = (EditText) view.findViewById(R.id.receipt_edit_et_amount);
-        mTimeField = (EditText) view.findViewById(R.id.receipt_edit_et_time);
+
+        mTimeField = (Button) view.findViewById(R.id.receipt_edit_et_time);
+        mTimeField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimePicker();
+            }
+        });
+
         mTypeSpinner = (Spinner) view.findViewById(R.id.receipt_edit_sp_type);
         ArrayAdapter<CharSequence> typeAdapter =
                 new ArrayAdapter(this.getContext(),
@@ -88,6 +102,11 @@ public class ReceiptEditFragment extends Fragment {
         return view;
     }
 
+    public void showTimePicker() {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this.getContext(), this, mHour, mMinute, true);
+        timePickerDialog.show();
+    }
+
     private void initializeForm() {
         setDate(mReceiptItem.getDate());
         mAmountField.setText(String.format("%d", mReceiptItem.getAmount()));
@@ -97,8 +116,8 @@ public class ReceiptEditFragment extends Fragment {
         String year = String.valueOf(mDatePicker.getYear());
         String month = String.valueOf(mDatePicker.getMonth()+1);
         String day = String.valueOf(mDatePicker.getDayOfMonth());
-        Log.i(TAG, String.format("%s-%s-%s", year, month, day));
-        return String.format("%s-%s-%s", year, month, day);
+        Log.i(TAG, String.format("%s-%s-%sT%d:%d", year, month, day, mHour, mMinute));
+        return String.format("%s-%s-%sT%d:%d:00", year, month, day, mHour, mMinute);
     }
 
     private void setDate(Date date) {
@@ -107,7 +126,10 @@ public class ReceiptEditFragment extends Fragment {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
+        mHour = calendar.get(Calendar.HOUR_OF_DAY);
+        mMinute = calendar.get(Calendar.MINUTE);
         mDatePicker.updateDate(year, month, day);
+        mTimeField.setText(mHour+":"+mMinute);
     }
 
     /**
@@ -126,7 +148,7 @@ public class ReceiptEditFragment extends Fragment {
         }
 
         try {
-            mReceiptItem.setFormattedDate(date);
+            mReceiptItem.setFormattedDateWithTime(date);
         }
         catch (Exception e) {
             throw new Exception("Could not parse date, format yyyy-MM-dd");
@@ -145,6 +167,13 @@ public class ReceiptEditFragment extends Fragment {
             }
         }
         return -1;
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        mMinute = minute;
+        mHour = hourOfDay;
+        mTimeField.setText(hourOfDay + ":" + minute);
     }
 
     private class FetchTypesTask extends AsyncTask<ReceiptItem, Void, List<Type>> {

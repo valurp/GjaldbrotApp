@@ -17,12 +17,12 @@
         android:calendarViewShown="false"
         android:datePickerMode="spinner"/>
 
-    <EditText
+    <Button
         android:id="@+id/receipt_edit_et_time"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:inputType="time"
-        android:hint="@string/time"></EditText>
+        android:hint="@string/time"></Button>
 
     <EditText
         android:id="@+id/receipt_edit_et_amount"
