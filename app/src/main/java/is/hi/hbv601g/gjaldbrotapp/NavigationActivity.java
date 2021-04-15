@@ -41,6 +41,7 @@ public class NavigationActivity extends AppCompatActivity {
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home,
                 R.id.nav_add_receipt,
+                R.id.nav_addType_receipt,
                 R.id.nav_month_overview,
                 R.id.nav_all_receipts,
                 R.id.nav_month_comparison)

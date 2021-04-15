@@ -13,6 +13,10 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_add_receipt" />
         <item
+            android:id="@+id/nav_addType_receipt"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/menu_add_type" />
+        <item
             android:id="@+id/nav_all_receipts"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_all_receipts" />

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@id/nav_home">
 
     <fragment
         android:id="@+id/nav_home"
@@ -66,4 +66,9 @@
         android:name="is.hi.hbv601g.gjaldbrotapp.ui.all_receipts.ChangeReceiptFragment"
         android:label="fragment_change_receipt"
         tools:layout="@layout/fragment_change_receipt" />
+    <fragment
+        android:id="@+id/addTypeFragment"
+        android:name="is.hi.hbv601g.gjaldbrotapp.ui.add_receipt.AddTypeFragment"
+        android:label="fragment_add_type"
+        tools:layout="@layout/fragment_add_type" />
 </navigation>
