@@ -392,7 +392,7 @@ public class HttpManager {
 
     private void parseOverview(List<OverviewGroup> overview, JSONObject jsonBody) throws JSONException{
         JSONArray groupsJSON = jsonBody.getJSONArray("group");
-        for (int i = 0; i < jsonBody.length(); i++) {
+        for (int i = 0; i < groupsJSON.length(); i++) {
             OverviewGroup group = new OverviewGroup();
             JSONObject groupJSON = groupsJSON.getJSONObject(i);
             group.setAmount(groupJSON.getInt("amount"));
