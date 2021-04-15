@@ -43,10 +43,6 @@ public class AddPhotoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_photo, container, false);
         view.setBackgroundColor(Color.WHITE);
 
-        FragmentManager fm = getChildFragmentManager();
-        mReceiptEditFragment = new ReceiptEditFragment();
-        fm.beginTransaction().add(R.id.photo_dp_container, mReceiptEditFragment).commit();
-
         return view;
     }
 
