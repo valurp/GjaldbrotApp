@@ -283,7 +283,7 @@ public class HttpManager {
         writeTo(con, jsonReceipt);
     }
 
-    public void createType(String type) throws Exception{
+    public void createType(String type, int color) throws Exception{
         String url = Uri.parse(URL)
                 .buildUpon()
                 .appendPath("user")
@@ -297,11 +297,13 @@ public class HttpManager {
         con.setRequestProperty("Content-Type", "application/json; utf-8");
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
-        String jsonType = "{ type: " + type + "}";
+        String jsonType = "{ \"type\": \"" + type + "\","
+                + "\"color\": \"" + color + "\""
+                + "}";
         writeTo(con, jsonType);
     }
 
-    public void updateType(int id, String name) throws Exception{
+    public void updateType(int id, String name, int color) throws Exception{
         String url = Uri.parse(URL)
                 .buildUpon()
                 .appendPath("user")
@@ -317,8 +319,9 @@ public class HttpManager {
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
         String jsonType = "{ \"id\": \"" + id + "\","
-                + "\"name\": " + name
-                + "}";
+                + "\"name\": " + name + "\","
+                + "\"color\": " + color + "\""
+                +"}";
         writeTo(con,jsonType);
     }
 
@@ -362,9 +365,11 @@ public class HttpManager {
 
             type.setId(typeJSON.getInt("id"));
             type.setName((typeJSON.getString("name")));
+            type.setColor(typeJSON.getInt("color"));
             types.add(type);
         }
     }
+
     public List<OverviewGroup> fetchOverview() {
         Log.i("Overview http", "starting fetch overview call");
         if(token == null){
