@@ -17,6 +17,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import java.util.ArrayList;
 
+import is.hi.hbv601g.gjaldbrotapp.Services.UserService;
+
 public class LoginActivity
         extends AppCompatActivity
         implements RegisterFragment.RegisterCallbacks,
@@ -47,7 +49,6 @@ public class LoginActivity
         // notandi sé skráður inn
         /** FOR DEV PURPOSES WE ALWAYS GO TO LOGIN SCREEN FIRST, MAYBE WE WANT A MORE COMPLEX CHECK
          * WITH LIKE A WEB CALL*/
-        /*
         SharedPreferences sharedPreferences = viewPager.getContext()
                         .getSharedPreferences(
                                 getString(R.string.shared_preferences),
@@ -56,9 +57,10 @@ public class LoginActivity
                 getString(R.string.token_file_key),
                 null);
         if (token != null) {
+            UserService.getInstance().setToken(token);
             onLogin();
             return;
-        }*/
+        }
 
 
         AuthenticationPagerAdapter pagerAdapter =
