@@ -38,12 +38,12 @@ public class AddTypeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_type, container, false);
         view.setBackgroundColor(Color.WHITE);
 
-        FragmentManager fm = getChildFragmentManager();
-        mAddTypeFragment = new AddTypeFragment();
-        fm.beginTransaction().add(R.id.manually_dp_container, mAddTypeFragment).commit();
+        // FragmentManager fm = getChildFragmentManager();
+        // mAddTypeFragment = new AddTypeFragment();
+        // fm.beginTransaction().add(R.id.manually_dp_container, mAddTypeFragment).commit();
 
-        Button createReceiptBtn = (Button) view.findViewById(R.id.manually_btn_add);
-        createReceiptBtn.setOnClickListener(new AddTypeFragment.CreateTypeListener());
+        // Button createReceiptBtn = (Button) view.findViewById(R.id.manually_btn_add);
+        // createReceiptBtn.setOnClickListener(new AddTypeFragment.CreateTypeListener());
 
         return view;
     }
