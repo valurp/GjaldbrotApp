@@ -414,6 +414,7 @@ public class HttpManager {
             JSONObject groupJSON = groupsJSON.getJSONObject(i);
             group.setAmount(groupJSON.getInt("amount"));
             group.setCategory(groupJSON.getString("name"));
+            group.setColor(groupJSON.getInt("color"));
             overview.add(group);
         }
     }
