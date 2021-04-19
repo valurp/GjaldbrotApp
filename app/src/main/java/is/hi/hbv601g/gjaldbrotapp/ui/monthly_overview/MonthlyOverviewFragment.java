@@ -89,7 +89,7 @@ public class MonthlyOverviewFragment extends Fragment {
         ArrayList<ColoredDataPoint> dataPoints = new ArrayList<ColoredDataPoint>();
         for (OverviewGroup group : mOverviewData) {
             if (group.isVisible()) {
-                dataPoints.add(new ColoredDataPoint(i, group.getAmount(), Color.rgb(255, 100, 100)));
+                dataPoints.add(new ColoredDataPoint(i, group.getAmount(), group.getColor()));
                 if (max < group.getAmount()) {
                     max = group.getAmount();
                 }
@@ -168,7 +168,7 @@ public class MonthlyOverviewFragment extends Fragment {
 
         public void onBindViewHolder(final TypeRecyclerAdapter.ViewHolder holder, int position) {
             holder.mTextView.setText(mValues.get(position).getCategory());
-            holder.mColor.setBackgroundColor(Color.rgb(200,100,100));
+            holder.mColor.setBackgroundColor(mValues.get(position).getColor());
         }
 
         public int getItemCount() { return mValues.size(); }
