@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +32,8 @@ public class AddManuallyFragment extends Fragment {
 
     private ReceiptEditFragment mReceiptEditFragment;
 
+    Button man;
+
     public AddManuallyFragment() {
     }
 
@@ -50,6 +54,20 @@ public class AddManuallyFragment extends Fragment {
 
         Button createReceiptBtn = (Button) view.findViewById(R.id.manually_btn_add);
         createReceiptBtn.setOnClickListener(new CreateReceiptListener());
+
+        man = (Button) view.findViewById(R.id.type_btn_add);
+
+        man.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment navHostFragment =
+                        (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                NavController navController = navHostFragment.getNavController();
+                navController.navigate(R.id.action_addManuallyFragment_to_addTypeFragment);
+            }
+        });
+
+
         return view;
     }
 
@@ -74,8 +92,10 @@ public class AddManuallyFragment extends Fragment {
         @Override
         public void onPostExecute(Boolean result) {
             if (result.booleanValue()) {
-                // TODO reroute to all_receipts, need callback to parent activity
-                return;
+                NavHostFragment navHostFragment =
+                        (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                NavController navController = navHostFragment.getNavController();
+                navController.navigate(R.id.action_addManuallyFragment_to_nav_all_receipts);
             }
             else {
                 Log.e("CREATE RECEIPT", "Error creating receipt");

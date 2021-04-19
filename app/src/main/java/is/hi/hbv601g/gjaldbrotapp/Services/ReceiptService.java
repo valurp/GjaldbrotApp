@@ -90,11 +90,11 @@ public class ReceiptService {
      * Method adds type for receipt for a given user
      * @param type the name of the Type
      */
-    public void addType(String type){
+    public void addType(String type, int color){
         if(loggedUser == null) uService.getUser();
         try {
             httpManager.setToken(loggedUser.getToken());
-            httpManager.createType(type);
+            httpManager.createType(type, color);
         } catch (Exception e){
             Log.e("HTTPManager", "Error creating type");
         }
@@ -136,7 +136,7 @@ public class ReceiptService {
      */
     public Boolean changeType(Type t){
         try {
-            httpManager.updateType(t.getId(), t.getName());
+            httpManager.updateType(t.getId(), t.getName(), t.getColor());
         } catch (Exception e) {
             Log.e("HTTPManager", e.toString());
             return false;

@@ -54,7 +54,14 @@
     <fragment
         android:id="@+id/addManuallyFragment"
         android:name="is.hi.hbv601g.gjaldbrotapp.ui.add_receipt.AddManuallyFragment"
-        android:label="AddManuallyFragment" />
+        android:label="AddManuallyFragment" >
+        <action
+            android:id="@+id/action_addManuallyFragment_to_addTypeFragment"
+            app:destination="@id/addTypeFragment" />
+        <action
+            android:id="@+id/action_addManuallyFragment_to_nav_all_receipts"
+            app:destination="@id/nav_all_receipts" />
+    </fragment>
 
     <fragment
         android:id="@+id/addPhotoFragment"
@@ -65,10 +72,14 @@
         android:id="@+id/changeReceiptFragment"
         android:name="is.hi.hbv601g.gjaldbrotapp.ui.all_receipts.ChangeReceiptFragment"
         android:label="fragment_change_receipt"
-        tools:layout="@layout/fragment_change_receipt" />
+        tools:layout="@layout/fragment_change_receipt" >
+        <action
+            android:id="@+id/action_changeReceiptFragment_to_nav_all_receipts"
+            app:destination="@id/nav_all_receipts" />
+    </fragment>
     <fragment
         android:id="@+id/addTypeFragment"
-        android:name="is.hi.hbv601g.gjaldbrotapp.ui.add_receipt.AddTypeFragment"
+        android:name="is.hi.hbv601g.gjaldbrotapp.ui.type.AddTypeFragment"
         android:label="fragment_add_type"
         tools:layout="@layout/fragment_add_type" />
 </navigation>

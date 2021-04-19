@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -79,8 +81,10 @@ public class ChangeReceiptFragment extends Fragment {
         @Override
         public void onPostExecute(Boolean result) {
             if (result.booleanValue()) {
-                // TODO reroute to all_receipts, need callback to parent activity
-                return;
+                NavHostFragment navHostFragment =
+                        (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                NavController navController = navHostFragment.getNavController();
+                navController.navigate(R.id.action_changeReceiptFragment_to_nav_all_receipts);
             }
             else {
                 Log.e("CREATE RECEIPT", "Error creating receipt");
