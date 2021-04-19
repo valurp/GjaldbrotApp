@@ -16,9 +16,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.ValueDependentColor;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
+import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import is.hi.hbv601g.gjaldbrotapp.Entities.OverviewGroup;
@@ -27,17 +30,39 @@ import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
 
 public class MonthlyOverviewFragment extends Fragment {
     private String TAG = "MontlyOverview";
+    private GraphView mGraph;
+    private List<OverviewGroup> mOverviewData;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_monthly_overview, container, false);
         view.setBackgroundColor(Color.WHITE);
 
-        GraphView graph = (GraphView) view.findViewById(R.id.overview_graph);
+        mGraph = (GraphView) view.findViewById(R.id.overview_graph);
 
         new FetchOverviewTask().execute();
 
         return view;
+    }
+
+    private void updateGraph() {
+        int i = 0;
+        ArrayList<ColoredDataPoint> dataPoints = new ArrayList<ColoredDataPoint>();
+        for (OverviewGroup group : mOverviewData) {
+            if (group.isVisible()) {
+                dataPoints.add(new ColoredDataPoint(i, group.getAmount(), Color.rgb(255, 100, 100)));
+                i++;
+            }
+        }
+        BarGraphSeries<ColoredDataPoint> barGraphSeries =
+                new BarGraphSeries<ColoredDataPoint>(dataPoints.toArray(new ColoredDataPoint[dataPoints.size()]));
+        barGraphSeries.setValueDependentColor(new ValueDependentColor<ColoredDataPoint>() {
+            @Override
+            public int get(ColoredDataPoint data) {
+                return data.getColor();
+            }
+        });
+        mGraph.addSeries(barGraphSeries);
     }
 
     private class FetchOverviewTask extends AsyncTask<Void, Void, List<OverviewGroup>> {
@@ -48,9 +73,20 @@ public class MonthlyOverviewFragment extends Fragment {
         @Override
         public void onPostExecute(List<OverviewGroup> result) {
             Log.i(TAG, "fetched data");
-            for (OverviewGroup og : result) {
-                Log.i(TAG, og.toString());
-            }
+            mOverviewData = result;
+            updateGraph();
+        }
+    }
+
+    private class ColoredDataPoint extends DataPoint {
+        private int mColor;
+        public ColoredDataPoint(int x, int y, int color) {
+            super(x, y);
+            mColor = color;
+        }
+
+        public int getColor() {
+            return mColor;
         }
     }
 }
