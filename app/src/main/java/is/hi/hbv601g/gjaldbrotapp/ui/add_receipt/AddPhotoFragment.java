@@ -1,21 +1,25 @@
 package is.hi.hbv601g.gjaldbrotapp.ui.add_receipt;
 
+import android.Manifest;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.io.File;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
-import is.hi.hbv601g.gjaldbrotapp.ReceiptEditFragment;
+import is.hi.hbv601g.gjaldbrotapp.MainActivity;
 import is.hi.hbv601g.gjaldbrotapp.R;
 import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
 
@@ -27,11 +31,13 @@ import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
 public class AddPhotoFragment extends Fragment {
     private static String TAG = "ADD_PHOTO_FRAGMENT";
 
-    private ReceiptEditFragment mReceiptEditFragment;
+    private ImageView imageView;
+    private Button addPhotobtn;
 
     public AddPhotoFragment() {
     }
 
+    @Nullable
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,20 +49,15 @@ public class AddPhotoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_photo, container, false);
         view.setBackgroundColor(Color.WHITE);
 
+        addPhotobtn = (Button) view.findViewById(R.id.photo_btn_add);
+        imageView = (ImageView) view.findViewById(R.id.display_capture);
+        addPhotobtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent cInt = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            }
+        });
         return view;
-    }
-
-    private class CreateReceiptListener implements View.OnClickListener{
-        @Override
-        public void onClick(View view) {
-            try {
-                ReceiptItem receiptItem = mReceiptEditFragment.getReceiptItem();
-                new CreateReceiptTask().execute(receiptItem);
-            }
-            catch (Exception e) {
-                Log.e(TAG, e.toString());
-            }
-        }
     }
 
     private class CreateReceiptTask extends AsyncTask<ReceiptItem, Void, Boolean> {
