@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -32,9 +33,12 @@ import is.hi.hbv601g.gjaldbrotapp.Entities.User;
  * fyrir authentication í bakendanum.
  */
 public class HttpManager {
+    private static final String URL = "https://gjaldbrot-rest-service.herokuapp.com/api";
     private static HttpManager self;
     private String token;
-    private static final String URL = "https://gjaldbrot-rest-service.herokuapp.com/api";
+
+    public HttpManager() {
+    }
 
     /**
      * Singleton hönnunar mynstrið
@@ -48,14 +52,15 @@ public class HttpManager {
 
     /**
      * Method for receiving response from server.
+     *
      * @param urlSpec URL to query
      * @return
      * @throws IOException
      */
     public byte[] getUrlBytes(String urlSpec, String method) throws IOException {
         URL url = new URL(urlSpec);
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-        if(token != null) conn.addRequestProperty("Authorization", "Bearer " + token);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        if (token != null) conn.addRequestProperty("Authorization", "Bearer " + token);
         conn.setRequestMethod(method);
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -77,6 +82,7 @@ public class HttpManager {
 
     /**
      * Method for getting response from server
+     *
      * @param urlSpec URL to query
      * @return String containing JSON response.
      * @throws IOException
@@ -85,32 +91,34 @@ public class HttpManager {
         return new String(getUrlBytes(urlSpec, method));
     }
 
-    public void writeTo(HttpURLConnection con, String json) throws Exception{
-        try(OutputStream os = con.getOutputStream()) {
-            byte[] input = json.getBytes("utf-8");
+    public void writeTo(HttpURLConnection con, String json) throws Exception {
+        try (OutputStream os = con.getOutputStream()) {
+            byte[] input = json.getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
-            Log.i("RESPONSE CODE", ""+con.getResponseCode());
-            Log.i("RESPONSE MSG", ""+con.getResponseMessage());
+            Log.i("RESPONSE CODE", "" + con.getResponseCode());
+            Log.i("RESPONSE MSG", "" + con.getResponseMessage());
         }
-        try(BufferedReader br = new BufferedReader(
-                new InputStreamReader(con.getInputStream(), "utf-8")
-        )){
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8)
+        )) {
             StringBuilder response = new StringBuilder();
             String responseLine = null;
-            while((responseLine = br.readLine()) != null) {
+            while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());
             }
             System.out.println(response.toString());
         }
     }
 
-    /** TODO Specify how
+    /**
+     * TODO Specify how
      * Function returns a User object if the user name and password given matches an existing user
+     *
      * @param u the username
      * @param p the password
      * @return a valid User object
      */
-    public User fetchUser(String u, String p) throws Exception{
+    public User fetchUser(String u, String p) throws Exception {
         User user = new User();
         try {
             String url = Uri.parse(URL)
@@ -135,6 +143,7 @@ public class HttpManager {
 
     /**
      * Creates User object from JSON response
+     *
      * @param jsonBody JSON response from back-end
      * @return user and assigns a token
      * @throws IOException
@@ -149,17 +158,18 @@ public class HttpManager {
 
     /**
      * Method fetches user's receipt with their token
+     *
      * @return
      */
     public List<ReceiptItem> fetchReceipts() {
         Log.i("Receipt http", "starting fetch receipt call");
-        if(token == null){
+        if (token == null) {
             Log.e("TOKEN", "Token is null");
             return null;
         }
         List<ReceiptItem> receipts = new ArrayList<ReceiptItem>();
         try {
-            String url = Uri.parse(URL+"/user/receipt")
+            String url = Uri.parse(URL + "/user/receipt")
                     .buildUpon()
                     .appendQueryParameter("method", "get")
                     .appendQueryParameter("format", "json")
@@ -178,12 +188,13 @@ public class HttpManager {
 
     /**
      * Fills List with receipts for a given user
-     * @param receipts the (empty) list to fill
+     *
+     * @param receipts         the (empty) list to fill
      * @param receiptJSONArray the JSON body in which the data can be found
      * @throws IOException
      * @throws JSONException
      */
-    private void parseReceipts(List<ReceiptItem> receipts, JSONArray receiptJSONArray) throws IOException, JSONException{
+    private void parseReceipts(List<ReceiptItem> receipts, JSONArray receiptJSONArray) throws IOException, JSONException {
         //JSONObject receiptsJSONObject = jsonBody.getJSONObject("receipts");
         //JSONArray receiptJSONArray = receiptsJSONObject.getJSONArray("receipt");
         for (int i = 0; i < receiptJSONArray.length(); i++) {
@@ -198,10 +209,9 @@ public class HttpManager {
             try {
                 String date = receiptJSON.getString("date").split(" ")[0];
                 String time = receiptJSON.getString("parsedTime");
-                Log.i("DATE", date+"T"+time);
-                receipt.setFormattedDateWithTime(date+"T"+time);
-            }
-            catch (Exception e) {
+                Log.i("DATE", date + "T" + time);
+                receipt.setFormattedDateWithTime(date + "T" + time);
+            } catch (Exception e) {
                 Log.e("ERROR", "error parsing date");
             }
             receipts.add(receipt);
@@ -211,12 +221,13 @@ public class HttpManager {
     /**
      * Method creates POST request to back-end, creating user
      * with username and password
-     * @param name username
+     *
+     * @param name     username
      * @param password password
-     * @throws Exception if URL is invalid, or if connection fails.
      * @return int (0 if user was created) (1 if error occured)
+     * @throws Exception if URL is invalid, or if connection fails.
      */
-    public void createUser(String name, String password) throws Exception{  //TODO gera eitthvað til að láta virka
+    public void createUser(String name, String password) throws Exception {  //TODO gera eitthvað til að láta virka
         String url = Uri.parse(URL)
                 .buildUpon()
                 .appendPath("signup")
@@ -232,8 +243,9 @@ public class HttpManager {
     /**
      * Method POSTs receipt using amount and type, backend requires token
      * and takes care of ID for us.
+     *
      * @param amount amount of receipt
-     * @param type type of receipt
+     * @param type   type of receipt
      * @throws Exception if URL is invalid, or if connection fails.
      */
     public void createReceipt(int amount, String type, long typeId, String date, String time) throws Exception {
@@ -253,7 +265,7 @@ public class HttpManager {
         String jsonReceipt =
                 "{ \"amount\":\"" + amount + "\", "
                         + "\"type\":\"" + type + "\","
-                        + "\"type_id\":"+typeId + ","
+                        + "\"type_id\":" + typeId + ","
                         + "\"date\":\"" + date + "\","
                         + "\"time\":\"" + time + "\""
                         + "}";
@@ -265,7 +277,7 @@ public class HttpManager {
                 .buildUpon()
                 .appendPath("user")
                 .appendPath("receipt")
-                .appendPath(""+ id)
+                .appendPath("" + id)
                 .build()
                 .toString();
         URL patchUrl = new URL(url);
@@ -279,11 +291,11 @@ public class HttpManager {
                 + "\"type\":\"" + type + "\","
                 + "\"date\":\"" + date + "\","
                 + "\"time\":\"" + time + "\""
-                + "}";;
+                + "}";
         writeTo(con, jsonReceipt);
     }
 
-    public void createType(String type, int color) throws Exception{
+    public void createType(String type, int color) throws Exception {
         String url = Uri.parse(URL)
                 .buildUpon()
                 .appendPath("user")
@@ -303,12 +315,12 @@ public class HttpManager {
         writeTo(con, jsonType);
     }
 
-    public void updateType(int id, String name, int color) throws Exception{
+    public void updateType(int id, String name, int color) throws Exception {
         String url = Uri.parse(URL)
                 .buildUpon()
                 .appendPath("user")
                 .appendPath("types")
-                .appendPath(""+ id)
+                .appendPath("" + id)
                 .build()
                 .toString();
         URL patchUrl = new URL(url);
@@ -321,27 +333,27 @@ public class HttpManager {
         String jsonType = "{ \"id\": \"" + id + "\","
                 + "\"name\": " + name + "\","
                 + "\"color\": " + color + "\""
-                +"}";
-        writeTo(con,jsonType);
-    }
-
-    public HttpManager(){
+                + "}";
+        writeTo(con, jsonType);
     }
 
     public void setToken(String token) {
         this.token = token;
     }
-    public boolean hasToken() { return token != null; }
+
+    public boolean hasToken() {
+        return token != null;
+    }
 
     public List<Type> fetchTypes() {
         Log.i("Type http", "starting fetch receipt call");
-        if(token == null){
+        if (token == null) {
             Log.e("TOKEN", "Token is null");
             return null;
         }
         List<Type> types = new ArrayList<>();
         try {
-            String url = Uri.parse(URL+"/user/types")
+            String url = Uri.parse(URL + "/user/types")
                     .buildUpon()
                     .appendQueryParameter("method", "get")
                     .appendQueryParameter("format", "json")
@@ -372,13 +384,13 @@ public class HttpManager {
 
     public List<OverviewGroup> fetchOverview() {
         Log.i("Overview http", "starting fetch overview call");
-        if(token == null){
+        if (token == null) {
             Log.e("TOKEN", "Token is null");
             return null;
         }
         List<OverviewGroup> overview = new ArrayList<>();
         try {
-            String url = Uri.parse(URL+"/user/overview")
+            String url = Uri.parse(URL + "/user/overview")
                     .buildUpon()
                     .appendQueryParameter("method", "get")
                     .appendQueryParameter("format", "json")
@@ -395,7 +407,7 @@ public class HttpManager {
 
     }
 
-    private void parseOverview(List<OverviewGroup> overview, JSONObject jsonBody) throws JSONException{
+    private void parseOverview(List<OverviewGroup> overview, JSONObject jsonBody) throws JSONException {
         JSONArray groupsJSON = jsonBody.getJSONArray("group");
         for (int i = 0; i < groupsJSON.length(); i++) {
             OverviewGroup group = new OverviewGroup();
