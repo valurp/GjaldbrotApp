@@ -16,7 +16,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.LabelFormatter;
 import com.jjoe64.graphview.ValueDependentColor;
+import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
@@ -39,6 +42,19 @@ public class MonthlyOverviewFragment extends Fragment {
         view.setBackgroundColor(Color.WHITE);
 
         mGraph = (GraphView) view.findViewById(R.id.overview_graph);
+        mGraph.getGridLabelRenderer().setHighlightZeroLines(true);
+        mGraph.getGridLabelRenderer().setLabelFormatter(new LabelFormatter() {
+            @Override
+            public String formatLabel(double value, boolean isValueX) {
+                if (isValueX) return "matur";
+                return (int) value + " kr";
+            }
+            @Override
+            public void setViewport(Viewport viewport) {
+
+            }
+        });
+        mGraph.getGridLabelRenderer().setNumHorizontalLabels(3);
 
         new FetchOverviewTask().execute();
 
@@ -62,6 +78,7 @@ public class MonthlyOverviewFragment extends Fragment {
                 return data.getColor();
             }
         });
+        barGraphSeries.setSpacing(20);
         mGraph.addSeries(barGraphSeries);
     }
 
@@ -81,6 +98,21 @@ public class MonthlyOverviewFragment extends Fragment {
     private class ColoredDataPoint extends DataPoint {
         private int mColor;
         public ColoredDataPoint(int x, int y, int color) {
+            super(x, y);
+            mColor = color;
+        }
+
+        public ColoredDataPoint(double x, double y, int color) {
+            super(x, y);
+            mColor = color;
+        }
+
+        public ColoredDataPoint(int x, double y, int color) {
+            super(x, y);
+            mColor = color;
+        }
+
+        public ColoredDataPoint(double x, int y, int color) {
             super(x, y);
             mColor = color;
         }
