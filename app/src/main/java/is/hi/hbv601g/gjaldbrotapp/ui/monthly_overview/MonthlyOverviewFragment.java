@@ -62,7 +62,6 @@ public class MonthlyOverviewFragment extends Fragment {
         view.setBackgroundColor(Color.WHITE);
 
         mGraph = (GraphView) view.findViewById(R.id.overview_graph);
-        mGraph.getGridLabelRenderer().setHighlightZeroLines(true);
         mGraph.getGridLabelRenderer().setLabelFormatter(new LabelFormatter() {
             @Override
             public String formatLabel(double value, boolean isValueX) {
@@ -74,7 +73,6 @@ public class MonthlyOverviewFragment extends Fragment {
 
             }
         });
-        mGraph.getGridLabelRenderer().setNumHorizontalLabels(3);
 
         RecyclerView legend = (RecyclerView) view.findViewById(R.id.overview_legend);
         legend.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -87,10 +85,14 @@ public class MonthlyOverviewFragment extends Fragment {
 
     private void updateGraph() {
         int i = 0;
+        int max = 0;
         ArrayList<ColoredDataPoint> dataPoints = new ArrayList<ColoredDataPoint>();
         for (OverviewGroup group : mOverviewData) {
             if (group.isVisible()) {
                 dataPoints.add(new ColoredDataPoint(i, group.getAmount(), Color.rgb(255, 100, 100)));
+                if (max < group.getAmount()) {
+                    max = group.getAmount();
+                }
                 i++;
             }
         }
@@ -103,6 +105,9 @@ public class MonthlyOverviewFragment extends Fragment {
             }
         });
         barGraphSeries.setSpacing(20);
+        mGraph.getViewport().setYAxisBoundsManual(true);
+        mGraph.getViewport().setMinY(0);
+        mGraph.getViewport().setMaxY(max + max*0.1);
         mGraph.addSeries(barGraphSeries);
     }
 
