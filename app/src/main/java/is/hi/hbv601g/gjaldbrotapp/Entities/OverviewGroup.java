@@ -3,6 +3,7 @@ package is.hi.hbv601g.gjaldbrotapp.Entities;
 public class OverviewGroup {
     private String mCategory;
     private int mAmount;
+    private int mColor;
     private boolean mIsVisible;
 
     public void setCategory(String category) {
@@ -21,14 +22,23 @@ public class OverviewGroup {
         return mAmount;
     }
 
-    public OverviewGroup(String category, int amount) {
+    public OverviewGroup(String category, int amount, int color) {
         this.mCategory = category;
         this.mAmount = amount;
+        this.mColor = color;
         mIsVisible = true;
     }
 
     public OverviewGroup() {
         mIsVisible = true;
+    }
+
+    public int getColor() {
+        return mColor;
+    }
+
+    public void setColor(int mColor) {
+        this.mColor = mColor;
     }
 
     @Override

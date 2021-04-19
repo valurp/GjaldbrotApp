@@ -94,7 +94,6 @@ public class AllReceiptsFragment extends Fragment {
     private class ReceiptRecyclerViewAdapter extends RecyclerView.Adapter<ReceiptRecyclerViewAdapter.ViewHolder>{
         private static final String TAG = "ReceiptRecyclerAdapter";
         private List<ReceiptItem> mValues;
-        private List<Type> mTypes;
 
         public ReceiptRecyclerViewAdapter(List<ReceiptItem> items) {
             mValues = items;
