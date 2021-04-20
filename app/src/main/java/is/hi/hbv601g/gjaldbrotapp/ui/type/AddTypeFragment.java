@@ -14,6 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.Entities.Type;
@@ -22,10 +26,21 @@ import is.hi.hbv601g.gjaldbrotapp.ReceiptEditFragment;
 import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
 import is.hi.hbv601g.gjaldbrotapp.ui.add_receipt.AddManuallyFragment;
 
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorChangedListener;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+
 public class AddTypeFragment extends Fragment {
     private static String TAG = "ADD_TYPE_FRAGMENT";
 
     private AddTypeFragment mAddTypeFragment;
+
+    private EditText mNameType;
+    private Button createTypeBtn;
+    private int colorSelected;
+    private ColorPickerDialogBuilder colorPickerDialogBuilder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,10 +55,36 @@ public class AddTypeFragment extends Fragment {
 
         // FragmentManager fm = getChildFragmentManager();
         // mAddTypeFragment = new AddTypeFragment();
-        // fm.beginTransaction().add(R.id.manually_dp_container, mAddTypeFragment).commit();
+        // fm.beginTransaction().add(R.id.type_dp_container, mAddTypeFragment).commit();
 
-        // Button createReceiptBtn = (Button) view.findViewById(R.id.manually_btn_add);
-        // createReceiptBtn.setOnClickListener(new AddTypeFragment.CreateTypeListener());
+        mNameType = (EditText) view.findViewById(R.id.addType_text);
+
+        ColorPickerView colorPickerView = view.findViewById(R.id.color_picker_view);
+        colorPickerView.addOnColorChangedListener(new OnColorChangedListener() {
+            /**
+             * Change color by changing the color weel.
+             * @param selectedColor
+             */
+            @Override
+            public void onColorChanged(int selectedColor) {
+                // Handle on color change
+                colorSelected = selectedColor;
+                Log.d("ColorPicker", "onColorChanged: 0x" + Integer.toHexString(selectedColor));
+            }
+        });
+        /**
+         * Gets the
+         */
+        colorPickerView.addOnColorSelectedListener(new OnColorSelectedListener() {
+            @Override
+            public void onColorSelected(int selectedColor) {
+                colorSelected = selectedColor;
+                Toast.makeText(getActivity(), "selectedColor: " + Integer.toHexString(selectedColor).toUpperCase(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        createTypeBtn = (Button) view.findViewById(R.id.AddType_button);
+        createTypeBtn.setOnClickListener(new AddTypeFragment.CreateTypeListener());
 
         return view;
     }
@@ -51,8 +92,7 @@ public class AddTypeFragment extends Fragment {
         @Override
         public void onClick(View view) {
             try {
-                // Type type = mAddTypeFragment.getType();
-                // new AddTypeFragment.CreateTypeTask().execute(type);
+                new AddTypeFragment.CreateTypeTask().execute();
             }
             catch (Exception e) {
                 Log.e(TAG, e.toString());
@@ -62,7 +102,7 @@ public class AddTypeFragment extends Fragment {
     private class CreateTypeTask extends AsyncTask<Type, Void, Boolean> {
         @Override
         public Boolean doInBackground(Type... params) {
-            return ReceiptService.getInstance().addType("String and shit", 1);
+            return ReceiptService.getInstance().addType(mNameType.getText().toString(), colorSelected);
         }
         @Override
         public void onPostExecute(Boolean result) {
