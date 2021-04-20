@@ -25,13 +25,13 @@ public class MonthlyComparisonFragment extends Fragment {
 
         root.setBackgroundColor(Color.WHITE);
 
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        mMonthlyComparisonViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+    //    final TextView textView = root.findViewById(R.id.text_slideshow);
+    //    mMonthlyComparisonViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+    //        @Override
+    //        public void onChanged(@Nullable String s) {
+    //            textView.setText(s);
+    //        }
+    //    });
         return root;
     }
 }
