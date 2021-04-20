@@ -50,6 +50,14 @@ public class HttpManager {
         return self;
     }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public boolean hasToken() {
+        return token != null;
+    }
+
     /**
      * Method for receiving response from server.
      *
@@ -337,14 +345,6 @@ public class HttpManager {
         writeTo(con, jsonType);
     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public boolean hasToken() {
-        return token != null;
-    }
-
     public List<Type> fetchTypes() {
         Log.i("Type http", "starting fetch receipt call");
         if (token == null) {
@@ -417,6 +417,11 @@ public class HttpManager {
             group.setColor(groupJSON.getInt("color"));
             overview.add(group);
         }
+    }
+
+    public String fetchComparison() {
+        Log.i("Comparison Fetch", "Fetching comparison");
+        return "";
     }
 
 }
