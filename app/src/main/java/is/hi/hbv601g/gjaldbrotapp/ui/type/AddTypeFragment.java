@@ -102,6 +102,8 @@ public class AddTypeFragment extends Fragment {
     private class CreateTypeTask extends AsyncTask<Type, Void, Boolean> {
         @Override
         public Boolean doInBackground(Type... params) {
+            Log.e("Name", mNameType.getText().toString());
+            Log.e("Color", Integer.toHexString(colorSelected));
             return ReceiptService.getInstance().addType(mNameType.getText().toString(), colorSelected);
         }
         @Override
