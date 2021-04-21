@@ -16,7 +16,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.jjoe64.graphview.GraphView;
 
+import is.hi.hbv601g.gjaldbrotapp.Entities.ComparisonData;
 import is.hi.hbv601g.gjaldbrotapp.R;
+import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
 
 public class MonthlyComparisonFragment extends Fragment {
     private static final String TAG = "ComparsionFragment";
@@ -32,16 +34,15 @@ public class MonthlyComparisonFragment extends Fragment {
         return root;
     }
 
-    private class FetchComparisonTask extends AsyncTask<Void, Void, String> {
+    private class FetchComparisonTask extends AsyncTask<Void, Void, ComparisonData> {
         @Override
-        public String doInBackground(Void... params) {
-            Log.i(TAG, "fetching comparison data");
-            return "";
+        public ComparisonData doInBackground(Void... params) {
+            return ReceiptService.getInstance().fetchComparison();
         }
 
         @Override
-        public void onPostExecute(String result) {
-
+        public void onPostExecute(ComparisonData result) {
+            Log.i(TAG, result.mGroups.toString());
         }
     }
 }
