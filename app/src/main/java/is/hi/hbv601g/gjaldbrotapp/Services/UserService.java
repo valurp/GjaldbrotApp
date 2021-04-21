@@ -69,13 +69,4 @@ public class UserService {
     public void setUser(User u){
         user = u;
     }
-
-    /**
-     * Testing method
-     * DELETE WHEN FINISHED
-     * @return
-     */
-    public User mockUser(){
-        return new User("Foo", "Bar");
-    }
 }
