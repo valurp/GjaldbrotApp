@@ -17,10 +17,15 @@ import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import is.hi.hbv601g.gjaldbrotapp.Entities.ComparisonData;
 import is.hi.hbv601g.gjaldbrotapp.Entities.OverviewGroup;
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.Entities.Type;
@@ -446,7 +451,7 @@ public class HttpManager {
         }
     }
 
-    public String fetchComparison() {
+    public ComparisonData fetchComparison() {
         Log.i("Comparison Fetch", "Fetching comparison");
         if (token == null) {
             Log.e(TAG, "Token is null");
@@ -458,16 +463,36 @@ public class HttpManager {
                     .build().toString();
             String jsonString = getUrlString(url, "GET");
             JSONObject jsonBody = new JSONObject(jsonString);
-            parseComparison(jsonBody);
+            return parseComparison(jsonBody);
         } catch (IOException ioe) {
             Log.e("GjaldbrotApp", "Failed to fetch receipts", ioe);
-        } catch (JSONException je) {
+        } catch (Exception je) {
             Log.e("GjaldbrotApp", "Failed to parse JSON", je);
         }
-        return "";
+        return null;
     }
 
-    private String parseComparison(JSONObject body) throws JSONException {
-        return "";
+    private ComparisonData parseComparison(JSONObject body) throws JSONException, ParseException {
+        DateFormat df = new SimpleDateFormat("yyyy-MM");
+        ComparisonData comparisonData = new ComparisonData();
+        Date startDate = df.parse(body.getString("startDate"));
+        Date endDate = df.parse(body.getString("endDate"));
+        comparisonData.mStartDate = startDate;
+        comparisonData.mEndDate = endDate;
+        JSONArray groups = body.getJSONArray("groups");
+        for(int i = 0; i < groups.length(); i++) {
+            JSONObject group = groups.getJSONObject(i);
+            String name = group.getString("name");
+            int color = group.getInt("color");
+            ComparisonData.Group group1 = comparisonData.addGroup(name, color);
+            JSONArray amounts = group.getJSONArray("amounts");
+            for(int j = 0; j < amounts.length(); j++) {
+                JSONObject monthAmount = amounts.getJSONObject(j);
+                Date month = df.parse(monthAmount.getString("date"));
+                int amount = monthAmount.getInt("amount");
+                group1.addMonthAmount(month, amount);
+            }
+        }
+        return comparisonData;
     }
 }

@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import is.hi.hbv601g.gjaldbrotapp.Entities.ComparisonData;
 import is.hi.hbv601g.gjaldbrotapp.Entities.OverviewGroup;
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.Entities.Type;
@@ -128,7 +129,7 @@ public class ReceiptService {
         return httpManager.fetchOverview();
     }
 
-    public String fetchComparison() {
+    public ComparisonData fetchComparison() {
         return httpManager.fetchComparison();
     }
 }
