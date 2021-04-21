@@ -81,5 +81,9 @@
         android:id="@+id/addTypeFragment"
         android:name="is.hi.hbv601g.gjaldbrotapp.ui.type.AddTypeFragment"
         android:label="fragment_add_type"
-        tools:layout="@layout/fragment_add_type" />
+        tools:layout="@layout/fragment_add_type" >
+        <action
+            android:id="@+id/action_addTypeFragment_to_nav_all_receipts"
+            app:destination="@id/nav_all_receipts" />
+    </fragment>
 </navigation>
