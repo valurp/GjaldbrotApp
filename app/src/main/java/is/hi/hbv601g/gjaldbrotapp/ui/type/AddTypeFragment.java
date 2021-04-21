@@ -112,7 +112,7 @@ public class AddTypeFragment extends Fragment {
                 NavHostFragment navHostFragment =
                         (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
                 NavController navController = navHostFragment.getNavController();
-                navController.navigate(R.id.action_addTypeFragment_to_nav_all_receipts);
+                navController.navigate(R.id.action_addTypeFragment_to_addManuallyFragment);
             }
             else {
                 Log.e("CREATE RECEIPT", "Error creating receipt");

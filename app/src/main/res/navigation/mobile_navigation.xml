@@ -83,7 +83,7 @@
         android:label="fragment_add_type"
         tools:layout="@layout/fragment_add_type" >
         <action
-            android:id="@+id/action_addTypeFragment_to_nav_all_receipts"
-            app:destination="@id/nav_all_receipts" />
+            android:id="@+id/action_addTypeFragment_to_addManuallyFragment"
+            app:destination="@id/addManuallyFragment" />
     </fragment>
 </navigation>
