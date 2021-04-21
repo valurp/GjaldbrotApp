@@ -89,7 +89,7 @@ public class MonthlyOverviewFragment extends Fragment {
         ArrayList<ColoredDataPoint> dataPoints = new ArrayList<ColoredDataPoint>();
         for (OverviewGroup group : mOverviewData) {
             if (group.isVisible()) {
-                dataPoints.add(new ColoredDataPoint(i, group.getAmount(), group.getColor()));
+                dataPoints.add(new ColoredDataPoint(i+1, group.getAmount(), group.getColor()));
                 if (max < group.getAmount()) {
                     max = group.getAmount();
                 }
@@ -106,8 +106,12 @@ public class MonthlyOverviewFragment extends Fragment {
         });
         barGraphSeries.setSpacing(20);
         mGraph.getViewport().setYAxisBoundsManual(true);
+        mGraph.getViewport().setXAxisBoundsManual(true);
         mGraph.getViewport().setMinY(0);
         mGraph.getViewport().setMaxY(max + max*0.1);
+        mGraph.getViewport().setMinX(0);
+        mGraph.getViewport().setMaxX(mOverviewData.size()+1);
+
         mGraph.addSeries(barGraphSeries);
     }
 
@@ -128,21 +132,6 @@ public class MonthlyOverviewFragment extends Fragment {
     private class ColoredDataPoint extends DataPoint {
         private int mColor;
         public ColoredDataPoint(int x, int y, int color) {
-            super(x, y);
-            mColor = color;
-        }
-
-        public ColoredDataPoint(double x, double y, int color) {
-            super(x, y);
-            mColor = color;
-        }
-
-        public ColoredDataPoint(int x, double y, int color) {
-            super(x, y);
-            mColor = color;
-        }
-
-        public ColoredDataPoint(double x, int y, int color) {
             super(x, y);
             mColor = color;
         }
