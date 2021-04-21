@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/type_dp_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.type.AddTypeFragment">
@@ -18,6 +19,7 @@
             android:layout_marginTop="52dp"
             android:ems="10"
             android:inputType="textPersonName"
+            android:hint="@string/enter_type_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
