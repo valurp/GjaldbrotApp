@@ -35,6 +35,10 @@ public class ComparisonData {
             MonthAmount monthAmount = new MonthAmount(month, amount);
             mAmounts.add(monthAmount);
         }
+
+        public String toString() {
+            return "name: "+mName+", color: "+mColor+mAmounts.toString();
+        }
     }
 
     public class MonthAmount {
@@ -43,6 +47,10 @@ public class ComparisonData {
         public MonthAmount(Date month, int amount) {
             mMonth = month;
             mAmount = amount;
+        }
+        @Override
+        public String toString() {
+            return "date: " + mMonth.toString()+", amount: "+mAmount;
         }
     }
 }
