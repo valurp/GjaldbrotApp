@@ -319,7 +319,7 @@ public class HttpManager {
         con.setRequestProperty("Content-Type", "application/json; utf-8");
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
-        String jsonType = "{ \"type\": \"" + type + "\","
+        String jsonType = "{ \"name\": \"" + type + "\","
                 + "\"color\": \"" + color + "\""
                 + "}";
         writeTo(con, jsonType);
