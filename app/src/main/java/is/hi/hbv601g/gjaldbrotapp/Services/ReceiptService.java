@@ -154,4 +154,8 @@ public class ReceiptService {
         }
         return httpManager.fetchOverview();
     }
+
+    public String fetchComparison() {
+        return httpManager.fetchComparison();
+    }
 }

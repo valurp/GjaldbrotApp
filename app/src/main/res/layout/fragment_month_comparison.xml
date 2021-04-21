@@ -8,6 +8,7 @@
     tools:context=".ui.monthly_comparison.MonthlyComparisonFragment" >
 
     <com.jjoe64.graphview.GraphView
+        android:id="@+id/comparison_graph"
         android:layout_width="match_parent"
         android:layout_height="350dp"
         app:layout_constraintBottom_toBottomOf="parent"

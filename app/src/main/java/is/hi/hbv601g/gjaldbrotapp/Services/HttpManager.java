@@ -35,6 +35,7 @@ import is.hi.hbv601g.gjaldbrotapp.Entities.User;
 public class HttpManager {
     private static final String URL = "https://gjaldbrot-rest-service.herokuapp.com/api";
     private static HttpManager self;
+    private static final String TAG="HttpManager";
     private String token;
 
     public HttpManager() {
@@ -62,6 +63,7 @@ public class HttpManager {
      * Method for receiving response from server.
      *
      * @param urlSpec URL to query
+     * @param method Http method of the query
      * @return
      * @throws IOException
      */
@@ -404,7 +406,6 @@ public class HttpManager {
             Log.e("GjaldbrotApp", "Failed to parse JSON", je);
         }
         return overview;
-
     }
 
     private void parseOverview(List<OverviewGroup> overview, JSONObject jsonBody) throws JSONException {
@@ -421,7 +422,26 @@ public class HttpManager {
 
     public String fetchComparison() {
         Log.i("Comparison Fetch", "Fetching comparison");
+        if (token == null) {
+            Log.e(TAG, "Token is null");
+            return null;
+        }
+        try {
+            String url = Uri.parse(URL + "/user/comparison")
+                    .buildUpon()
+                    .build().toString();
+            String jsonString = getUrlString(url, "GET");
+            JSONObject jsonBody = new JSONObject(jsonString);
+            parseComparison(jsonBody);
+        } catch (IOException ioe) {
+            Log.e("GjaldbrotApp", "Failed to fetch receipts", ioe);
+        } catch (JSONException je) {
+            Log.e("GjaldbrotApp", "Failed to parse JSON", je);
+        }
         return "";
     }
 
+    private String parseComparison(JSONObject body) {
+        return "";
+    }
 }
