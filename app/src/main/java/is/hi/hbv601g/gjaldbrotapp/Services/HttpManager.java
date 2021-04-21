@@ -34,8 +34,9 @@ import is.hi.hbv601g.gjaldbrotapp.Entities.User;
  */
 public class HttpManager {
     private static final String URL = "https://gjaldbrot-rest-service.herokuapp.com/api";
+    private static final String TAG = "HttpManager";
     private static HttpManager self;
-    private static final String TAG="HttpManager";
+
     private String token;
 
     public HttpManager() {
@@ -105,8 +106,7 @@ public class HttpManager {
         try (OutputStream os = con.getOutputStream()) {
             byte[] input = json.getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
-            Log.i("RESPONSE CODE", "" + con.getResponseCode());
-            Log.i("RESPONSE MSG", "" + con.getResponseMessage());
+            Log.i(TAG, "RESPONSE CODE:\t" + con.getResponseCode());
         }
         try (BufferedReader br = new BufferedReader(
                 new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8)
@@ -124,31 +124,31 @@ public class HttpManager {
      * TODO Specify how
      * Function returns a User object if the user name and password given matches an existing user
      *
-     * @param u the username
-     * @param p the password
+     * @param username the username
+     * @param password the password
      * @return a valid User object
      */
-    public User fetchUser(String u, String p) throws Exception {
-        User user = new User();
+    public User fetchUser(String username, String password) throws Exception {
+        User user;
+        // creates the query url
+        String url = Uri.parse(URL)
+                .buildUpon()
+                .appendPath("login")
+                .appendQueryParameter("username", username)
+                .appendQueryParameter("password", password)
+                .build().toString();
         try {
-            String url = Uri.parse(URL)
-                    .buildUpon()
-                    .appendPath("login")
-                    .appendQueryParameter("username", u)
-                    .appendQueryParameter("password", p)
-                    .build().toString();
             String jsonString = getUrlString(url, "POST");
             JSONObject jsonBody = new JSONObject(jsonString);
             user = parseUser(jsonBody);
         } catch (IOException ioe) {
-            Log.e("GjaldbrotApp", "Failed to fetch user", ioe);
+            Log.e(TAG, "Failed to fetch user", ioe);
             throw ioe;
         } catch (JSONException je) {
-            Log.e("GjaldbrotApp", "Failed to parse JSON", je);
+            Log.e(TAG, "Failed to parse JSON for user", je);
             throw je;
         }
         return user;
-
     }
 
     /**
@@ -159,11 +159,10 @@ public class HttpManager {
      * @throws IOException
      * @throws JSONException
      */
-    private User parseUser(JSONObject jsonBody) throws IOException, JSONException {
-        //String name = jsonBody.getString("username");
+    private User parseUser(JSONObject jsonBody) throws JSONException {
         String token = jsonBody.getString("access_token");
-        this.token = token; // TODO vista token i store sem er sott thegar app er keyrt upp
-        return new User("joi", token);
+        this.token = token;
+        return new User("", token);
     }
 
     /**
@@ -172,25 +171,27 @@ public class HttpManager {
      * @return
      */
     public List<ReceiptItem> fetchReceipts() {
-        Log.i("Receipt http", "starting fetch receipt call");
+        Log.i(TAG, "Fetching receipts call");
         if (token == null) {
-            Log.e("TOKEN", "Token is null");
+            Log.e(TAG, "TOKEN ERROR: Token is null");
             return null;
         }
         List<ReceiptItem> receipts = new ArrayList<ReceiptItem>();
+
+        String url = Uri.parse(URL + "/user/receipt")
+                .buildUpon()
+                .appendQueryParameter("method", "get")
+                .appendQueryParameter("format", "json")
+                .build().toString();
+
         try {
-            String url = Uri.parse(URL + "/user/receipt")
-                    .buildUpon()
-                    .appendQueryParameter("method", "get")
-                    .appendQueryParameter("format", "json")
-                    .build().toString();
             String jsonString = getUrlString(url, "GET");
             JSONArray jsonBody = new JSONArray(jsonString);
             parseReceipts(receipts, jsonBody);
         } catch (IOException ioe) {
-            Log.e("GjaldbrotApp", "Failed to fetch receipts", ioe);
+            Log.e(TAG, "Failed to fetch receipts", ioe);
         } catch (JSONException je) {
-            Log.e("GjaldbrotApp", "Failed to parse JSON", je);
+            Log.e(TAG, "Failed to parse JSON for receipts", je);
         }
         return receipts;
 
@@ -204,14 +205,11 @@ public class HttpManager {
      * @throws IOException
      * @throws JSONException
      */
-    private void parseReceipts(List<ReceiptItem> receipts, JSONArray receiptJSONArray) throws IOException, JSONException {
-        //JSONObject receiptsJSONObject = jsonBody.getJSONObject("receipts");
-        //JSONArray receiptJSONArray = receiptsJSONObject.getJSONArray("receipt");
+    private void parseReceipts(List<ReceiptItem> receipts, JSONArray receiptJSONArray) throws JSONException {
         for (int i = 0; i < receiptJSONArray.length(); i++) {
             ReceiptItem receipt = new ReceiptItem();
 
             JSONObject receiptJSON = receiptJSONArray.getJSONObject(i);
-            // TODO parse-a líka date
             receipt.setAmount(receiptJSON.getInt("amount"));
             receipt.setId(receiptJSON.getInt("id"));
             receipt.setType(receiptJSON.getString("type"));
@@ -219,10 +217,9 @@ public class HttpManager {
             try {
                 String date = receiptJSON.getString("date").split(" ")[0];
                 String time = receiptJSON.getString("parsedTime");
-                Log.i("DATE", date + "T" + time);
                 receipt.setFormattedDateWithTime(date + "T" + time);
             } catch (Exception e) {
-                Log.e("ERROR", "error parsing date");
+                Log.e(TAG, "Error parsing date in receipt");
             }
             receipts.add(receipt);
         }
@@ -232,22 +229,27 @@ public class HttpManager {
      * Method creates POST request to back-end, creating user
      * with username and password
      *
-     * @param name     username
+     * @param username username
      * @param password password
      * @return int (0 if user was created) (1 if error occured)
      * @throws Exception if URL is invalid, or if connection fails.
      */
-    public void createUser(String name, String password) throws Exception {  //TODO gera eitthvað til að láta virka
+    public boolean createUser(String username, String password)  {
         String url = Uri.parse(URL)
                 .buildUpon()
                 .appendPath("signup")
-                .appendQueryParameter("username", name)
+                .appendQueryParameter("username", username)
                 .appendQueryParameter("password", password)
                 .build()
                 .toString();
-        Log.i("REGISTER URL", url);
-        String response = getUrlString(url, "POST");
-        Log.i("REGISTER RESPONSE", response);
+        try {
+            String response = getUrlString(url, "POST");
+        }
+        catch (Exception e) {
+            Log.e(TAG, "Error creating user");
+            return false;
+        }
+        return true; // user was created
     }
 
     /**
@@ -259,12 +261,14 @@ public class HttpManager {
      * @throws Exception if URL is invalid, or if connection fails.
      */
     public void createReceipt(int amount, String type, long typeId, String date, String time) throws Exception {
+        // builds the url
         String url = Uri.parse(URL)
                 .buildUpon()
                 .appendPath("user")
                 .appendPath("receipt")
                 .build()
                 .toString();
+
         URL postUrl = new URL(url);
         HttpURLConnection con = (HttpURLConnection) postUrl.openConnection();
         con.setRequestMethod("POST");
@@ -282,6 +286,15 @@ public class HttpManager {
         writeTo(con, jsonReceipt);
     }
 
+    /**
+     * Performs a patch call to update the receipt with the id
+     * @param amount
+     * @param type
+     * @param id
+     * @param time
+     * @param date
+     * @throws Exception
+     */
     public void updateReceipt(int amount, String type, int id, String time, String date) throws Exception {
         String url = Uri.parse(URL)
                 .buildUpon()
@@ -305,6 +318,12 @@ public class HttpManager {
         writeTo(con, jsonReceipt);
     }
 
+    /**
+     * Performs a post call to create a type
+     * @param type
+     * @param color
+     * @throws Exception
+     */
     public void createType(String type, int color) throws Exception {
         String url = Uri.parse(URL)
                 .buildUpon()
@@ -325,6 +344,13 @@ public class HttpManager {
         writeTo(con, jsonType);
     }
 
+    /**
+     * Performs a patch call to update the type with the id
+     * @param id
+     * @param name
+     * @param color
+     * @throws Exception
+     */
     public void updateType(int id, String name, int color) throws Exception {
         String url = Uri.parse(URL)
                 .buildUpon()
@@ -348,25 +374,25 @@ public class HttpManager {
     }
 
     public List<Type> fetchTypes() {
-        Log.i("Type http", "starting fetch receipt call");
+        Log.i(TAG, "Fetching all receipt types");
         if (token == null) {
-            Log.e("TOKEN", "Token is null");
+            Log.e(TAG, "TOKEN ERROR: Token is null");
             return null;
         }
         List<Type> types = new ArrayList<>();
+        String url = Uri.parse(URL + "/user/types")
+                .buildUpon()
+                .appendQueryParameter("method", "get")
+                .appendQueryParameter("format", "json")
+                .build().toString();
         try {
-            String url = Uri.parse(URL + "/user/types")
-                    .buildUpon()
-                    .appendQueryParameter("method", "get")
-                    .appendQueryParameter("format", "json")
-                    .build().toString();
             String jsonString = getUrlString(url, "GET");
             JSONArray jsonBody = new JSONArray(jsonString);
             parseTypes(types, jsonBody);
         } catch (IOException ioe) {
-            Log.e("GjaldbrotApp", "Failed to fetch receipts", ioe);
+            Log.e(TAG, "Failed to fetch receipt types", ioe);
         } catch (JSONException je) {
-            Log.e("GjaldbrotApp", "Failed to parse JSON", je);
+            Log.e(TAG, "Failed to parse JSON for types", je);
         }
         return types;
     }
@@ -385,25 +411,25 @@ public class HttpManager {
     }
 
     public List<OverviewGroup> fetchOverview() {
-        Log.i("Overview http", "starting fetch overview call");
+        Log.i(TAG, "Starting fetch overview call");
         if (token == null) {
-            Log.e("TOKEN", "Token is null");
+            Log.e(TAG, "TOKEN ERROR: Token is null");
             return null;
         }
         List<OverviewGroup> overview = new ArrayList<>();
+        String url = Uri.parse(URL + "/user/overview")
+                .buildUpon()
+                .appendQueryParameter("method", "get")
+                .appendQueryParameter("format", "json")
+                .build().toString();
         try {
-            String url = Uri.parse(URL + "/user/overview")
-                    .buildUpon()
-                    .appendQueryParameter("method", "get")
-                    .appendQueryParameter("format", "json")
-                    .build().toString();
             String jsonString = getUrlString(url, "GET");
             JSONObject jsonBody = new JSONObject(jsonString);
             parseOverview(overview, jsonBody);
         } catch (IOException ioe) {
-            Log.e("GjaldbrotApp", "Failed to fetch receipts", ioe);
+            Log.e(TAG, "Failed to fetch overview data", ioe);
         } catch (JSONException je) {
-            Log.e("GjaldbrotApp", "Failed to parse JSON", je);
+            Log.e(TAG, "Failed to parse JSON for overview data", je);
         }
         return overview;
     }
@@ -441,7 +467,7 @@ public class HttpManager {
         return "";
     }
 
-    private String parseComparison(JSONObject body) {
+    private String parseComparison(JSONObject body) throws JSONException {
         return "";
     }
 }

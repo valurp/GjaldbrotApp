@@ -19,6 +19,7 @@ import is.hi.hbv601g.gjaldbrotapp.Entities.User;
  */
 public class ReceiptService {
     private static ReceiptService self; // vísun í sjálfan sig fyrir singleton
+    private static final String TAG = "RECEIPT SERVICE";
 
     private User loggedUser = new User(); //Hold reference to who's logged in to keep authorization
     private UserService uService; //Use uService to fetch logged user
@@ -43,24 +44,10 @@ public class ReceiptService {
     }
 
     /**
-     * Parses String from HTTPManager into list of
-     * ReceiptItems
-     * @param s result from HTTPManager
-     * @return list of ReceiptItems
-     */
-    private List<ReceiptItem> parseItems(String s){
-        throw new UnsupportedOperationException("This function has not been implemented");
-    }
-
-    /**
      * Method fetches all receipts from logged in user
      * @return list of their receipts
      */
     public List<ReceiptItem> fetchReceipts(){
-        if (!httpManager.hasToken()) {
-            Log.e("MANAGER TOKEN", "HttpManager has no token");
-            return null;
-        }
         return httpManager.fetchReceipts();
     }
 
@@ -70,18 +57,15 @@ public class ReceiptService {
      */
     public Boolean addReceipt(ReceiptItem r){
         try {
-            /*int amount = r.getAmount();
-            String type = r.getType();*/
             int amount = r.getAmount();
             String type = r.getType(); // TODO láta type tengjast meira ReceiptType
             String date = r.getFormattedDate();
             String time = r.getTime();
-            Log.i("RECEIPT SERVICE", time);
             httpManager.createReceipt(amount, type, r.getTypeId(), date, time);
-            Log.i("RECEIPT_SERVICE", "Receipt created");
+            Log.i(TAG, "Receipt created");
             return true;
         } catch (Exception e) {
-            Log.e("RECEIPT_SEVICE", e.toString());
+            Log.e(TAG, e.toString());
             return false;
         }
     }
@@ -94,10 +78,10 @@ public class ReceiptService {
         try {
             httpManager.createType(type, color);
         } catch (Exception e){
-            Log.e("HTTPManager", "Error creating type");
+            Log.e(TAG, "Error creating type");
             return false;
         }
-        Log.i("HTTPManager", "Type created");
+        Log.i(TAG, "Type created");
         return true;
     }
 
@@ -106,14 +90,13 @@ public class ReceiptService {
      * @param r the Receipt to be modified
      */
     public Boolean changeReceipt(ReceiptItem r){
-        // if(loggedUser == null) uService.getUser();
         try {
             httpManager.updateReceipt(r.getAmount(), r.getType(), r.getId(), r.getTime(), r.getFormattedDate());
         } catch (Exception e) {
-            Log.e("HTTPManager", e.toString());
+            Log.e(TAG, e.toString());
             return false;
         }
-        Log.i("HTTPManager", "Receipt updated");
+        Log.i(TAG, "Receipt updated");
         return true;
     }
 
@@ -122,10 +105,6 @@ public class ReceiptService {
      * @return all types for logged user
      */
     public List<Type> fetchReceiptType(){
-        if (!httpManager.hasToken()) {
-            Log.e("MANAGER TOKEN", "HttpManager has no token");
-            return null;
-        }
         return httpManager.fetchTypes();
     }
 
@@ -138,18 +117,14 @@ public class ReceiptService {
         try {
             httpManager.updateType(t.getId(), t.getName(), t.getColor());
         } catch (Exception e) {
-            Log.e("HTTPManager", e.toString());
+            Log.e(TAG, e.toString());
             return false;
         }
-        Log.i("HTTPManager", "Type updated");
+        Log.i(TAG, "Type updated");
         return true;
     }
 
     public List<OverviewGroup> fetchOverview(){
-        if (!httpManager.hasToken()) {
-            Log.e("MANAGER TOKEN", "HttpManager has no token");
-            return null;
-        }
         return httpManager.fetchOverview();
     }
 

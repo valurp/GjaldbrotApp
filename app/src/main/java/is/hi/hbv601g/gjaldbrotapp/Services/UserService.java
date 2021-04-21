@@ -54,12 +54,7 @@ public class UserService {
      * @throws Exception if username is already taken
      */
     public Boolean createUser(String u, String p){
-        try {
-            manager.createUser(u, p);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        return manager.createUser(u, p);
     }
 
 
