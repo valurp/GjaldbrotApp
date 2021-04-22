@@ -39,12 +39,12 @@ import is.hi.hbv601g.gjaldbrotapp.ui.all_receipts.dummy.DummyContent;
  */
 public class AllTypeFragment extends Fragment {
 
-    private List<ReceiptItem> mReceiptItems;
-    private ReceiptRecyclerViewAdapter mAdapter;
+    private List<Type> mTypeItems;
+    private TypeRecyclerViewAdapter mAdapter;
 
     public AllTypeFragment() {
-        mReceiptItems = new ArrayList<ReceiptItem>();
-        mAdapter = new ReceiptRecyclerViewAdapter(mReceiptItems);
+        mTypeItems = new ArrayList<Type>();
+        mAdapter = new TypeRecyclerViewAdapter(mTypeItems);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class AllTypeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_all_receipts_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_all_types_list, container, false);
         view.setBackgroundColor(Color.WHITE);
 
         // Set the adapter
@@ -74,45 +74,44 @@ public class AllTypeFragment extends Fragment {
 
     // Innri klasi sem að sækir kvittanir í gegnum ReceiptService og lætur mAdapter fyrir
     // recycler view vita að ný gögn hafi borist.
-    private class FetchReceiptsTask extends AsyncTask<Void, Void, List<ReceiptItem>> {
+    private class FetchReceiptsTask extends AsyncTask<Void, Void, List<Type>> {
         @Override
-        protected List<ReceiptItem> doInBackground(Void... params) {
-            return ReceiptService.getInstance().fetchReceipts();
+        protected List<Type> doInBackground(Void... params) {
+            return ReceiptService.getInstance().fetchReceiptType();
         }
 
         @Override
-        protected void onPostExecute(List<ReceiptItem> items) {
+        protected void onPostExecute(List<Type> items) {
             if(items == null) {
                 Log.e("NULL ERROR", "items from receipt call are null");
                 return;
             }
-            mReceiptItems.addAll(items); // TODO gera eitthvað í null response frá httpManager t.d. láta user logga sig aftur inn
+            mTypeItems.addAll(items); // TODO gera eitthvað í null response frá httpManager t.d. láta user logga sig aftur inn
             mAdapter.notifyDataSetChanged();
         }
     }
 
-    private class ReceiptRecyclerViewAdapter extends RecyclerView.Adapter<ReceiptRecyclerViewAdapter.ViewHolder>{
+    private class TypeRecyclerViewAdapter extends RecyclerView.Adapter<TypeRecyclerViewAdapter.ViewHolder>{
         private static final String TAG = "ReceiptRecyclerAdapter";
-        private List<ReceiptItem> mValues;
+        private List<Type> mValues;
 
-        public ReceiptRecyclerViewAdapter(List<ReceiptItem> items) {
+        public TypeRecyclerViewAdapter(List<Type> items) {
             mValues = items;
         }
 
         @Override
-        public ReceiptRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public TypeRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.fragment_all_receipts, parent, false);
-            return new ReceiptRecyclerViewAdapter.ViewHolder(view);
+                    .inflate(R.layout.fragment_all_types, parent, false);
+            return new TypeRecyclerViewAdapter.ViewHolder(view);
         }
 
         // Þessi aðferð populate-ar röð i með gögnum úr staki i úr listanum.
         @Override
-        public void onBindViewHolder(final ReceiptRecyclerViewAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(final TypeRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mDateView.setText(""+holder.mItem.getFormattedDate());
-            holder.mTypeView.setText(""+holder.mItem.getType());
-            holder.mAmountView.setText(""+holder.mItem.getAmount());
+            holder.mNameView.setText(""+holder.mItem.getName());
+            holder.mColorView.setText(""+holder.mItem.getColor());
             // holder.mEditButton.setOnClickListener(new ReceiptRecyclerViewAdapter.EditButtonOnClickListener(holder.mItem));
             holder.mEditButton.setText("Edit receipt");
         }
@@ -124,29 +123,22 @@ public class AllTypeFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            public final TextView mTypeView;
-            public final TextView mAmountView;
-            public final TextView mDateView;
+            public final TextView mNameView;
+            public final TextView mColorView;
             public final Button mEditButton;
-            public ReceiptItem mItem;
+            public Type mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mTypeView = (TextView) view.findViewById(R.id.receipt_list_type);
-                mAmountView = (TextView) view.findViewById(R.id.receipt_list_amount);
-                mDateView = (TextView) view.findViewById(R.id.receipt_list_date);
+                mNameView = (TextView) view.findViewById(R.id.type_list_name);
+                mColorView = (TextView) view.findViewById(R.id.type_list_color);
                 mEditButton = (Button) view.findViewById(R.id.receipt_list_button);
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mAmountView.getText() + "'";
             }
         }
 
-        public void setItems(List<ReceiptItem> receiptItems) {
-            mValues = receiptItems;
+        public void setItems(List<Type> typeItems) {
+            mValues = typeItems;
             notifyDataSetChanged();
         }
 
