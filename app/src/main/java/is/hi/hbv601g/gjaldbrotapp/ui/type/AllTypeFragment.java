@@ -92,7 +92,7 @@ public class AllTypeFragment extends Fragment {
     }
 
     private class TypeRecyclerViewAdapter extends RecyclerView.Adapter<TypeRecyclerViewAdapter.ViewHolder>{
-        private static final String TAG = "ReceiptRecyclerAdapter";
+        private static final String TAG = "TypeRecyclerAdapter";
         private List<Type> mValues;
 
         public TypeRecyclerViewAdapter(List<Type> items) {

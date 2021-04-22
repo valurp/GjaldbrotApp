@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list"
+    android:name="is.hi.hbv601g.gjaldbrotapp.ui.type.AllTypeFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.type.AllTypeFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list"
-        android:name="is.hi.hbv601g.gjaldbrotapp.ui.all_receipts.AllReceiptsFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".ui.all_receipts.AllReceiptsFragment"
-        tools:listitem="@layout/fragment_all_receipts" />
-
-</FrameLayout>
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    app:layoutManager="LinearLayoutManager"
+    tools:context=".ui.type.AllTypeFragment"
+    tools:listitem="@layout/fragment_all_types" />
