@@ -85,11 +85,14 @@ public class MonthlyOverviewFragment extends Fragment {
     }
 
     private void updateGraph() {
+        mGraph.removeAllSeries();
         int i = 0;
         int max = 0;
+        int numOfDataPoints = 0;
         ArrayList<ColoredDataPoint> dataPoints = new ArrayList<ColoredDataPoint>();
         for (OverviewGroup group : mOverviewData) {
             if (group.isVisible()) {
+                numOfDataPoints++;
                 dataPoints.add(new ColoredDataPoint(i+1, group.getAmount(), group.getColor()));
                 if (max < group.getAmount()) {
                     max = group.getAmount();
@@ -111,7 +114,7 @@ public class MonthlyOverviewFragment extends Fragment {
         mGraph.getViewport().setMinY(0);
         mGraph.getViewport().setMaxY(max + max*0.1);
         mGraph.getViewport().setMinX(0);
-        mGraph.getViewport().setMaxX(mOverviewData.size()+1);
+        mGraph.getViewport().setMaxX(numOfDataPoints+1);
 
         mGraph.addSeries(barGraphSeries);
     }
@@ -186,17 +189,17 @@ public class MonthlyOverviewFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                Log.i(TAG, mButton.getText().toString());
+                Log.i(TAG, mPosition+"");
 
                 if (mButton.getText().toString().toLowerCase().equals("hide")) {
                     mButton.setText("Show");
-                    //TODO: Implement hiding group on graph
+                    mOverviewData.get(mPosition).setHidden();
                 }
                 else {
                     mButton.setText("Hide");
-                    //TODO: Implement showing group on graph
+                    mOverviewData.get(mPosition).setVisible();
                 }
-
+                updateGraph();
             }
         }
     }

@@ -111,7 +111,7 @@ public class AllTypeFragment extends Fragment {
         public void onBindViewHolder(final TypeRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
             holder.mNameView.setText(""+holder.mItem.getName());
-            holder.mColorView.setText(""+holder.mItem.getColor());
+            holder.mColorView.setBackgroundColor(holder.mItem.getColor());
             // holder.mEditButton.setOnClickListener(new ReceiptRecyclerViewAdapter.EditButtonOnClickListener(holder.mItem));
             holder.mDeleteButton.setText("Delete Type");
         }
