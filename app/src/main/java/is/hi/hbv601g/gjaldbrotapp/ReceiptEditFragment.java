@@ -166,7 +166,7 @@ public class ReceiptEditFragment extends Fragment implements TimePickerDialog.On
         mHour = calendar.get(Calendar.HOUR_OF_DAY);
         mMinute = calendar.get(Calendar.MINUTE);
         mDatePicker.updateDate(year, month, day);
-        mTimeField.setText(mHour+":"+mMinute);
+        mTimeField.setText((mHour < 10 ? "0": "" )+ mHour + ":" + (mMinute<10 ? "0": "")+ mMinute);
     }
 
     /**
@@ -208,7 +208,7 @@ public class ReceiptEditFragment extends Fragment implements TimePickerDialog.On
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         mMinute = minute;
         mHour = hourOfDay;
-        mTimeField.setText(hourOfDay + ":" + minute);
+        mTimeField.setText((mHour < 10 ? "0": "" )+ hourOfDay + ":" + (mMinute<10 ? "0": "")+ minute);
     }
 
     /**
