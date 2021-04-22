@@ -1,23 +1,18 @@
-package is.hi.hbv601g.gjaldbrotapp;
+package is.hi.hbv601g.gjaldbrotapp.ui.login;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.ViewParent;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import java.util.ArrayList;
 
-import is.hi.hbv601g.gjaldbrotapp.Services.UserService;
+import is.hi.hbv601g.gjaldbrotapp.NavigationActivity;
+import is.hi.hbv601g.gjaldbrotapp.R;
 
 public class LoginActivity
         extends AppCompatActivity

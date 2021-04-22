@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">Gjaldbrot</string>
     <string name="title_activity_navigation">Gjaldbrot</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Gjaldbrot</string>
     <string name="nav_header_subtitle">Menu</string>
     <string name="nav_header_desc">Navigation header</string>
@@ -17,9 +15,7 @@
     <string name="take_a_photo">Take a photo</string>
     <string name="photo">Photo</string>
     <string name="manually">Manually</string>
-    <string name="date">Date</string>
     <string name="time">Time</string>
-    <string name="type">Type></string>
     <string name="amount">Amount</string>
     <string name="add">Add</string>
     <string name="delete">Delete</string>
@@ -27,13 +23,11 @@
     <string name="add_types">Add Types</string>
     <string name="all_types">All Types</string>
     <string name="all_types_list">All Types List</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">Gjaldbrot</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
     -->
-    <string name="hello_world">Hello Square World!</string>
     <string name="shared_preferences">shared_preferences</string>
     <string name="token_file_key">user_token</string>
     <string name="enter_type_name">Enter type name</string>

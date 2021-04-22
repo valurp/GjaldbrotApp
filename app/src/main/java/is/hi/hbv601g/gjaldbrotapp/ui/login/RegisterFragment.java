@@ -1,4 +1,4 @@
-package is.hi.hbv601g.gjaldbrotapp;
+package is.hi.hbv601g.gjaldbrotapp.ui.login;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import is.hi.hbv601g.gjaldbrotapp.Services.HttpManager;
+import is.hi.hbv601g.gjaldbrotapp.R;
 import is.hi.hbv601g.gjaldbrotapp.Services.UserService;
 
 public class RegisterFragment extends Fragment {

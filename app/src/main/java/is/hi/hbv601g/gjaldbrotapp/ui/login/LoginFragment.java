@@ -1,4 +1,4 @@
-package is.hi.hbv601g.gjaldbrotapp;
+package is.hi.hbv601g.gjaldbrotapp.ui.login;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,20 +7,15 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
-
-import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.Entities.User;
-import is.hi.hbv601g.gjaldbrotapp.Services.HttpManager;
+import is.hi.hbv601g.gjaldbrotapp.R;
 import is.hi.hbv601g.gjaldbrotapp.Services.UserService;
 
 public class LoginFragment extends Fragment {

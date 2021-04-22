@@ -21,12 +21,9 @@ public class AddReceiptFragment extends Fragment {
     Button man;
     Button photo;
 
-    private AddReceiptViewModel mAddReceiptViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mAddReceiptViewModel =
-                new ViewModelProvider(this).get(AddReceiptViewModel.class);
         View root = inflater.inflate(R.layout.fragment_add_receipt, container, false);
 
         root.setBackgroundColor(Color.WHITE);

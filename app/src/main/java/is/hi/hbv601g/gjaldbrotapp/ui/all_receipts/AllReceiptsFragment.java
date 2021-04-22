@@ -1,18 +1,13 @@
 package is.hi.hbv601g.gjaldbrotapp.ui.all_receipts;
 
-import android.content.AsyncQueryHandler;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,12 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
-import is.hi.hbv601g.gjaldbrotapp.Entities.Type;
 import is.hi.hbv601g.gjaldbrotapp.R;
-import is.hi.hbv601g.gjaldbrotapp.Services.HttpManager;
 import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
-import is.hi.hbv601g.gjaldbrotapp.ui.add_receipt.AddManuallyFragment;
-import is.hi.hbv601g.gjaldbrotapp.ui.all_receipts.dummy.DummyContent;
 
 /**
  * Fragment sem að sækir og birtir allar kvittanir sem innskráður notandi hefur.
