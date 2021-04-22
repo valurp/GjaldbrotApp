@@ -95,7 +95,7 @@ public class MonthlyOverviewFragment extends Fragment {
         for (OverviewGroup group : mOverviewData) {
             if (group.isVisible()) {
                 numOfDataPoints++;
-                dataPoints.add(new ColoredDataPoint(i+1, group.getAmount(), group.getColor()));
+                dataPoints.add(new ColoredDataPoint(i+1, group.getAmount(), group.getColor(), group.getMaxBudget()));
                 budgetDataPoints.add(new DataPoint(i+1, group.getMaxBudget()));
                 if (max < group.getAmount()) {
                     max = group.getAmount();
@@ -110,6 +110,9 @@ public class MonthlyOverviewFragment extends Fragment {
         barGraphSeries.setValueDependentColor(new ValueDependentColor<ColoredDataPoint>() {
             @Override
             public int get(ColoredDataPoint data) {
+                if (data.getY() > data.getMaxBudget()) {
+                    return Color.RED;
+                }
                 return data.getColor();
             }
         });
@@ -141,14 +144,17 @@ public class MonthlyOverviewFragment extends Fragment {
 
     private class ColoredDataPoint extends DataPoint {
         private int mColor;
-        public ColoredDataPoint(int x, int y, int color) {
+        private int mMaxBudget;
+        public ColoredDataPoint(int x, int y, int color, int maxBudget) {
             super(x, y);
             mColor = color;
+            mMaxBudget = maxBudget;
         }
 
         public int getColor() {
             return mColor;
         }
+        public int getMaxBudget() { return mMaxBudget; }
     }
 
     private class TypeRecyclerAdapter extends RecyclerView.Adapter<TypeRecyclerAdapter.ViewHolder>{
@@ -167,6 +173,9 @@ public class MonthlyOverviewFragment extends Fragment {
 
         public void onBindViewHolder(final TypeRecyclerAdapter.ViewHolder holder, int position) {
             holder.mTextView.setText(mValues.get(position).getCategory());
+            if (mValues.get(position).getAmount() > mValues.get(position).getMaxBudget()) {
+                holder.mView.setBackgroundColor(Color.argb(150, 255, 0, 0));
+            }
             holder.mColor.setBackgroundColor(mValues.get(position).getColor());
             holder.mButton.setOnClickListener(new TypeRecyclerAdapter.ShowButtonOnClickListener(holder.mButton, position));
         }
@@ -174,11 +183,13 @@ public class MonthlyOverviewFragment extends Fragment {
         public int getItemCount() { return mValues.size(); }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
+            View mView;
             TextView mColor;
             TextView mTextView;
             Button mButton;
             public ViewHolder(View view) {
                 super(view);
+                mView = view;
                 mTextView = (TextView) view.findViewById(R.id.overview_legend_title);
                 mColor = (TextView) view.findViewById(R.id.overview_legend_color);
                 mButton = (Button) view.findViewById(R.id.show_hide_type_button);
