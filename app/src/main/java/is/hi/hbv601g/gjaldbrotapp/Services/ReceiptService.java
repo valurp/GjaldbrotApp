@@ -103,7 +103,7 @@ public class ReceiptService {
      */
     public Boolean changeReceipt(ReceiptItem r){
         try {
-            httpManager.updateReceipt(r.getAmount(), r.getType(), r.getId(), r.getTime(), r.getFormattedDate());
+            httpManager.updateReceipt(r.getAmount(), r.getTypeId(), r.getId(), r.getTime(), r.getFormattedDate());
         } catch (Exception e) {
             Log.e(TAG, e.toString());
             return false;

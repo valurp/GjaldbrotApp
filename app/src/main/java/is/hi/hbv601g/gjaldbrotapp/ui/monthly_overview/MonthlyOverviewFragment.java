@@ -34,6 +34,7 @@ import com.jjoe64.graphview.ValueDependentColor;
 import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.PointsGraphSeries;
 
 import org.w3c.dom.Text;
 
@@ -90,10 +91,12 @@ public class MonthlyOverviewFragment extends Fragment {
         int max = 0;
         int numOfDataPoints = 0;
         ArrayList<ColoredDataPoint> dataPoints = new ArrayList<ColoredDataPoint>();
+        ArrayList<DataPoint> budgetDataPoints = new ArrayList<>();
         for (OverviewGroup group : mOverviewData) {
             if (group.isVisible()) {
                 numOfDataPoints++;
                 dataPoints.add(new ColoredDataPoint(i+1, group.getAmount(), group.getColor()));
+                budgetDataPoints.add(new DataPoint(i+1, group.getMaxBudget()));
                 if (max < group.getAmount()) {
                     max = group.getAmount();
                 }
@@ -102,6 +105,8 @@ public class MonthlyOverviewFragment extends Fragment {
         }
         BarGraphSeries<ColoredDataPoint> barGraphSeries =
                 new BarGraphSeries<ColoredDataPoint>(dataPoints.toArray(new ColoredDataPoint[dataPoints.size()]));
+        PointsGraphSeries<DataPoint> pointPointsGraphSeries =
+                new PointsGraphSeries<>(budgetDataPoints.toArray(new DataPoint[budgetDataPoints.size()]));
         barGraphSeries.setValueDependentColor(new ValueDependentColor<ColoredDataPoint>() {
             @Override
             public int get(ColoredDataPoint data) {
@@ -112,11 +117,12 @@ public class MonthlyOverviewFragment extends Fragment {
         mGraph.getViewport().setYAxisBoundsManual(true);
         mGraph.getViewport().setXAxisBoundsManual(true);
         mGraph.getViewport().setMinY(0);
-        mGraph.getViewport().setMaxY(max + max*0.1);
+        mGraph.getViewport().setMaxY(max + max*0.2);
         mGraph.getViewport().setMinX(0);
         mGraph.getViewport().setMaxX(numOfDataPoints+1);
 
         mGraph.addSeries(barGraphSeries);
+        mGraph.addSeries(pointPointsGraphSeries);
     }
 
     private class FetchOverviewTask extends AsyncTask<Void, Void, List<OverviewGroup>> {

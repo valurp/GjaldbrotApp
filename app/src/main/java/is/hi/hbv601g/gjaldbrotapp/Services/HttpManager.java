@@ -301,7 +301,7 @@ public class HttpManager {
      * @param date
      * @throws Exception
      */
-    public void updateReceipt(int amount, String type, long id, String time, String date) throws Exception {
+    public void updateReceipt(int amount, long type, long id, String time, String date) throws Exception {
         String url = Uri.parse(URL)
                 .buildUpon()
                 .appendPath("user")
