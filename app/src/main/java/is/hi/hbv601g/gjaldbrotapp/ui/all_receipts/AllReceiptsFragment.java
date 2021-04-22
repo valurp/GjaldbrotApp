@@ -104,8 +104,8 @@ public class AllReceiptsFragment extends Fragment {
             holder.mDateView.setText(""+holder.mItem.getFormattedDate());
             holder.mTypeView.setText(""+holder.mItem.getType());
             holder.mAmountView.setText(""+holder.mItem.getAmount());
-            holder.mEditButton.setOnClickListener(new ReceiptRecyclerViewAdapter.EditButtonOnClickListener(holder.mItem));
-            holder.mEditButton.setText("Edit receipt");
+            holder.mView.setOnClickListener(new ReceiptRecyclerViewAdapter.EditButtonOnClickListener(holder.mItem));
+            // holder.mEditButton.setText("Edit receipt");
         }
 
         @Override
@@ -118,7 +118,7 @@ public class AllReceiptsFragment extends Fragment {
             public final TextView mTypeView;
             public final TextView mAmountView;
             public final TextView mDateView;
-            public final Button mEditButton;
+            //  final Button mEditButton;
             public ReceiptItem mItem;
 
             public ViewHolder(View view) {
@@ -127,7 +127,7 @@ public class AllReceiptsFragment extends Fragment {
                 mTypeView = (TextView) view.findViewById(R.id.receipt_list_type);
                 mAmountView = (TextView) view.findViewById(R.id.receipt_list_amount);
                 mDateView = (TextView) view.findViewById(R.id.receipt_list_date);
-                mEditButton = (Button) view.findViewById(R.id.receipt_list_button);
+                // mEditButton = (Button) view.findViewById(R.id.receipt_list_button);
             }
 
             @Override

@@ -8,13 +8,17 @@
     <FrameLayout
         android:id="@+id/manually_dp_container"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
-        android:layout_height="wrap_content"></FrameLayout>
+        android:layout_marginTop="28dp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="50dp"></FrameLayout>
+
     <Button
         android:id="@+id/manually_btn_add"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="84dp"
         android:text="@string/add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -27,6 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="150dp"
         android:layout_marginEnd="150dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/menu_add_type"
         app:layout_constraintBottom_toTopOf="@+id/manually_btn_add"
         app:layout_constraintEnd_toEndOf="parent"
