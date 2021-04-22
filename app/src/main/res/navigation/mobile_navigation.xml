@@ -72,8 +72,8 @@
     <fragment
         android:id="@+id/changeReceiptFragment"
         android:name="is.hi.hbv601g.gjaldbrotapp.ui.all_receipts.ChangeReceiptFragment"
-        android:label="fragment_change_receipt"
-        tools:layout="@layout/fragment_change_receipt" >
+        android:label="Change Receipt"
+        tools:layout="@layout/fragment_change_receipt">
         <action
             android:id="@+id/action_changeReceiptFragment_to_nav_all_receipts"
             app:destination="@id/nav_all_receipts"
