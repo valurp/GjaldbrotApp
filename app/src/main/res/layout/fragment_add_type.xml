@@ -95,7 +95,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="18dp"
             android:ems="10"
-            android:hint="@string/enter_type_mac"
+            android:hint="@string/enter_type_budget"
             android:inputType="number"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
