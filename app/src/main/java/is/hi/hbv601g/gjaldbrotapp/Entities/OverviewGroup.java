@@ -5,6 +5,7 @@ public class OverviewGroup {
     private int mAmount;
     private int mColor;
     private boolean mIsVisible;
+    private int mMaxBudget;
 
     public void setCategory(String category) {
         this.mCategory = category;
@@ -20,6 +21,14 @@ public class OverviewGroup {
 
     public int getAmount() {
         return mAmount;
+    }
+
+    public void setMaxBudget(int maxBudget) {
+        mMaxBudget = maxBudget;
+    }
+
+    public int getMaxBudget() {
+        return mMaxBudget;
     }
 
     public OverviewGroup(String category, int amount, int color) {

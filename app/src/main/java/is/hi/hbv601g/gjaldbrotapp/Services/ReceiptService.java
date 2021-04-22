@@ -86,6 +86,17 @@ public class ReceiptService {
         return true;
     }
 
+    public Boolean deleteType(int id) {
+        try {
+            httpManager.deleteType(id);
+            Log.i(TAG, "Type deleted");
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
+
     /**
      * Method modifies old receipt from User
      * @param r the Receipt to be modified

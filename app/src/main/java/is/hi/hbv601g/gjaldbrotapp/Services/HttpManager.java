@@ -397,6 +397,22 @@ public class HttpManager {
         writeTo(con, jsonType);
     }
 
+    public void deleteType(int id)  throws IOException {
+        String url = Uri.parse(URL)
+                .buildUpon()
+                .appendPath("user")
+                .appendPath("types")
+                .appendPath("" + id)
+                .build()
+                .toString();
+        URL deleteURL = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) deleteURL.openConnection();
+        con.setRequestProperty("Authorization", "Bearer " + token);
+        con.setDoInput(true);
+        con.setRequestMethod("DELETE");
+        Log.i(TAG, "delete response code: " + con.getResponseCode());
+    }
+
     public List<Type> fetchTypes() {
         Log.i(TAG, "Fetching all receipt types");
         if (token == null) {
@@ -467,6 +483,7 @@ public class HttpManager {
             group.setAmount(groupJSON.getInt("amount"));
             group.setCategory(groupJSON.getString("name"));
             group.setColor(groupJSON.getInt("color"));
+            group.setMaxBudget(groupJSON.getInt("maxBudget"));
             overview.add(group);
         }
     }

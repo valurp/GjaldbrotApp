@@ -101,7 +101,7 @@ public class AllTypeFragment extends Fragment {
             holder.mItem = mValues.get(position);
             holder.mNameView.setText(""+holder.mItem.getName());
             holder.mColorView.setBackgroundColor(holder.mItem.getColor());
-            // holder.mEditButton.setOnClickListener(new ReceiptRecyclerViewAdapter.EditButtonOnClickListener(holder.mItem));
+            holder.mDeleteButton.setOnClickListener(new DeleteButtonOnClickListener(holder.mItem.getId()));
             holder.mDeleteButton.setText("Delete Type");
         }
 
@@ -131,22 +131,28 @@ public class AllTypeFragment extends Fragment {
             notifyDataSetChanged();
         }
 
-        /*private class EditButtonOnClickListener implements View.OnClickListener {
-            private ReceiptItem mReceiptItem;
-
-            public EditButtonOnClickListener(ReceiptItem receiptItem) {
-                //super();
-                mReceiptItem = receiptItem;
+        private class DeleteButtonOnClickListener implements View.OnClickListener {
+            private int mId;
+            public DeleteButtonOnClickListener(int id) {
+                super();
+                mId = id;
             }
-
             @Override
             public void onClick(View v) {
-                NavHostFragment navHostFragment =
-                        (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-                NavController navController = navHostFragment.getNavController();
-                Bundle bundle = ChangeReceiptFragment.createBundleFromReceipt(mReceiptItem);
-                navController.navigate(R.id.action_nav_all_receipts_to_changeReceiptFragment, bundle);
+                new DeleteReceiptTypeTask().execute(mId);
             }
-        }*/
+        }
+
+        private class DeleteReceiptTypeTask extends AsyncTask<Integer, Void, Boolean> {
+            @Override
+            public Boolean doInBackground(Integer... params) {
+                return ReceiptService.getInstance().deleteType(params[0]);
+            }
+            @Override
+            public void onPostExecute(Boolean result) {
+
+
+            }
+        }
     }
 }
