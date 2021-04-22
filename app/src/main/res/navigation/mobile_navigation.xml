@@ -60,7 +60,8 @@
             app:destination="@id/addTypeFragment" />
         <action
             android:id="@+id/action_addManuallyFragment_to_nav_all_receipts"
-            app:destination="@id/nav_all_receipts" />
+            app:destination="@id/nav_all_receipts"
+            app:popUpTo="@id/nav_add_receipt" />
     </fragment>
 
     <fragment
@@ -75,7 +76,8 @@
         tools:layout="@layout/fragment_change_receipt" >
         <action
             android:id="@+id/action_changeReceiptFragment_to_nav_all_receipts"
-            app:destination="@id/nav_all_receipts" />
+            app:destination="@id/nav_all_receipts"
+            app:popUpTo="@id/nav_home" />
     </fragment>
     <fragment
         android:id="@+id/addTypeFragment"

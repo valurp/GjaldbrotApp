@@ -82,8 +82,8 @@ public class MyRecieptRecyclerViewAdapter extends RecyclerView.Adapter<MyReciept
     }
 
     private class EditButtonOnClickListener implements View.OnClickListener {
-        private int mId;
-        public EditButtonOnClickListener(int id) {
+        private long mId;
+        public EditButtonOnClickListener(long id) {
             //super();
             mId = id;
         }

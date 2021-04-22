@@ -101,6 +101,17 @@ public class ReceiptService {
         return true;
     }
 
+    public Boolean deleteReceipt(long id) {
+        try {
+            httpManager.deleteReceipt(id);
+        }
+        catch (Exception e) {
+            Log.e(TAG, e.toString());
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Method fetches users receipt types
      * @return all types for logged user

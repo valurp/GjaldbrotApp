@@ -2,6 +2,7 @@ package is.hi.hbv601g.gjaldbrotapp;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -59,15 +60,11 @@ public class ReceiptEditFragment extends Fragment implements TimePickerDialog.On
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_receipt_edit, container, false);
+        view.setBackgroundColor(Color.WHITE);
         // Dagsetningar veljarinn.
         mDatePicker = (DatePicker) view.findViewById(R.id.edit_receipt_datepicker);
         // Svæði fyrir upphæðina.
@@ -96,6 +93,10 @@ public class ReceiptEditFragment extends Fragment implements TimePickerDialog.On
         initializeForm();
 
         return view;
+    }
+
+    public long getReceiptId() {
+        return mReceiptItem.getId();
     }
 
     /**

@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import is.hi.hbv601g.gjaldbrotapp.Entities.ReceiptItem;
 import is.hi.hbv601g.gjaldbrotapp.R;
@@ -23,9 +24,6 @@ import is.hi.hbv601g.gjaldbrotapp.ui.add_receipt.AddManuallyFragment;
 
 public class ChangeReceiptFragment extends Fragment {
     private final static String TAG = "CHANGE_RECEIPT_FRAGMENT";
-    private final static String bundleAmount = "amount";
-    private final static String bundleDate = "date";
-    private final static String bundleType = "type";
 
     public static Bundle createBundleFromReceipt(ReceiptItem receiptItem) {
         Bundle bundle = new Bundle();
@@ -57,10 +55,13 @@ public class ChangeReceiptFragment extends Fragment {
 
         Button createReceiptBtn = (Button) view.findViewById(R.id.edit_receipt_btn);
         createReceiptBtn.setOnClickListener(new CreateReceiptListener());
+
+        Button deleteReceiptBtn = (Button) view.findViewById(R.id.delete_receipt_btn);
+        deleteReceiptBtn.setOnClickListener(new DeleteReceiptListener());
         return view;
     }
 
-    private class CreateReceiptListener implements View.OnClickListener{
+    private class CreateReceiptListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             try {
@@ -70,6 +71,13 @@ public class ChangeReceiptFragment extends Fragment {
             catch (Exception e) {
                 Log.e(TAG, e.toString());
             }
+        }
+    }
+
+    private class DeleteReceiptListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            new DeleteReceiptTask().execute(mReceiptEditFragment.getReceiptId());
         }
     }
 
@@ -88,6 +96,26 @@ public class ChangeReceiptFragment extends Fragment {
             }
             else {
                 Log.e("CREATE RECEIPT", "Error creating receipt");
+            }
+        }
+    }
+
+    private class DeleteReceiptTask extends AsyncTask<Long, Void, Boolean> {
+        @Override
+        public Boolean doInBackground(Long... params ) {
+            return ReceiptService.getInstance().deleteReceipt(params[0]);
+        }
+        @Override
+        public void onPostExecute(Boolean result) {
+            if (result) {
+                Log.i(TAG, "Receipt deleted");
+                NavHostFragment navHostFragment =
+                        (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                NavController navController = navHostFragment.getNavController();
+                navController.navigate(R.id.action_changeReceiptFragment_to_nav_all_receipts);
+            }
+            else {
+                Log.e(TAG, "Could not delete receipt");
             }
         }
     }

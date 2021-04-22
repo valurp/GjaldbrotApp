@@ -75,6 +75,9 @@ public class MonthlyComparisonFragment extends Fragment {
 
         @Override
         public void onPostExecute(ComparisonData result) {
+            if (result == null) {
+                return;
+            }
             Log.i(TAG, result.mGroups.toString());
             mComparisonData = result;
             populateGraph();

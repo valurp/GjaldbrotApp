@@ -82,6 +82,7 @@ public class HttpManager {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             InputStream in = conn.getInputStream();
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                Log.e(TAG, "Non 200 status");
                 throw new IOException(conn.getResponseMessage() + ":with " + urlSpec);
             }
             int bytesRead = 0;
@@ -216,7 +217,7 @@ public class HttpManager {
 
             JSONObject receiptJSON = receiptJSONArray.getJSONObject(i);
             receipt.setAmount(receiptJSON.getInt("amount"));
-            receipt.setId(receiptJSON.getInt("id"));
+            receipt.setId(receiptJSON.getLong("id"));
             receipt.setType(receiptJSON.getString("type"));
             receipt.setTypeId(receiptJSON.getLong("type_id"));
             try {
@@ -300,7 +301,7 @@ public class HttpManager {
      * @param date
      * @throws Exception
      */
-    public void updateReceipt(int amount, String type, int id, String time, String date) throws Exception {
+    public void updateReceipt(int amount, String type, long id, String time, String date) throws Exception {
         String url = Uri.parse(URL)
                 .buildUpon()
                 .appendPath("user")
@@ -321,6 +322,22 @@ public class HttpManager {
                 + "\"time\":\"" + time + "\""
                 + "}";
         writeTo(con, jsonReceipt);
+    }
+
+    public void deleteReceipt(long id) throws Exception {
+        String url = Uri.parse(URL)
+                .buildUpon()
+                .appendPath("user")
+                .appendPath("receipt")
+                .appendPath("" + id)
+                .build()
+                .toString();
+        URL deleteURL = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) deleteURL.openConnection();
+        con.setRequestProperty("Authorization", "Bearer " + token);
+        con.setDoInput(true);
+        con.setRequestMethod("DELETE");
+        Log.i(TAG, "delete response code: " + con.getResponseCode());
     }
 
     /**

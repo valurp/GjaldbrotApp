@@ -92,6 +92,7 @@ public class AddManuallyFragment extends Fragment {
         @Override
         public void onPostExecute(Boolean result) {
             if (result.booleanValue()) {
+                mReceiptEditFragment = null;
                 NavHostFragment navHostFragment =
                         (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
                 NavController navController = navHostFragment.getNavController();

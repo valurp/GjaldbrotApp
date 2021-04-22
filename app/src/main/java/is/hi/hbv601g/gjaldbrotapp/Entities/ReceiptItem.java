@@ -16,7 +16,7 @@ public class ReceiptItem implements Serializable {
     private static DateFormat mDateFormatWithTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private static DateFormat mTimeFormat = new SimpleDateFormat("HH:mm:ss");
 
-    private int mId;
+    private long mId;
     private int mAmount;
     private String mType;
     private long mTypeId;
@@ -33,7 +33,7 @@ public class ReceiptItem implements Serializable {
         mType = type;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         mId = id;
     }
 
@@ -47,7 +47,7 @@ public class ReceiptItem implements Serializable {
 
     public void setTypeId(long typeId) { mTypeId = typeId; }
 
-    public int getId() {
+    public long getId() {
         return mId;
     }
 
