@@ -82,10 +82,18 @@
     <fragment
         android:id="@+id/addTypeFragment"
         android:name="is.hi.hbv601g.gjaldbrotapp.ui.type.AddTypeFragment"
-        android:label="fragment_add_type"
-        tools:layout="@layout/fragment_add_type" >
+        android:label="@string/add_types"
+        tools:layout="@layout/fragment_add_type">
         <action
             android:id="@+id/action_addTypeFragment_to_addManuallyFragment"
             app:destination="@id/addManuallyFragment" />
+        <action
+            android:id="@+id/action_addTypeFragment_to_allTypeFragment"
+            app:destination="@id/allTypeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/allTypeFragment"
+        android:name="is.hi.hbv601g.gjaldbrotapp.ui.type.AllTypeFragment"
+        android:label="@string/all_types_list"
+        tools:layout="@layout/fragment_all_types_list" />
 </navigation>
