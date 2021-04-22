@@ -38,6 +38,7 @@ public class AddTypeFragment extends Fragment {
     private AddTypeFragment mAddTypeFragment;
 
     private EditText mNameType;
+    private EditText mMaxType;
     private Button createTypeBtn;
     private int colorSelected;
     private ColorPickerDialogBuilder colorPickerDialogBuilder;
@@ -66,6 +67,7 @@ public class AddTypeFragment extends Fragment {
         });
 
         mNameType = (EditText) view.findViewById(R.id.addType_text);
+        mMaxType = (EditText) view.findViewById(R.id.addType_max);
 
         ColorPickerView colorPickerView = view.findViewById(R.id.color_picker_view);
         colorPickerView.addOnColorChangedListener(new OnColorChangedListener() {
@@ -112,7 +114,7 @@ public class AddTypeFragment extends Fragment {
         public Boolean doInBackground(Type... params) {
             Log.e("Name", mNameType.getText().toString());
             Log.e("Color", Integer.toHexString(colorSelected));
-            return ReceiptService.getInstance().addType(mNameType.getText().toString(), colorSelected);
+            return ReceiptService.getInstance().addType(mNameType.getText().toString(), colorSelected, Integer.parseInt(mMaxType.getText().toString()));
         }
         @Override
         public void onPostExecute(Boolean result) {
