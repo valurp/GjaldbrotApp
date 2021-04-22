@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.GridView;
@@ -46,7 +47,7 @@ import is.hi.hbv601g.gjaldbrotapp.R;
 import is.hi.hbv601g.gjaldbrotapp.Services.ReceiptService;
 
 public class MonthlyOverviewFragment extends Fragment {
-    private String TAG = "MontlyOverview";
+    private String TAG = "MonthlyOverview";
     private GraphView mGraph;
     private List<OverviewGroup> mOverviewData;
     private TypeRecyclerAdapter mAdapter;
@@ -158,6 +159,7 @@ public class MonthlyOverviewFragment extends Fragment {
         public void onBindViewHolder(final TypeRecyclerAdapter.ViewHolder holder, int position) {
             holder.mTextView.setText(mValues.get(position).getCategory());
             holder.mColor.setBackgroundColor(mValues.get(position).getColor());
+            holder.mButton.setOnClickListener(new TypeRecyclerAdapter.ShowButtonOnClickListener(holder.mButton, position));
         }
 
         public int getItemCount() { return mValues.size(); }
@@ -165,10 +167,36 @@ public class MonthlyOverviewFragment extends Fragment {
         public class ViewHolder extends RecyclerView.ViewHolder {
             TextView mColor;
             TextView mTextView;
+            Button mButton;
             public ViewHolder(View view) {
                 super(view);
                 mTextView = (TextView) view.findViewById(R.id.overview_legend_title);
                 mColor = (TextView) view.findViewById(R.id.overview_legend_color);
+                mButton = (Button) view.findViewById(R.id.show_hide_type_button);
+            }
+        }
+
+        private class ShowButtonOnClickListener implements View.OnClickListener {
+            private int mPosition;
+            private Button mButton;
+            public ShowButtonOnClickListener(Button button, int position){
+                mButton = button;
+                mPosition = position;
+            }
+
+            @Override
+            public void onClick(View view) {
+                Log.i(TAG, mButton.getText().toString());
+
+                if (mButton.getText().toString().toLowerCase().equals("hide")) {
+                    mButton.setText("Show");
+                    //TODO: Implement hiding group on graph
+                }
+                else {
+                    mButton.setText("Hide");
+                    //TODO: Implement showing group on graph
+                }
+
             }
         }
     }

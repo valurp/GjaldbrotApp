@@ -37,5 +37,5 @@
     <string name="shared_preferences">shared_preferences</string>
     <string name="token_file_key">user_token</string>
     <string name="enter_type_name">Enter type name</string>
-    <string name="show_type">Show</string>
+    <string name="show_hide_type">Hide</string>
 </resources>
