@@ -346,7 +346,7 @@ public class HttpManager {
      * @param color
      * @throws Exception
      */
-    public void createType(String type, int color) throws Exception {
+    public void createType(String type, int color, int maxBudget) throws Exception {
         String url = Uri.parse(URL)
                 .buildUpon()
                 .appendPath("user")
@@ -361,7 +361,8 @@ public class HttpManager {
         con.setRequestProperty("Accept", "application/json");
         con.setDoOutput(true);
         String jsonType = "{ \"name\": \"" + type + "\","
-                + "\"color\": \"" + color + "\""
+                + "\"color\": \"" + color + "\","
+                + "\"maxBudget\": \"" + maxBudget + "\""
                 + "}";
         writeTo(con, jsonType);
     }
@@ -373,7 +374,7 @@ public class HttpManager {
      * @param color
      * @throws Exception
      */
-    public void updateType(int id, String name, int color) throws Exception {
+    public void updateType(int id, String name, int color, int maxBudget) throws Exception {
         String url = Uri.parse(URL)
                 .buildUpon()
                 .appendPath("user")
@@ -390,7 +391,8 @@ public class HttpManager {
         con.setDoOutput(true);
         String jsonType = "{ \"id\": \"" + id + "\","
                 + "\"name\": " + name + "\","
-                + "\"color\": " + color + "\""
+                + "\"color\": " + color + "\","
+                + "\"maxBudget\": " + maxBudget + "\""
                 + "}";
         writeTo(con, jsonType);
     }
@@ -428,6 +430,7 @@ public class HttpManager {
             type.setId(typeJSON.getInt("id"));
             type.setName((typeJSON.getString("name")));
             type.setColor(typeJSON.getInt("color"));
+            type.setMaxBudget(typeJSON.getInt("maxBudget"));
             types.add(type);
         }
     }

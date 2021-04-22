@@ -5,6 +5,15 @@ public class Type {
     private int id;
     private String name;
     private int color;
+    private int maxBudget;
+
+    public int getMaxBudget() {
+        return maxBudget;
+    }
+
+    public void setMaxBudget(int maxBudget) {
+        this.maxBudget = maxBudget;
+    }
 
     public void setId(int id) {
         this.id = id;
