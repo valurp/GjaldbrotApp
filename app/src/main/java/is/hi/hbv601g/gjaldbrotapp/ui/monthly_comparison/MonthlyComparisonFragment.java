@@ -15,8 +15,13 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.LabelFormatter;
+import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import is.hi.hbv601g.gjaldbrotapp.Entities.ComparisonData;
 import is.hi.hbv601g.gjaldbrotapp.R;
@@ -48,6 +53,18 @@ public class MonthlyComparisonFragment extends Fragment {
             series.setColor(group.mColor);
             mGraphView.addSeries(series);
         }
+
+        mGraphView.getGridLabelRenderer().setLabelFormatter(new LabelFormatter() {
+            @Override
+            public String formatLabel(double value, boolean isValueX) {
+                if (isValueX) return "";
+                return (int) value + " kr";
+            }
+            @Override
+            public void setViewport(Viewport viewport) {
+
+            }
+        });
     }
 
     private class FetchComparisonTask extends AsyncTask<Void, Void, ComparisonData> {
