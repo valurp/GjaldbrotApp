@@ -53,9 +53,17 @@ public class AddTypeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_type, container, false);
         view.setBackgroundColor(Color.WHITE);
 
-        // FragmentManager fm = getChildFragmentManager();
-        // mAddTypeFragment = new AddTypeFragment();
-        // fm.beginTransaction().add(R.id.type_dp_container, mAddTypeFragment).commit();
+        Button all = (Button) view.findViewById(R.id.type_btn_alltypes);
+
+        all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment navHostFragment =
+                        (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                NavController navController = navHostFragment.getNavController();
+                navController.navigate(R.id.action_addTypeFragment_to_allTypeFragment);
+            }
+        });
 
         mNameType = (EditText) view.findViewById(R.id.addType_text);
 
