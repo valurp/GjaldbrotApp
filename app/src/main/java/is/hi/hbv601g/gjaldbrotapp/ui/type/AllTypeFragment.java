@@ -113,7 +113,7 @@ public class AllTypeFragment extends Fragment {
             holder.mNameView.setText(""+holder.mItem.getName());
             holder.mColorView.setText(""+holder.mItem.getColor());
             // holder.mEditButton.setOnClickListener(new ReceiptRecyclerViewAdapter.EditButtonOnClickListener(holder.mItem));
-            holder.mEditButton.setText("Edit receipt");
+            holder.mDeleteButton.setText("Delete Type");
         }
 
         @Override
@@ -125,7 +125,7 @@ public class AllTypeFragment extends Fragment {
             public final View mView;
             public final TextView mNameView;
             public final TextView mColorView;
-            public final Button mEditButton;
+            public final Button mDeleteButton;
             public Type mItem;
 
             public ViewHolder(View view) {
@@ -133,7 +133,7 @@ public class AllTypeFragment extends Fragment {
                 mView = view;
                 mNameView = (TextView) view.findViewById(R.id.type_list_name);
                 mColorView = (TextView) view.findViewById(R.id.type_list_color);
-                mEditButton = (Button) view.findViewById(R.id.receipt_list_button);
+                mDeleteButton = (Button) view.findViewById(R.id.type_list_button);
             }
         }
 
